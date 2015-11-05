@@ -10,6 +10,7 @@ import {
   isString,
   isStringMap,
   isFunction,
+  isArray,
   StringWrapper,
   Type,
   getTypeNameForDebugging
@@ -190,42 +191,64 @@ export class RouteRegistry {
    */
   generate(linkParams: any[], parentComponent: any): Instruction {
     let segments = [];
+    var auxInstructions = {};
     let componentCursor = parentComponent;
     var lastInstructionIsTerminal = false;
+    let lastSegment = '';
 
     for (let i = 0; i < linkParams.length; i += 1) {
       let segment = linkParams[i];
       if (isBlank(componentCursor)) {
         throw new BaseException(`Could not find route named "${segment}".`);
       }
-      if (!isString(segment)) {
-        throw new BaseException(`Unexpected segment "${segment}" in link DSL. Expected a string.`);
+      if (!isString(segment) && !isArray(segment)) {
+        throw new BaseException(`Unexpected segment "${segment}" in link DSL. Expected a string/array.`);
       } else if (segment == '' || segment == '.' || segment == '..') {
         throw new BaseException(`"${segment}/" is only allowed at the beginning of a link DSL.`);
       }
       let params = {};
-      if (i + 1 < linkParams.length) {
-        let nextSegment = linkParams[i + 1];
-        if (isStringMap(nextSegment)) {
-          params = nextSegment;
-          i += 1;
-        }
-      }
-
+      let response;
       var componentRecognizer = this._rules.get(componentCursor);
+
       if (isBlank(componentRecognizer)) {
         throw new BaseException(
-            `Component "${getTypeNameForDebugging(componentCursor)}" has no route config.`);
+          `Component "${getTypeNameForDebugging(componentCursor)}" has no route config.`);
       }
-      var response = componentRecognizer.generate(segment, params);
+      if (isArray(segment)) {
+        if (isStringMap(segment[1])) {
+          params = segment[1];
+        }
+
+        response = componentRecognizer.generateAux(segment[0], params);
+
+        if (!auxInstructions[lastSegment]) {
+          auxInstructions[lastSegment] = {};
+        }
+
+        auxInstructions[lastSegment][segment] = new Instruction(response, null, {});
+      } else {
+        if (i + 1 < linkParams.length) {
+          let nextSegment = linkParams[i + 1];
+          if (isStringMap(nextSegment) && !isArray(nextSegment)) {
+            params = nextSegment;
+            i += 1;
+          }
+        }
+
+        response = componentRecognizer.generate(segment, params);
+        response.segment = isString(segment) ? segment.toLowerCase() : false;
+        segments.push(response);
+      }
 
       if (isBlank(response)) {
         throw new BaseException(
             `Component "${getTypeNameForDebugging(componentCursor)}" has no route named "${segment}".`);
       }
-      segments.push(response);
-      componentCursor = response.componentType;
+      if (!isBlank(nextSegment) && !isArray(nextSegment)) {
+        componentCursor = response.componentType;
+      }
       lastInstructionIsTerminal = response.terminal;
+      lastSegment = response.segment;
     }
 
     var instruction: Instruction = null;
@@ -246,9 +269,9 @@ export class RouteRegistry {
       }
     }
 
-
     while (segments.length > 0) {
-      instruction = new Instruction(segments.pop(), instruction, {});
+      let segmentInstruction = segments.pop();
+      instruction = new Instruction(segmentInstruction, instruction, auxInstructions[segmentInstruction.segment] || {});
     }
 
     return instruction;

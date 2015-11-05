@@ -77,7 +77,7 @@ function ngOutletDirective($animate, $q: ng.IQService, $router) {
 
   function outletLink(scope, element, attrs, ctrls, $transclude) {
     class Outlet {
-      constructor(private controller, private router) {}
+      constructor(private controller, private router, private name = attrs.ngOutlet) {}
 
       private currentController;
       private currentInstruction;
@@ -184,7 +184,11 @@ function ngOutletDirective($animate, $q: ng.IQService, $router) {
 
     myCtrl.$$currentComponent = null;
 
-    router.registerPrimaryOutlet(new Outlet(myCtrl, router));
+    if (attrs.ngOutlet) {
+      router.registerAuxOutlet(new Outlet(myCtrl, router));
+    } else {
+      router.registerPrimaryOutlet(new Outlet(myCtrl, router));
+    }
   }
 }
 /**

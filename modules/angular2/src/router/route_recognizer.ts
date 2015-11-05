@@ -120,6 +120,14 @@ export class RouteRecognizer {
 
   hasRoute(name: string): boolean { return this.names.has(name); }
 
+  generateAux(path: string, params: any): ComponentInstruction {
+    var pathRecognizer = this.auxRoutes.get(path);
+    if (isBlank(pathRecognizer)) {
+        return null;
+    }
+    return pathRecognizer.generate(params);
+  }
+
   generate(name: string, params: any): ComponentInstruction {
     var pathRecognizer: PathRecognizer = this.names.get(name);
     if (isBlank(pathRecognizer)) {
