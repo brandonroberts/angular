@@ -673,7 +673,7 @@ Remember that we're going to use routing for the product list area of the app.
 To do that, open `app.component.html` and
 replace `app-product-list` with `routeroutlet`. 
 
-<code-example header="src/app/app.component.html (Router outlet)" path="getting-started/src/app/app.component.html" region="router-outlet">
+<code-example header="src/app/app.component.html (Router outlet)" path="getting-started/src/app/app.component.html">
 </code-example>
 
 The router is ready to listen for changes in the browser URL, but you need to configure it with routes to transition from one set of components to the next.
