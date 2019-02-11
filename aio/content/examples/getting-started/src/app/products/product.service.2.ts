@@ -1,12 +1,10 @@
 // #docplaster
-// #docregion provider, product-data
+// #docregion provider, product-data, rxjs-imports, product-import
 import { Injectable } from '@angular/core';
-
 // #enddocregion provider
-// #docregion rxjs-imports
 import { Observable, of } from 'rxjs';
+
 // #enddocregion rxjs-imports
-// #docregion product-import
 import { Product } from './product';
 // #enddocregion product-import
 
@@ -23,14 +21,14 @@ export class ProductService {
     "products": [
       {
         "id": 1,
-        "name": "Pixel 3 XL",
+        "name": "Phone XL",
         "price": "799",
         "description": "A large phone with one of the best screens",
         "categories": ["phones"]
       },
       {
         "id": 2,
-        "name": "Pixel 3",
+        "name": "Phone Mini",
         "price": "699",
         "description": "A great phone with one of the best cameras",
         "categories": ["phones"]

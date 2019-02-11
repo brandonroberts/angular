@@ -1,17 +1,21 @@
+<!-- #docplaster -->
 <!-- #docregion top-bar -->
 <app-top-bar></app-top-bar>
 <!-- #enddocregion top-bar -->
 
-<!-- #docregion side-nav -->
-<app-side-nav></app-side-nav>
+<!-- #docregion side-nav, product-preview -->
+<div class="container">
+  <app-side-nav></app-side-nav>
 <!-- #enddocregion side-nav -->
+
+  <app-product-preview
+    [product]="{ name: 'Phone XL', description: 'A great phone with a large screen' }">
+  </app-product-preview>
+<!-- #docregion side-nav -->
+</div>
+<!-- #enddocregion side-nav, product-preview -->
 
 <!-- #docregion product-list -->
 <app-product-list></app-product-list>
 <!-- #enddocregion product-list -->
 
-<!-- #docregion product-preview -->
-<app-product-preview
-  [product]="{ name: 'Pixel 3 XL', description: 'A great phone with a large screen' }">
-</app-product-preview>
-<!-- #enddocregion product-preview -->
