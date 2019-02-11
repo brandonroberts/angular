@@ -172,12 +172,12 @@ To learn about the full capabilities of Angular's template syntax, see the [Temp
 
 
 {@a basic-app}
-## Building the basic shopping cart application
+## Building the basic store app layout
 <!-- skeleton, framework, site layout, app layout -->
 
 Let's get started. 
 
-In this section, you'll create a new project in StackBlitz, and then scaffod out the components for your shopping cart. 
+In this section, you'll create a new project in StackBlitz, and then scaffold out some components for your store. 
 
 
 #### 1. Create a new project
@@ -196,6 +196,8 @@ Tip: If you log into StackBlitz, you can easily take breaks and return to the cu
 
 </div>
 
+*BR: Need something about styles are not covered and we are provided finished styles to put in the styles.css file*
+
 
 ####  2. Create the top bar component
 
@@ -207,7 +209,7 @@ Tip: If you log into StackBlitz, you can easily take breaks and return to the cu
   <code-pane header="src/app/top-bar/top-bar.component.ts" path="getting-started/src/app/top-bar/top-bar.component.ts" region="v1">
   </code-pane>
 
-  <code-pane header="src/app/top-bar/top-bar.component.html" path="getting-started/src/app/top-bar/top-bar.component.html" region="initial">
+  <code-pane header="src/app/top-bar/top-bar.component.html" path="getting-started/src/app/top-bar/top-bar.component.1.html" region="initial">
   </code-pane>
 
   <code-pane header="src/app/top-bar/top-bar.component.css" path="getting-started/src/app/top-bar/top-bar.component.css">
@@ -231,7 +233,7 @@ Right now, the `TopBarComponent` doesn't do much, but you'll update it to show t
 
 3. Update the `TopBarComponent` template to display a welcome message with an interpolation of the `name` property. Delete the original "top bar works" message. 
 
-<code-example header="src/app/top-bar/top-bar.component.html" path="getting-started/src/app/top-bar/top-bar.component.html" region="header">
+<code-example header="src/app/top-bar/top-bar.component.html" path="getting-started/src/app/top-bar/top-bar.component.1.html" region="header">
 </code-example>
 
 4. Replace the starter contents of `app.component.html` ("Angular Getting Started") with the `app-top-bar` component.
