@@ -39,7 +39,7 @@ This tutorial is organized into three parts:
     - Retrieving data via an HTTP interface
     - Using forms to manage user interactions with data
 
-* Part 3 - Deployment: You'll deploy your app to a live website (Firebase) or to your local environment. If you chose to deploy to a local environment, you'll learn how to use the [Angular CLI](cli) to build and deploy your app to the hosting environment of your choice. 
+* Part 3 - Deployment: You'll deploy your app to a live website (Firebase) or to your hosting environment. If you chose to deploy to your hosting environment, you'll learn how to use the [Angular CLI](cli) to build and deploy your app to the hosting environment of your choice. 
 
 Within each section, this tutorial introduces a new concept and then provides instructions to apply that concept to the online store app. 
 
@@ -110,7 +110,7 @@ We can organize this app into the following tree of components:
     * app-product-preview: Product preview
     * app-product-preview: Product preview
     
-Just like HTML elements, components can be referred to or nested in another component's template. A component is referred to by its `selector`. The selector is the name you give the Angular component when it is rendered as an HTML element on the page. By convention, Angular component selectors begin with the prefix `app-`, followed by the component name. 
+Just like HTML elements, components can be referred to or nested in another component's template. A component is referred to by its `selector`. The selector is the name you give the Angular component when it is rendered as an HTML element on the page. By convention, Angular component selectors begin with the prefix such as `app-`, followed by the component name. 
 
 
 {@a template-syntax}
@@ -132,7 +132,9 @@ Interpolation lets you render the contents of a property of a component as text 
 
 Following the mental model of HTML, components have state being given to them. This is accomplished by binding to the property of a component or HTML element.
 
-*JAF: Not sure I understand this lead-in. You can bind a property so that whenever the value changes in the component, that new value appears on the screen.*
+*JAF: Not sure I understand this lead-in. *
+
+You can bind to a property on an element, so that whenever the property changes, the element is updated based on the template expression.
 
 <aio-gs-property-binding></aio-gs-property-binding>
 
@@ -150,9 +152,9 @@ You can add and remove elements from the page dynamically using `*ngIf`.
 
 <aio-gs-ng-if></aio-gs-ng-if>
 
-*JAF: If you delete everything in the input box you get an error condition. Move the [ ] outside the box? Assume users will understand why you have to leave [ ] to see the effect of ngIf?*
+*JAF: If you delete everything in the input box you get an error condition. Move the [ ] outside the box? Assume users will understand why you have to leave [ ] to see the effect of ngIf? - We could change the error message to "The provided value must be an array of items to be more clear"*
 
-*JAF: Can we just refer to this as *ngIf? Seems like that's the template syntax, and NgIf the API/implementation, which could be skipped right now.*
+*JAF: Can we just refer to this as *ngIf? Seems like that's the template syntax, and NgIf the API/implementation, which could be skipped right now. - Not sure if you mean NgIf*
 
 
 #### *ngFor
