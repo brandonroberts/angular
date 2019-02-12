@@ -256,7 +256,7 @@ To create the side navigation, you'll repeat the pattern of steps you did to cre
 <code-example header="src/app/side-nav/side-nav.component.ts" path="getting-started/src/app/side-nav/side-nav.component.ts">
 </code-example> 
 
-3. Update the `side-nav.component.html` to display a list of categories using an `NgFor` directive.
+3. Update the `side-nav.component.html` to display a list of categories using an `*ngFor` directive.
 
 <code-example header="src/app/side-nav/side-nav.component.html" path="getting-started/src/app/side-nav/side-nav.component.html" linenums="false">
 </code-example>
