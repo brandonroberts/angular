@@ -1,70 +1,28 @@
 # Data
 
-Once an Angular app has its general component structure, the next step is the use and management of data.
+In addition to building a general component structure in your Angular app, your application uses and manages data and from internal and external sources.
 
-## Streams of Data
+## Introduction
 
-Data coming back from servers in Angular applications most frequently take the form of a stream. Streams are useful because they make it easy to transform the data that is coming back, and to make modifications to the way data is requested.
+Data your app needs can come from many different sources. Whether it be a static file, a backend API that exposes data through a JSON-based API, or other different formats, your app consumes and makes use of this data to make decisions and display content. Your app also needs data to be entered from users to fill out forms for processing. Angular provides libraries to help you consume and receive data by building on top of existing browser APIs. 
 
-The three most common tasks users will do with a stream of data are to transform the data, combine multiple streams, and to perform an action for each of the pieces of data in a stream. Streams are created and managed using [RxJS](https://rxjs.dev/) in Angular.
+### What you'll learn
 
-Any operation you would like to define on a stream is defined with the use of RxJS operators. These will return a new stream, and the operations defined on the stream will only execute when one of your components or services is subscribed to the stream of data.
+In this section, you'll focus on using data and receiving data from user input.
 
-Read more about observable streams in the [Observables guide](guide/observables).
+- Retrieving external data using Angular's Http Client
+- Receiving form input through Angular Reactive Forms
 
-## Transforming Data
+In the sections below, you'll build out your store with retreiving data from and external source, displaying product details,
+ and adding a checkout page.
 
-To take a stream of events, and create a new stream of event statuses, use the `pipe()` method and provide the `map()` operator from the RxJS library.
+## Requesting data with the Angular Http Client
 
-```ts
-events.pipe(
-  map(events => event.statuses),
-)
-```
+Data coming back from servers in Angular applications most frequently take the form of a stream. Streams are useful because they make it easy to transform the data that is coming back, and to make modifications to the way data is requested. The Angular Http Client is a built-in way to fetch data from external APIs and provide them to your application as a stream. 
 
-The `map` operator uses a function to transform the value from the source stream into a new value. The new value is returned as a stream to the subscriber.
+Similarly with the Angular Router, the `HttpClientModule` registers the providers needed to use a single instance of the `HttpClient` service throughout your application. The `HttpClient` service is what you inject into your services to fetch data and interact with external APIs and resources. The `HttpClient` also uses observables to handle requests and provide responses. 
 
-Another example of this is a JSON object returned from an external API:
-
-```json
-{
-  status: 'success',
-  results_count: 42,
-  items: [
-    {...},
-    {...},
-    ...
-  ]
-}
-```
-
-To only return the `items` from the results, use the `map()` operator to define a new stream that only returns the `items` property.
-
-```ts
-data.pipe(
-  map(result => result.items),
-)
-```
-
-## Combining Multiple Streams
-
-It's a very common need to combine multiple streams. This is needed to have multiple HTTP requests, or to combine information from the Router with an HTTP request.
-
-```ts
-router.paramMap.pipe(
-  switchMap(params => http.get(`/items/${params.get('id')}`)),
-)
-```
-
-The `switchMap()` operator will take the parameters of the current route and use it to create a new stream to request data for that route. If the user visits the same route again only with different parameters, the stream will automatically make an additional HTTP request.
-
-## Angular HTTP Client
-
-Angular includes an easy way to fetch and render data from external APIs, which are generally JSON-based. These external APIs are consumed and provided to your application as a stream of data.
-
-The `HttpClientModule` registers the providers needed to use the `HttpClient` service throughout your application. The `HttpClient` service is what you inject into your services to fetch data and interact with external APIs and resources. The `HttpClient` uses observables to handle requests and provide responses. Learn more about Angular's HTTP client in the [HttpCient guide](guide/http).
-
-## Pulling data using `HttpClient`
+### Pulling data using `HttpClient`
 
 Currently, your products data is using the `data` property in the `ProductService` for its data. For a real world application, this data would be fetched from an external API or resource such as a JSON file. To show how to use `HttpClient`, you'll update the `ProductService` to pull the data from a JSON file using the `HttpClient` service.
 
@@ -114,7 +72,6 @@ Inject the `HttpClient` service into the `ProductService` by adding it to the co
 <code-example header="src/app/products/product.service.ts (HttpClient)" path="getting-started/src/app/products/product.service.ts" linenums="false" region="httpclient-inject">
 </code-example>
 
-
 #### 7. Request and return data from JSON file
 
 Update the `getAll()` method to transform the results of the `HttpClient#get()` method using the `map()` operator to return the products.
@@ -122,24 +79,39 @@ Update the `getAll()` method to transform the results of the `HttpClient#get()` 
 <code-example header="src/app/products/product.service.ts (Http.get)" path="getting-started/src/app/products/product.service.ts" linenums="false" region="httpclient-get-all">
 </code-example>
 
-The `HttpClient#get()` method returns an observable of the external request made to fetch the `products`. This observable will not execute until the method is subscribed to. The `products.json` is an object with a `products` property. The `{ products: Product[] }` provides type information about the observable stream being returned from the request. The `map()` operator is a function that is called with the results from the request, which then transforms the data into a new observable array of the products.
+- The `HttpClient#get()` method returns an observable of the external request made to fetch the `products`. This observable will not execute until the method is subscribed to. 
+- The `products.json` is an object with a `products` property. The `{ products: Product[] }` provides type information about the observable stream being returned from the request. 
+- The `map()` operator is a function that is called with the results from the request, which then transforms the data into a new observable array of the products.
 
 Remove the `Observable` and `of` imports from the rxjs package, and the data property in the `ProductService`.
 
-When you reload the page, the product list still displays the same information, but the data can be changed dynamically without changing your code.
+<code-example header="src/app/products/product.service.ts" path="getting-started/src/app/products/product.service.ts" linenums="false" region="complete">
+</code-example>
 
-## Retrieving details for a product
+When you reload the page, the product list still displays the same information, but the data can be changed dynamically without changing your code. 
+
+### Retrieving details for a product
 
 You've retrieved a list of the products with their associated information. You'll use that list to show the details of an individual product. In a real world application, retrieving an individual product might have a separate endpoint, but for this guide, you'll reuse the product list for an individual product.
 
-In the `ProductService`, add a `getOne()` method that takes an id and returns an observable of one product based on the `productId`.
+#### Add properties to product
+
+Update the `Product` interface in the `product.ts` file with more properties about a given product, 
+such as its id, price, and categories. 
+
+<code-example header="src/app/products/product.ts (Product interface)" path="getting-started/src/app/products/product.ts" linenums="false">
+</code-example>
+
+You can safely reference these properties as part of a `Product` in your app now.
+
+In the `ProductService`, add a `getOne()` method that takes an `id` and returns an observable of one `product` based on the `productId`.
 
 <code-example header="src/app/products/product.service.ts (getOne())" path="getting-started/src/app/products/product.service.ts" linenums="false" region="httpclient-get-one">
 </code-example>
 
 The `map()` operator takes the existing array of products, and uses the `Array#filter()` method to find the product based on the `productId`. As mentioned earlier, you are transforming a stream of an array of products into a new stream of a single product.
 
-## Displaying details for a product
+### Displaying details for a product
 
 The `ProductService` handles retrieving of all products and a a single product. You'll use the `ProductService` and the Angular Router to combine and transform streams of data to display the product details.
 
@@ -154,6 +126,8 @@ In the `product-details.component.ts`:
 </code-example>
 
 #### Import current route information
+
+To see information provided by the router for a routed component, each routed component is provided an `ActivatedRoute` service. You inject the `ActivatedRoute` service to access its route parameters, route data, and other necessary information. 
 
 Import the `ActivatedRoute` from the `@angular/router` package
 
@@ -183,6 +157,8 @@ To retreive an individual product, you must transform the stream containing the 
 1. Inject the `ProductService` and `ActivatedRoute` classes in the constructor of the `ProductDetailsComponent`.
 2. Define the `product` property to retrieve the route’s params as an observable and `switchMap` it into a request made by the `ProductService.getOne()` method using the `productId`.
 
+The route parameters are provided as an observable you subscribe to. When the parameters observable is updated, the observable produce a new value.
+
 <div class="alert is-important">
 
 **Note:** The process of transitioning from one observable stream into another with an operator ending with `Map` is called "flattening". The route parameters stream is flattened and mapped into the second stream of retrieving the individual product. Read more about observable streams in the [Observables](guide/observables) guide.
@@ -206,13 +182,11 @@ Update the `ProductDetailsComponent` template to subscribe to `product`.
 
 In the example above, you assigned the `product` as an `productInfo` in the template. This allows you to reuse the same reference in multiple places, instead of using the `AsyncPipe` multiple times, which creates multiple subscriptions.
 
-## Collecting data with Angular Forms
+## Managing additional data with a service
 
-Forms in Angular take the standard capabilities of the HTML based forms and add an orchestration layer to help with creating custom form controls, and to supply great validation experiences. There are two parts to an Angular Reactive form, the visualization of the form that lives in the template, and the objects that live in the component to store and manage the form.
+You've used the `ProductService` to retrieve a list of products, and to retrieve an individual product. To finish out the buying process, you'll need to store the products the user intends to buy. This data is managed separately from the products themselves, so you'll need a separate service to store information about items in the cart.
 
-For this example you'll use [reactive forms](/guide/reactive-forms). To learn about Angular forms in general, read the [Forms Overview](guide/forms-overview) guide.
-
-## Storing products for the cart
+### Storing products for the cart
 
 The product details includes `Buy` button for each product that you need to capture for the checkout process. You'll store the cart items using a service that is accessible from the page where the user checks out.
 
@@ -231,7 +205,7 @@ Update the `CartService` file with functionality to add products, and return a l
 * The `add()` method appends a product to an array of `items` defined in the `CartService`. 
 * The `getAll()` method collects the items added to the cart and returns each item with its associated quantity.
 
-## Adding products to the cart
+### Adding products to the cart
 
 The `CartService` adds the product each time the `CartService#add` method is called. Because services are shared, the `ProductDetailsComponent` can use the service to add products to the cart. Update the `ProductDetailsComponent` to add the `product` to the cart when the `Buy` button is clicked. 
 
@@ -265,7 +239,11 @@ Add a click event listener to the Buy button that calls the `onBuy()` method you
 
 Now you refresh the application, click on product details, click the Buy button, and the product is added to the store list of items.
 
-## Creating a checkout page
+## Collecting data with Angular Reactive Forms
+
+Forms in Angular take the standard capabilities of the HTML based forms and add an orchestration layer to help with creating custom form controls, and to supply great validation experiences. There are two parts to an Angular Reactive form, the objects that live in the component to store and manage the form, and the visualization of the form that lives in the template.
+
+### Creating a checkout page
 
 The products are stored each time the `Buy` button is clicked, but the checkout page is where the checkout process is completed. You'll build out the checkout page to list the cart items and submit the purchase.
 
@@ -292,6 +270,8 @@ The form lives in a component's TypeScript class and its template. In the compon
 Right click on the `app` folder, use the `Angular Generator`, and generate a component named `checkout`.
 
 #### Import reactive forms classes
+ 
+To build out the form model, you'll need to import some building blocks from the forms package.
 
 Import `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms` package.
 
@@ -307,23 +287,27 @@ Import the `CartService` class, and the `CartItem` interface for type informatio
 
 #### Create items property
 
-To store the cart item locally in the component class, you need to create a class property.
+To store the cart items locally in the component class, you need to create a class property.
 
 Create an `items` property with type `CartItem[]`. You'll reference the items in the class and in the component template.
 
-<code-example header="src/app/checkout/checkout.component.ts (Checkout form)" path="getting-started/src/app/checkout/checkout.component.ts" region="checkout-form">
+<code-example header="src/app/checkout/checkout.component.ts (Checkout form)" path="getting-started/src/app/checkout/checkout.component.ts" region="cart-items">
 </code-example>
 
 #### Create form property
+
+In a reactive form, the form model, which is the source of truth for the form value and validation status, is defined in the component class. 
 
 Create a `checkoutForm` property with type `FormGroup`. You'll create the `FormGroup` in the constructor using the `FormBuilder`.
 
 <code-example header="src/app/checkout/checkout.component.ts (Checkout form)" path="getting-started/src/app/checkout/checkout.component.ts" region="checkout-form">
 </code-example>
 
+The `checkoutForm` property will store the form model for handling input from the user.
+
 #### Inject CartService
 
-Inject the `CartService` and `CartService` as dependencies in the constructor of the `CheckoutComponent`.
+Inject the `FormBuilder` and `CartService` as dependencies in the constructor of the `CheckoutComponent`.
 
 <code-example header="src/app/checkout/checkout.component.ts" path="getting-started/src/app/checkout/checkout.component.ts" region="cart-service">
 </code-example>
@@ -332,16 +316,16 @@ Inject the `CartService` and `CartService` as dependencies in the constructor of
 
 The source of truth for the form model for reactive forms is defined in the component class. The form model is reflected in the template through directives provided by Angular reactive forms.
 
-Inject the `FormBuilder` class into the `CheckoutComponent` constructor and use the `FormBuilder#group()` method to create a form group with name and address.
+Use the `FormBuilder#group()` method to create a form group with name and address.
 
 <code-example header="src/app/checkout/checkout.component.ts (Form Builder)" path="getting-started/src/app/checkout/checkout.component.ts" region="formbuilder">
 </code-example>
 
 #### Populate list of cart items
 
-The `ngOnInit()` method in each component class is a lifecycle hook. The `ngOnInit()` method is called after the component is initialized. This initialization is after the constructor, but provides you a place to wire up initial logic for your component. Read more about this and other hooks in the [lifecycle hooks](guide/lifecycle-hooks) guide.
+The `ngOnInit()` method in  `CheckoutComponent` class is a lifecycle hook. The `ngOnInit()` method is called after the component is initialized. This initialization is after the constructor, but provides you a place to perform additional logic for your component. Read more about this and other hooks in the [lifecycle hooks](guide/lifecycle-hooks) guide.
 
-In the `ngOnInit()` method, subscribe to the `CartService#getAll()` method to listen to a stream its values. When the stream outputs a value, you want to store the items with the `items` property in the component class.
+In the `ngOnInit()` method, subscribe to the `CartService#getAll()` method to listen to a stream its values. When the stream outputs a value, you want to store the items on the `items` property in the component class.
 
 <code-example header="src/app/checkout/checkout.component.ts (ngOnInit())" path="getting-started/src/app/checkout/checkout.component.ts" region="on-init">
 </code-example>
@@ -357,12 +341,12 @@ The form model is defined in the `CheckoutComponent` class. The template needs t
 
 1. Add a `Checkout` header to the template.
 
-<code-example header="src/app/checkout/checkout.component.html (template)" path="getting-started/src/app/checkout/checkout.component.html" linenums="false" region="header">
+<code-example header="src/app/checkout/checkout.component.html (header)" path="getting-started/src/app/checkout/checkout.component.1.html" linenums="false" region="header">
 </code-example>
 
 2. Use an `NgFor` directive to iterate over the `items`, display each product name and total for the quantity purchased.
 
-<code-example header="src/app/checkout/checkout.component.html (template)" path="getting-started/src/app/checkout/checkout.component.html" linenums="false" region="list">
+<code-example header="src/app/checkout/checkout.component.html (cart items)" path="getting-started/src/app/checkout/checkout.component.1.html" linenums="false" region="list">
 </code-example>
 
 3. Define a `form` tag in the template and bind the `checkoutForm` from the component class to the `formGroup` attribute on the form. 
@@ -370,10 +354,31 @@ The form model is defined in the `CheckoutComponent` class. The template needs t
 5. Add input fields for name and address using `formControlName` directive.
 6. Add a `submit` button to trigger the form submission.
 
-<code-example header="src/app/checkout/checkout.component.html (template)" path="getting-started/src/app/checkout/checkout.component.html" linenums="false" region="form">
+<code-example header="src/app/checkout/checkout.component.html (checkout form)" path="getting-started/src/app/checkout/checkout.component.1.html" linenums="false" region="form">
 </code-example>
 
-## Adding the checkout route
+#### Completing the checkout process
+
+To end the checkout process, you'll want to hide the checkout form upon clicking the `Purchase` button. Because you can use the `NgIf` discussed earlier to add and remove elements from the page dynamically, you'll use this flag to trigger the display and removal of an element in the component template.
+
+1. Add a `submitted` property to the `CheckoutComponent` class that defaults to `false`. 
+
+<code-example header="src/app/checkout/checkout.component.ts (submitted property)" path="getting-started/src/app/checkout/checkout.component.ts" region="submitted">
+</code-example>
+
+2. Add a message to the `CheckoutComponent` template with an attached `NgIf` directive that is based on the `submitted` property. 
+
+<code-example header="src/app/checkout/checkout.component.html (submitted message)" path="getting-started/src/app/checkout/checkout.component.html" region="submitted">
+</code-example>
+
+3. Set the `submitted` property to `true` in the `onSubmit()` method.
+
+<code-example header="src/app/checkout/checkout.component.ts (set submitted)" path="getting-started/src/app/checkout/checkout.component.ts" region="set-submitted">
+</code-example>
+
+Now when you complete the user form and click the `Purchase` button, the form is removed from the page and the message is displayed.
+
+### Adding the checkout route
 
 To access the checkout route from your application, it needs to be registered with the Angular Router.
 
@@ -382,14 +387,24 @@ Add a route in the array of routes for the `CheckoutComponent`.
 <code-example header="src/app/app.module.ts (checkout route)" path="getting-started/src/app/app.module.ts" linenums="false" region="checkout-route">
 </code-example>
 
-The route is registered, so you can type the URL in manually. To access the checkout route easily, add a `routerLink` to the `SideNavComponent` template.
+The route is registered, so you can type the URL in manually. To access the checkout route easily, add a `routerLink` to the `TopBarComponent` template.
 
-<code-example header="src/app/side-nav/side-nav.component.html (checkout link)" path="getting-started/src/app/side-nav/side-nav.component.html" linenums="false" region="checkout-link">
+<code-example header="src/app/top-bar/top-bar.component.html (checkout link)" path="getting-started/src/app/top-bar/top-bar.component.html" linenums="false" region="checkout-link">
 </code-example>
 
 When the user fills out the form and submits the button, the customer data is logged to the browser console. 
 Your shopping cart is now accessing data from the internet and allowing users to checkout.
 
-## Next steps
+## Review and next steps
 
-As your application grows, you should starting thinking about the [architecture](getting-started/getting-started-architecture) of your application.
+You did it! You have built an Angular app. 
+
+In this part you learned:
+* How to register and use Angular's Http Client
+* How to fetch data from external sources
+* How to use the Angular Router to fetch route information
+* How to register Angular Reactive Forms
+* How to build a reactive form to handle user input
+* How to conditionally show and hide page elements
+
+You've built your Angular app, and now you can [deploy it](getting-started/getting-started-deployment) to a live website.

@@ -464,25 +464,14 @@ Learn more about Angular's dependency injection system in the [Dependency Inject
 
 Services are the place where you share data between parts of your application. For the shopping cart, a product service is where you to store your product data and methods.
 
-#### 1. Add properties to product
-
-Update the `Product` interface in the `product.ts` file with more properties about a given product, 
-such as its id, price, and categories. 
-
-<code-example header="src/app/products/product.ts (Product interface)" path="getting-started/src/app/products/product.ts" linenums="false">
-</code-example>
-
-*JAF: Why now? We don't use them.*
-
-
-#### 2. Generate the product service
+#### 1. Generate the product service
 
 Right click on the the `products` folder, and use the `Angular Generator` to generate a service name `Product`.
 
 <code-example header="src/app/products/product.service.ts (Initial code)" path="getting-started/src/app/products/product.service.1.ts">
 </code-example>
 
-#### 3. Import functionality to manage the array of products
+#### 2. Import functionality to manage the array of products
 
 [Observables](guide/glossary#observable) provide support for passing messages between publishers and subscribers in your application. They are ysed for asynchronous event handling throughout Angular. 
 
@@ -718,7 +707,14 @@ To display more information for a particular product, you'll use a specific rout
 
 When the user clicks on the product title, the router will navigate to the product details route, with the specific `productId`. Only placeholder text is displayed, but you'll retrieve the product details in the data section.
 
+### Navigating to the homepage
 
+Router links are convenient to navigate the user around without manually entering a URL each time. After the user clicks on a product's details, you'll want to provide a link to get back to the home page.
+
+Wrap the header in the `TopBarComponent` template in a link to navigate back to the app home page.
+
+<code-example header="src/app/top-bar/top-bar.component.html" path="getting-started/src/app/top-bar/top-bar.component.html" region="home-route">
+</code-example>
 
 ### How routing works
 
@@ -727,28 +723,6 @@ Navigation is done through the `RouterLink` directive provided by the `Router` i
 *JAF: Is all of this important and in context of what we need for *
 
 
-#### Retrieving route information
-
-To see information provided by the router for a routed component, each routed component is provided an `ActivatedRoute` service. You inject the `ActivatedRoute` service to access its route parameters, route data, and other necessary information. 
-
-```ts
-export class MyPageComponent {
-  productId: string;
-
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      this.productId = params.get('productId');
-    });
-  }
-}
-```
-*JAF: I think this is too deep without an example. Can we instead focus on the pattern of steps to take to set up routing?*
-
-The route parameters and route data are provided as observables you subscribe to. When the parameters or data observables are updated, the observables produce a new value. The example below shows you how to subscribe to a route and get its `productId` provided through a variable route from its URL.
-
-*JAF: I think this is too deep without an example. Can we instead focus on the pattern of steps to take to set up routing?*
 
 After you set up the router, you can continue to create more components and routes in your `RouteConfig`.
 
