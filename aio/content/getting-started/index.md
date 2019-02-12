@@ -25,6 +25,8 @@ This tutorial walks you through the steps to build a simple online store applica
 ### What you'll learn
 <!-- Tutorial application -->
 
+The store app is simplified to help you focus on skills that you are most likely to use in developing your own apps. The techniques that you will learn are Angular best practices, intended to scale with your Angular apps. 
+
 This tutorial is organized into three parts:
 
 * Part 1 - Your First App (1.5 hours): You'll create the catalog of products. You'll learn about:
@@ -42,6 +44,7 @@ This tutorial is organized into three parts:
 * Part 3 - Deployment: You'll deploy your app to a live website (Firebase) or to your hosting environment. If you chose to deploy to your hosting environment, you'll learn how to use the [Angular CLI](cli) to build and deploy your app to the hosting environment of your choice. 
 
 Within each section, this tutorial introduces a new concept and then provides instructions to apply that concept to the online store app. 
+
 
 *JAF: Verify and update time estimates for each part.*
 
