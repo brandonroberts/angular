@@ -253,7 +253,7 @@ In this section you'll:
 
 * Learn how to register Angular's Reactive Forms.
 * Build a form model to store the form data and reflect it in the component template.
-* Use an NgIf directive to conditionally add and remove elements.
+* Use an `*ngIf` directive to conditionally add and remove elements.
 
 ### Creating a checkout page
 
