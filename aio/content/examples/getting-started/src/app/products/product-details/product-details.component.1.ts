@@ -1,14 +1,12 @@
 // #docplaster
+// #docregion rxjs-imports, activated-route-import, product-imports
 import { Component } from '@angular/core';
-// #docregion rxjs-imports
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 // #enddocregion rxjs-imports
-// #docregion activated-route-import
 import { ActivatedRoute } from '@angular/router';
 // #enddocregion activated-route-import
 
-// #docregion product-imports
 import { ProductService } from '../product.service';
 import { Product } from '../product';
 // #enddocregion product-imports

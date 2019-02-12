@@ -1,10 +1,8 @@
 // #docplaster
-// #docregion complete
+// #docregion complete, httpclient, rxjs-import
 import { Injectable } from '@angular/core';
-// #docregion httpclient
 import { HttpClient } from '@angular/common/http';
 // #enddocregion httpclient
-// #docregion rxjs-import
 import { map } from 'rxjs/operators';
 // #enddocregion rxjs-import
 
@@ -13,8 +11,8 @@ import { Product } from './product';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
 // #docregion httpclient-inject
+export class ProductService {
   constructor(private http: HttpClient) { }
 // #enddocregion httpclient-inject
 
@@ -33,6 +31,6 @@ export class ProductService {
       );
   }
 // #enddocregion httpclient-get-one
-// #docregion complete
+// #docregion complete, httpclient-inject
 }
-// #enddocregion complete
+// #enddocregion complete, httpclient-inject
