@@ -1,26 +1,25 @@
 // #docplaster
-// #docregion
+// #docregion, forms-imports, cart-imports
 import { Component, OnInit } from '@angular/core';
-// #docregion forms-imports
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 // #enddocregion forms-imports
 
-// #docregion cart-imports
 import { CartService, CartItem } from '../cart.service';
 // #enddocregion cart-imports
 
 @Component({
   selector: 'app-checkout',
-  templateUrl: './checkout.component.html'
+  templateUrl: './checkout.component.html',
+  styleUrls: ['./checkout.component.css']
 })
-// #docregion cart-items
+// #docregion cart-items, checkout-form, submitted
 export class CheckoutComponent implements OnInit {
   items: CartItem[];
 // #enddocregion cart-items
-
-// #docregion checkout-form
   checkoutForm: FormGroup;
 // #enddocregion checkout-form
+  submitted = false;
+// #enddocregion submitted
 
 // #docregion cart-service, formbuilder
   constructor(
@@ -33,10 +32,10 @@ export class CheckoutComponent implements OnInit {
       name: ['', Validators.required],
       address: ['', Validators.required],
     });
-// #enddocregion checkout-form-group, formbuilder
+// #enddocregion checkout-form-group
 // #docregion cart-service
   }
-// #enddocregion cart-service
+// #enddocregion cart-service, formbuilder
 
 // #docregion on-init
   ngOnInit() {
@@ -45,17 +44,19 @@ export class CheckoutComponent implements OnInit {
   }
 // #enddocregion on-init
 
-// #docregion on-submit
+// #docregion on-submit, set-submitted
   onSubmit(customerData: any) {
     const checkoutData = {
       customer: customerData,
       items: this.items
     };
-
-    // Do something with the checkout data here
+// #enddocregion on-submit
+    this.submitted = true;
+// #docregion on-submit
+    // Process checkout data here
     console.log(checkoutData);
   }
-// #enddocregion on-submit
-// #docregion cart-items
+// #enddocregion on-submit, set-submitted
+// #docregion cart-items, checkout-form, submitted
 }
-// #enddocregion cart-items
+// #enddocregion cart-items, checkout-form, submitted

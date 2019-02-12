@@ -1,5 +1,5 @@
 // #docplaster
-// #docregion
+// #docregion complete
 import { Injectable } from '@angular/core';
 // #docregion httpclient
 import { HttpClient } from '@angular/common/http';
@@ -23,7 +23,7 @@ export class ProductService {
     return this.http.get<{ products: Product[] }>('/assets/products.json')
       .pipe(map(data => data.products));
   }
-// #enddocregion httpclient-get-all
+// #enddocregion httpclient-get-all, complete
 
 // #docregion httpclient-get-one
   getOne(productId: number) {
@@ -33,4 +33,6 @@ export class ProductService {
       );
   }
 // #enddocregion httpclient-get-one
+// #docregion complete
 }
+// #enddocregion complete

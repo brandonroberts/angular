@@ -25,9 +25,9 @@ import { CheckoutComponent } from './checkout/checkout.component';
 // #enddocregion checkout-route
 // #docregion product-list-route
       { path: '', component: ProductListComponent },
-// #docregion product-details-route
+// #docregion product-details-route, checkout-route
     ]),
-// #enddocregion product-list-route, product-details-route
+// #enddocregion product-list-route, product-details-route, checkout-route
     HttpClientModule,
     ReactiveFormsModule,
   ],
