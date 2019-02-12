@@ -18,7 +18,7 @@ This tutorial walks you through the steps to build a simple online store applica
 </figure>
 
 
-*JAF: Replace with image of this tutorial's final app. MUST: Fix sizing and spacing*
+*JAF: Min: Replace image with one that is just the app without component overlays, fix sizing. Consider: Replace with final GS Store app*
 
 
 {@a intro-tutorial}
@@ -63,9 +63,15 @@ If you are new to web development, you'll find lots of resources available to co
 </div> 
 
 {@a stackblitz}
-### Setup
+### Working in Stackblitz
 
-You don't need to install anything. You'll build the shopping cart using [StackBlitz](https://stackblitz.com/). StackBlitz is an online development environment with accelerators that make it easy to develop an Angular application. 
+You don't need to install anything. You'll build the shopping cart using [StackBlitz](https://stackblitz.com/). StackBlitz is an online development environment with accelerators that make it easy to develop an Angular application. The accelerators are similar to what is offered by the Angular CLI when you are working locally. 
+
+Tips for workingn in Stackblitz:
+* Create a user account and login. Stackblitz will store your work, so you can take breaks and resume where you left off. 
+* If you want to save a snapshot of your work at a given point, create a fork. To display all of your froks, click on your name in the top bar. 
+* If the preview pane isn't showing what you expect, save and then click the refresh button. 
+* To copy a code example from this tutorial, click the icon at the top right of the code example box, which saves the example to the clipboard. Then you can paste it into Stackblitz. 
 
 
 {@a components}
@@ -92,7 +98,7 @@ The components at each level of the tree have progressively fewer responsibiliti
 
 Imagine a typical shopping experience, such as [Google Express](https://express.google.com): 
 
-*JAF: Use the shopping cart that we'll build. Fix size. Make accessible, by removing animation.*
+*JAF: Use the shopping cart that we'll build. Fix size.*
 
 <figure>
   <img src='generated/images/guide/toh/component-structure.png' alt="Angular applications are broken down into a tree of components like on express.google.com">
@@ -132,8 +138,6 @@ Interpolation lets you render the contents of a property of a component as text 
 
 Following the mental model of HTML, components have state being given to them. This is accomplished by binding to the property of a component or HTML element.
 
-*JAF: Not sure I understand this lead-in. *
-
 You can bind to a property on an element, so that whenever the property changes, the element is updated based on the template expression.
 
 <aio-gs-property-binding></aio-gs-property-binding>
@@ -151,11 +155,6 @@ You can add and remove elements from the page dynamically using `*ngIf`.
 `*ngIf` is a "structural directive". Structural directives change which HTML or components are displayed.  Technically, they shape or reshape the DOM's structure, typically by adding, removing, and manipulating the elements to which they are attached. Any directive with an * is a structural directive.
 
 <aio-gs-ng-if></aio-gs-ng-if>
-
-*JAF: If you delete everything in the input box you get an error condition. Move the [ ] outside the box? Assume users will understand why you have to leave [ ] to see the effect of ngIf? - We could change the error message to "The provided value must be an array of items to be more clear"*
-
-*JAF: Can we just refer to this as *ngIf? Seems like that's the template syntax, and NgIf the API/implementation, which could be skipped right now. - Not sure if you mean NgIf*
-
 
 #### *ngFor
 
@@ -222,7 +221,7 @@ A component definition includes:
  * The `Component` decorator, which provides metadata about the component, including its templates, styles, and a selector.
  * An exported class, which handles functionality for the component.
 
-*JAF: By our terminology, a component also includes the html and css. Is there a term for the collection here, what's in the .ts file specifically?*
+*JAF: By our current definitions, a component also includes the html and css. Is there a term for the collection here, the collection of what's in the .ts file specifically? It comes up in terms of "open the component .ts file" where the other files have names "component template file" and "component style file" that are alternatives to "component .html file" and "component .css file".*
 
 Right now, the `TopBarComponent` doesn't do much, but you'll update it to show the name of your store.
 
@@ -325,7 +324,7 @@ Inputs define what data can be passed into your component. This data is updated 
 
 ### External communication with an output
 
-*JAF: Note that we don't use an Output in the shopping cart app, at least not in Part 1. Should we shorten this introduction? Add functionality?*
+*JAF: Note that we don't use an Output in the shopping cart app in Part 1. Should we shorten this introduction? Add functionality?*
 
 Look at the `editName` property to see how the component communicates externally.
 
@@ -387,8 +386,6 @@ The initial component that is generated only imports the most basic functionalit
 
 <code-example header="src/app/products/product-preview/product-preview.component.ts" path="getting-started/src/app/products/product-preview/product-preview.component.ts" region="product-imports">
 </code-example>
-
-*JAF: Extend doc region to show both lines together, so readers know where this goes.*
 
 
 4. Define a property in the `ProductPreviewComponent` class named `product` and use the `Input` decorator on it. Give the `product` a defined type using the `Product` interface.
@@ -458,7 +455,6 @@ Learn more about Angular's dependency injection system in the [Dependency Inject
 
 </div>
 
-*JAF: I deleted everything that was here HTTPClient and the example injecting it into MyDataService.* 
 
 ### Creating a product service to store products
 
@@ -502,7 +498,7 @@ Use methods to expose the data from the `ProductService.data` property.
 1. Define a `data` property in the `ProductService` class that contains product list data.
 2. Add a `getAll()` method using the `of` method to return the products from the data property.
 
-The complete code is below. Tip: You can use the icon at the top right of the code example box to copy the code to the clipboard. 
+The complete code is below. Ensure that `@Injectable` includes `providedIn: 'root'`.
 
 *JAF: StackBlitz doesn't create @Injectable with providedIn: 'root'.*
 
@@ -571,8 +567,6 @@ In this section, you'll:
 * Make the product list area routable, meaning that user actions in this area will change the URL, and changes to the URL will replace the contents of this area
 * Create and configure new product details to be included in the product list area when a single product is selected
 
-*JAF: I need a word like "routable"...is that right?*
-
 In this section, we'll update the Store app to use routing for the product list area of the app. 
 The top bar and side navigation will remain fixed, while the product list changes. 
 The URL and product list will change together, based on the user's selections. 
@@ -616,9 +610,7 @@ So far we've worked mostly within individual components and services.
 
 Some Angular features, however, are global to the app and available at all times. Because routing is pervasive--the user can enter a new URL or take an action that causes a change to the URL--routing must be enabled and configured at the app level. 
 
-*JAF: Need help with this.*
-
-To add routing to an app: 
+To eanble routing in the app, you will: 
 
 1. Import and register RouterModule.
 2. Set up a RouterOutet as a placeholder to dislay routed components.
@@ -629,8 +621,6 @@ To add routing to an app:
 Open the `app.module.ts` file. 
 This file contains the root module, which is loaded first by the app. 
 Functionality that applies to the entire app is defined here. 
-
-*JAF: We've only touched app.module.html, so we should probably introduce this file formally here.* 
 
 
 #### 2. Import RouterModule
@@ -646,31 +636,31 @@ Import `RouterModule` from the `@angular/router` package into the `app.module.ts
 In the `imports` array, add the `RouterModule.forRoot([])` method with an empty array. 
 Configured routes will be stored in the array.
 
-*JAF: Terminology. "configured routes" or "defined routes" or "route configurations"?*
+*JAF: Terminology. Are these terms synonymous: "configured routes" or "defined routes" or "route configurations"?*
 
 <code-example header="src/app/app.module.ts (imports)" path="getting-started/src/app/app.module.1.ts" region="router-module-imports">
 </code-example>
 
-Your application is configured with Angular routing, but the template needs a placeholder where it renders routed components. 
-
-*JAF: "configured with Angular routing" means the router is created and ready to listen?*
+At this point, your application is configured with Angular routing; the router is created and ready to listen.
 
 
 #### 3. Add a router outlet
 
-Remember that we're going to use routing for the product list area of the app.
+The template needs a placeholder where it renders routed components. That placeholder is called a "router outlet."
+
+Recall that we're going to use routing for the product list area of the app. 
+So, we'll replace the product list view with a router outlet. 
 To do that, open `app.component.html` and
 replace `app-product-list` with `routeroutlet`. 
 
 <code-example header="src/app/app.component.html (Router outlet)" path="getting-started/src/app/app.component.html">
 </code-example>
 
-The router is ready to listen for changes in the browser URL, but you need to configure it with routes to transition from one set of components to the next.
-
-*JAF: Is this a listening action, a writing action, or both via routeroutlet?*
-
+Now the router is both ready to listen for changes in the browser URL, and it has a place to display the requested component. 
 
 ### Create a route that shows product list
+
+Next you need to configure the app with routes to transition from one set of components to the next.
 
 To register a route for the product list, it must be defined in the array of routes.
 
@@ -683,7 +673,7 @@ In the `app.module.ts` file, add an object to the array defined in `RouterModule
 
 Now when you navigate to your example URL with only the `/`, the list of products is displayed.
 
-*JAF: Screen shot? Or show URL?*
+*JAF: This isn't easy to see. Screen shot? Or show URL?*
 
 ### Create a route for product details
 
@@ -718,11 +708,7 @@ Wrap the header in the `TopBarComponent` template in a link to navigate back to 
 
 ### How routing works
 
-Navigation is done through the `RouterLink` directive provided by the `Router` in a template, or imperatively using the `Router` service. Navigation is always done by string, or by array of URL paths, such as `['path', 'to', variable]` which results in a URL that looks like 'https://example.org/path/to/42'.
-
-*JAF: Is all of this important and in context of what we need for *
-
-
+Navigation is done through the `RouterLink` directive provided by the `Router` in a template, or imperatively using the `Router` service. Navigation is always done by string, or by array of URL paths, such as `['path', 'to', variable]` which results in a URL that looks like 'https://example.org/path/to/42'. 
 
 After you set up the router, you can continue to create more components and routes in your `RouteConfig`.
 
@@ -733,7 +719,7 @@ To learn more about routing, see the [Router and Navigation Guide](guide/router)
 
 </div>
 
-
+*JAF: Much of the original content has been removed. Move this to the start of routing? Work it into the steps?*
 
 
 ## Review and next steps
