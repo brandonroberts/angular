@@ -8,7 +8,7 @@ Data your app needs can come from many different sources. Whether it be a static
 
 ### What you'll learn
 
-In this section, you'll focus on using data and receiving data from user input.
+In the sections below, you'll focus on using data and receiving data from user input.
 
 - Retrieving external data using Angular's Http Client
 - Receiving form input through Angular Reactive Forms
@@ -21,6 +21,12 @@ In the sections below, you'll build out your store with retreiving data from and
 Data coming back from servers in Angular applications most frequently take the form of a stream. Streams are useful because they make it easy to transform the data that is coming back, and to make modifications to the way data is requested. The Angular Http Client is a built-in way to fetch data from external APIs and provide them to your application as a stream. 
 
 Similarly with the Angular Router, the `HttpClientModule` registers the providers needed to use a single instance of the `HttpClient` service throughout your application. The `HttpClient` service is what you inject into your services to fetch data and interact with external APIs and resources. The `HttpClient` also uses observables to handle requests and provide responses. 
+
+In this section you'll:
+
+* Learn how to register Angular's Http Client
+* Fetch data from an external source
+* Use the Angular Router to fetch route information and use that information to request data.
 
 ### Pulling data using `HttpClient`
 
@@ -242,6 +248,12 @@ Now you refresh the application, click on product details, click the Buy button,
 ## Collecting data with Angular Reactive Forms
 
 Forms in Angular take the standard capabilities of the HTML based forms and add an orchestration layer to help with creating custom form controls, and to supply great validation experiences. There are two parts to an Angular Reactive form, the objects that live in the component to store and manage the form, and the visualization of the form that lives in the template.
+
+In this section you'll:
+
+* Learn how to register Angular's Reactive Forms.
+* Build a form model to store the form data and reflect it in the component template.
+* Use an NgIf directive to conditionally add and remove elements.
 
 ### Creating a checkout page
 

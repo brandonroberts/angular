@@ -559,7 +559,7 @@ The `AsyncPipe` used in the template subscribes to the `products` observable tha
 {@a routing}
 ## Navigating with the Angular router
 
-Up to this point, the application doesn't have any variable states or navigation. There is one URL, and that URL always displays the "Welcome to My Store" page with a fixed list of categories and products. 
+Up to this point, the application doesn't have any variable states or navigation. There is one URL, and that URL always displays the "My Store" page with a fixed list of categories and products. 
 
 The Angular [router](guide/glossary#router) allows us to show different components and data to the user based on where the user is in the application. 
 
