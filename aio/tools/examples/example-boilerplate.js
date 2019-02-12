@@ -78,6 +78,11 @@ BOILERPLATE_PATHS.universal = [
   'package.json'
 ];
 
+BOILERPLATE_PATHS['getting-started'] = [
+  ...cliRelativePath,
+  'src/styles.css'
+];
+
 BOILERPLATE_PATHS.ivy = {
   systemjs: [
     'rollup-config.js',
@@ -126,7 +131,11 @@ class ExampleBoilerPlate {
       BOILERPLATE_PATHS[boilerPlateType].forEach(filePath => this.copyFile(boilerPlateBasePath, exampleFolder, filePath));
 
       // Copy the boilerplate common files
-      BOILERPLATE_PATHS.common.forEach(filePath => this.copyFile(BOILERPLATE_COMMON_BASE_PATH, exampleFolder, filePath));
+      const useCommonBoilerplate = exampleConfig.useCommonBoilerplate !== false;
+      
+      if (useCommonBoilerplate) {
+        BOILERPLATE_PATHS.common.forEach(filePath => this.copyFile(BOILERPLATE_COMMON_BASE_PATH, exampleFolder, filePath));
+      }
 
       // Copy Ivy specific files
       if (ivy) {
