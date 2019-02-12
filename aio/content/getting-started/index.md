@@ -70,9 +70,9 @@ If you are new to web development, you'll find lots of resources available to co
 
 You don't need to install anything. You'll build the shopping cart using [StackBlitz](https://stackblitz.com/). StackBlitz is an online development environment with accelerators that make it easy to develop an Angular application. The accelerators are similar to what is offered by the Angular CLI when you are working locally. 
 
-Tips for workingn in Stackblitz:
-* Create a user account and login. Stackblitz will store your work, so you can take breaks and resume where you left off. 
-* If you want to save a snapshot of your work at a given point, create a fork. To display all of your froks, click on your name in the top bar. 
+Tips for working in Stackblitz:
+* If you are logged in, Stackblitz will store your work, so you can take breaks and resume where you left off. If you have a Github account, you can connect that to Stackblitz. 
+* If you want to save a snapshot of your work at a given point, create a fork. You can edit the name of your Stackblitz project to make it easier to return to your work (such as `getting-started-part1`). To display all of your forks, click on your name in the top bar. 
 * If the preview pane isn't showing what you expect, save and then click the refresh button. 
 * To copy a code example from this tutorial, click the icon at the top right of the code example box, which saves the example to the clipboard. Then you can paste it into Stackblitz. 
 
@@ -189,16 +189,14 @@ You develop apps in the context of an Angular workspace. A workspace contains th
 
 To create a new project in StackBlitz, [click here](https://stackblitz.com/fork/ng-getting-started).
 
-StackBlitz creates a new Angular workspace and an initial app project. The initial project includes the `app-root` component mentioned above, as well as other app and configuration files. The `app-root` component is responsible for displaying "Angular Getting Started" in the preview pane on the right. 
+StackBlitz creates a new Angular workspace and an initial app project. The initial app includes the `app-root` component mentioned above, as well as other app and configuration files. The `app-root` component is responsible for displaying "Angular Getting Started" in the preview pane on the right. 
 
 
 <div class="alert is-helpful">
 
-Tip: If you log into StackBlitz, you can easily take breaks and return to the current state of this tutorial app. If you have a GitHub account, you can log into StackBlitz with that account. 
+Reminder: If you log into StackBlitz, you can easily take breaks and return to the current state of this tutorial app. If you have a GitHub account, you can log into StackBlitz with that account. See [Working in Stackblitz](#stackblitz) for more tips. 
 
 </div>
-
-*BR: Need something about styles are not covered and we are provided finished styles to put in the styles.css file*
 
 
 ####  2. Create the top bar component
@@ -271,10 +269,9 @@ To create the side navigation, you'll repeat the pattern of steps you did to cre
 The styles that are defined for a component are specific to that component. 
 They do not impact the styles of other components in the application. 
 
-
 <div class="alert is-helpful">
 
-For more information about styling components, see the [Component Styles guide](guide/component-styles).
+Global styles are defined in the app's `style.css` file. The global styles are overridden by component-specific styles. For more information about styling components, see the [Component Styles guide](guide/component-styles).
 
 </div>
 
