@@ -66,9 +66,9 @@ If you are new to web development, you'll find lots of resources available to co
 </div> 
 
 {@a stackblitz}
-### Working in Stackblitz
+### Setup
 
-You don't need to install anything. You'll build the shopping cart using [StackBlitz](https://stackblitz.com/). StackBlitz is an online development environment with accelerators that make it easy to develop an Angular application. The accelerators are similar to what is offered by the Angular CLI when you are working locally. 
+You don't need to install anything. You'll build the shopping cart using [StackBlitz](https://stackblitz.com/). StackBlitz is an online development environment with accelerators that make it easy to develop an Angular application. The accelerators are similar to what is offered by the [Angular CLI](cli) when you are working locally. 
 
 
 {@a components}
