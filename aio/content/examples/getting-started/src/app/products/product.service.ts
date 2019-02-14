@@ -11,7 +11,7 @@ import { Product } from './product';
 @Injectable({
   providedIn: 'root'
 })
-// #docregion httpclient-inject
+// #docregion httpclient-inject, httpclient-get-one
 export class ProductService {
   constructor(private http: HttpClient) { }
 // #enddocregion httpclient-inject
@@ -23,14 +23,12 @@ export class ProductService {
   }
 // #enddocregion httpclient-get-all, complete
 
-// #docregion httpclient-get-one
   getOne(productId: number) {
     return this.getAll()
       .pipe(
         map(products => products.find(product => product.id === productId))
       );
   }
-// #enddocregion httpclient-get-one
 // #docregion complete, httpclient-inject
 }
-// #enddocregion complete, httpclient-inject
+// #enddocregion complete, httpclient-inject, httpclient-get-one

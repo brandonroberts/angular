@@ -1,13 +1,13 @@
 // #docplaster
-// #docregion
+// #docregion app-module, router-module
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-// #docregion router-module
 import { RouterModule } from '@angular/router';
-// #enddocregion router-module
+// #enddocregion router-module, app-module
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
+// #docregion app-module
 import { AppComponent } from './app.component';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { SideNavComponent } from './side-nav/side-nav.component';
@@ -20,13 +20,14 @@ import { ProductPreviewComponent } from './products/product-preview/product-prev
   imports: [
 // #enddocregion router-module-imports
     BrowserModule,
+// #enddocregion app-module
 // #docregion router-module-imports
     // Other imports ...
     RouterModule.forRoot([]),
 // #enddocregion router-module-imports
     HttpClientModule,
     ReactiveFormsModule,
-// #docregion router-module-imports
+// #docregion router-module-imports, app-module
   ],
 // #enddocregion router-module-imports
   declarations: [
@@ -40,4 +41,4 @@ import { ProductPreviewComponent } from './products/product-preview/product-prev
 // #docregion router-module-imports
 })
 export class AppModule { }
-// #enddocregion router-module-imports
+// #enddocregion router-module-imports, app-module

@@ -77,3 +77,10 @@ The three most common tasks users will do with a stream of data are to transform
 Any operation you would like to define on a stream is defined with the use of RxJS operators. These will return a new stream, and the operations defined on the stream will only execute when one of your components or services is subscribed to the stream of data.
 
 Read more about observable streams in the [Observables guide](guide/observables).
+
+
+### How routing works
+
+Navigation is done through the `RouterLink` directive provided by the `Router` in a template, or imperatively using the `Router` service. Navigation is always done by string, or by array of URL paths, such as `['path', 'to', variable]` which results in a URL that looks like 'https://example.org/path/to/42'. 
+
+After you set up the router, you can continue to create more components and routes in your `RouteConfig`.

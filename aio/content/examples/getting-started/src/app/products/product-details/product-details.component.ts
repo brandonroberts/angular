@@ -1,19 +1,13 @@
 // #docplaster
+// #docregion cart-imports
 import { Component } from '@angular/core';
-// #docregion rxjs-imports
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-// #enddocregion rxjs-imports
-// #docregion activated-route-import
 import { ActivatedRoute } from '@angular/router';
-// #enddocregion activated-route-import
 
-// #docregion product-imports
 import { ProductService } from '../product.service';
 import { Product } from '../product';
-// #enddocregion product-imports
 
-// #docregion cart-imports
 import { CartService } from '../../cart.service';
 // #enddocregion cart-imports
 
@@ -25,7 +19,7 @@ import { CartService } from '../../cart.service';
 export class ProductDetailsComponent {
   product: Observable<Product>;
 
-// #docregion product-details, cart-service
+  // #docregion product-details, cart-service
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
@@ -36,14 +30,15 @@ export class ProductDetailsComponent {
       .pipe(
         switchMap(params => this.productService.getOne(+params.get('productId')))
       );
+// #docregion cart-service
   }
-// #enddocregion product-details
+// #enddocregion product-details, cart-service
 
 // #docregion buy
   onBuy(product: Product) {
     this.cartService.add(product);
   }
 // #enddocregion buy
-// #docregion product, product-details, flags
+// #docregion product-details, flags, cart-service
 }
-// #enddocregion product, product-details, flags
+// #enddocregion product-details, flags, cart-service

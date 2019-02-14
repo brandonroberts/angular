@@ -103,7 +103,7 @@ You've retrieved a list of the products with their associated information. You'l
 #### Add properties to product
 
 Update the `Product` interface in the `product.ts` file with more properties about a given product, 
-such as its id, price, and categories. 
+such as its price, and categories.
 
 <code-example header="src/app/products/product.ts (Product interface)" path="getting-started/src/app/products/product.ts" linenums="false">
 </code-example>
@@ -243,7 +243,7 @@ Add a click event listener to the Buy button that calls the `onBuy()` method you
 <code-example header="src/app/products/product-details/product-details.component.html" path="getting-started/src/app/products/product-details/product-details.component.html" region="buy">
 </code-example>
 
-Now you refresh the application, click on product details, click the Buy button, and the product is added to the store list of items.
+Now you refresh the application, click on product details, click the Buy button, and the product is added to the stored list of items in the cart.
 
 ## Collecting data with Angular Reactive Forms
 
@@ -255,7 +255,7 @@ In this section you'll:
 * Build a form model to store the form data and reflect it in the component template.
 * Use an `*ngIf` directive to conditionally add and remove elements.
 
-### Creating a checkout page
+### Creating a checkout page and form
 
 The products are stored each time the `Buy` button is clicked, but the checkout page is where the checkout process is completed. You'll build out the checkout page to list the cart items and submit the purchase.
 
@@ -285,7 +285,7 @@ Right click on the `app` folder, use the `Angular Generator`, and generate a com
  
 To build out the form model, you'll need to import some building blocks from the forms package.
 
-Import `FormGroup`, `FormBuilder` and `Validators` from `@angular/forms` package.
+Import `FormGroup`, `FormBuilder` from `@angular/forms` package.
 
 <code-example header="src/app/checkout/checkout.component.ts (Reactive forms imports)" path="getting-started/src/app/checkout/checkout.component.ts" region="forms-imports">
 </code-example>
@@ -317,12 +317,14 @@ Create a `checkoutForm` property with type `FormGroup`. You'll create the `FormG
 
 The `checkoutForm` property will store the form model for handling input from the user.
 
-#### Inject CartService
+#### Inject Services
 
 Inject the `FormBuilder` and `CartService` as dependencies in the constructor of the `CheckoutComponent`.
 
 <code-example header="src/app/checkout/checkout.component.ts" path="getting-started/src/app/checkout/checkout.component.ts" region="cart-service">
 </code-example>
+
+The `FormBuilder` is a service provided for easily construction form controls in your component class. The `CartService` you defined earlier is for adding items to the cart.
 
 #### Create form model
 
@@ -331,6 +333,36 @@ The source of truth for the form model for reactive forms is defined in the comp
 Use the `FormBuilder#group()` method to create a form group with name and address.
 
 <code-example header="src/app/checkout/checkout.component.ts (Form Builder)" path="getting-started/src/app/checkout/checkout.component.ts" region="formbuilder">
+</code-example>
+
+The `checkoutForm` is defined to handle the name and address input fields from the user. You could also validate that the name and address fields are required using built-in validators for length and other requirements.
+
+<div class="alert is-helpful">
+
+Learn more about validation in the [form validation guide](guide/form-validation).
+
+</div>
+
+#### Displaying the form model in the template
+
+The form model is defined in the `CheckoutComponent` class. The template needs to be updated to reflect the form model.
+
+1. Use an `NgFor` directive to iterate over the `items`, display each product name and total for the quantity purchased.
+
+<code-example header="src/app/checkout/checkout.component.html (cart items)" path="getting-started/src/app/checkout/checkout.component.1.html" linenums="false" region="list">
+</code-example>
+
+1. Define a `form` tag in the template and bind the `checkoutForm` from the component class to the `formGroup` attribute on the form. 
+2. Set an event listener for the `ngSubmit` event and call the `onSubmit()` method with the checkoutForm value.
+3. Add input fields for name and address using `formControlName` directive.
+4. Add a `submit` button to trigger the form submission.
+
+<code-example header="src/app/checkout/checkout.component.html (checkout form)" path="getting-started/src/app/checkout/checkout.component.1.html" linenums="false" region="form">
+</code-example>
+
+Define an `onSubmit()` method to log the customer data when the form is submitted. To go further, you would submit the data to an external API using the `CartService`, but for now you'll log to the browser console.
+
+<code-example header="src/app/checkout/checkout.component.ts (on submit)" path="getting-started/src/app/checkout/checkout.component.ts" region="on-submit">
 </code-example>
 
 #### Populate list of cart items
@@ -342,32 +374,7 @@ In the `ngOnInit()` method, subscribe to the `CartService#getAll()` method to li
 <code-example header="src/app/checkout/checkout.component.ts (ngOnInit())" path="getting-started/src/app/checkout/checkout.component.ts" region="on-init">
 </code-example>
 
-Define an `onSubmit()` method to log the customer data when the form is submitted. To go further, you would submit the data to an external API using the `CartService`, but for now you'll log to the browser console.
-
-<code-example header="src/app/checkout/checkout.component.ts (on submit)" path="getting-started/src/app/checkout/checkout.component.ts" region="on-submit">
-</code-example>
-
-#### Displaying the form model in the template
-
-The form model is defined in the `CheckoutComponent` class. The template needs to be updated to reflect the form model.
-
-1. Add a `Checkout` header to the template.
-
-<code-example header="src/app/checkout/checkout.component.html (header)" path="getting-started/src/app/checkout/checkout.component.1.html" linenums="false" region="header">
-</code-example>
-
-2. Use an `NgFor` directive to iterate over the `items`, display each product name and total for the quantity purchased.
-
-<code-example header="src/app/checkout/checkout.component.html (cart items)" path="getting-started/src/app/checkout/checkout.component.1.html" linenums="false" region="list">
-</code-example>
-
-3. Define a `form` tag in the template and bind the `checkoutForm` from the component class to the `formGroup` attribute on the form. 
-4. Set an event listener for the `ngSubmit` event and call the `onSubmit()` method with the checkoutForm value.
-5. Add input fields for name and address using `formControlName` directive.
-6. Add a `submit` button to trigger the form submission.
-
-<code-example header="src/app/checkout/checkout.component.html (checkout form)" path="getting-started/src/app/checkout/checkout.component.1.html" linenums="false" region="form">
-</code-example>
+The checkout page will display the items that have been added to the card above the checkout form.
 
 #### Completing the checkout process
 
@@ -399,12 +406,12 @@ Add a route in the array of routes for the `CheckoutComponent`.
 <code-example header="src/app/app.module.ts (checkout route)" path="getting-started/src/app/app.module.ts" linenums="false" region="checkout-route">
 </code-example>
 
-The route is registered, so you can type the URL in manually. To access the checkout route easily, add a `routerLink` to the `TopBarComponent` template.
+The checkout page route is registered, so you can type the URL in manually. To access the checkout route easily, add a `routerLink` to the `TopBarComponent` template.
 
 <code-example header="src/app/top-bar/top-bar.component.html (checkout link)" path="getting-started/src/app/top-bar/top-bar.component.html" linenums="false" region="checkout-link">
 </code-example>
 
-When the user fills out the form and submits the button, the customer data is logged to the browser console. 
+After the user adds items to the cart, fills out the form, and submits the button, the customer data is logged to the browser console. 
 Your shopping cart is now accessing data from the internet and allowing users to checkout.
 
 ## Review and next steps

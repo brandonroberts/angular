@@ -1,7 +1,7 @@
 // #docplaster
 // #docregion, forms-imports, cart-imports
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 // #enddocregion forms-imports
 
 import { CartService, CartItem } from '../cart.service';
@@ -29,8 +29,8 @@ export class CheckoutComponent implements OnInit {
 // #enddocregion cart-service
 // #docregion checkout-form-group
     this.checkoutForm = this.fb.group({
-      name: ['', Validators.required],
-      address: ['', Validators.required],
+      name: '',
+      address: '',
     });
 // #enddocregion checkout-form-group
 // #docregion cart-service

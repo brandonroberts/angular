@@ -361,7 +361,7 @@ Add the `name` and `description` properties shown below:
 <code-example header="src/app/products/product.ts" path="getting-started/src/app/products/product.1.ts">
 </code-example>
 
-This interface defines the structure of a product, including its name and description. This interface also provides you a consistent way to reference a `Product` throughout your application.
+This interface defines the structure of a product, including its id, name, and description. This interface also provides you a consistent way to reference a `Product` throughout your application.
 
 #### 3. Create a product preview component
 
@@ -373,7 +373,6 @@ The initial component that is generated only imports the most basic functionalit
 
 <code-example header="src/app/products/product-preview/product-preview.component.ts" path="getting-started/src/app/products/product-preview/product-preview.component.ts" region="core-imports">
 </code-example>
-
 
 3. Import the `Product` interface using its path relative to the `product-preview` folder. Add this line below the other `import` statement. 
 
@@ -558,11 +557,11 @@ In this section, you'll:
 * Learn about common types of routes
 * Enable routing in the Store app
 * Make the product list area routable, meaning that user actions in this area will change the URL, and changes to the URL will replace the contents of this area
-* Create and configure new product details to be included in the product list area when a single product is selected
+* Create and configure a new product details route to transition from the product list area when a single product is selected
 
 In this section, we'll update the Store app to use routing for the product list area of the app. 
 The top bar and side navigation will remain fixed, while the product list changes. 
-The URL and product list will change together, based on the user's selections. 
+The URL and displayed components will change together, based on the user's selections. 
 
 ### Types of routes
 
@@ -582,7 +581,7 @@ Most applications include these common types of routes:
     { path: 'about', component: AboutPageComponent }
     ```
 
-* Variable routes, which are determined at runtime, include a variable prefixed with a colon to designate substitution. Variable routes are useful for creating URLs that correlate to data values, such as product IDs. This is the type of routing we'll use for the product list. 
+* Variable routes, which are determined at runtime, include a variable prefixed with a colon to designate substitution. Variable routes are useful for creating URLs that correlate to data values, such as product IDs. This is the type of routing we'll use for the product details. 
 
     ```ts
     { path: 'products/:productId', component: ProductDetailsComponent }
@@ -601,20 +600,35 @@ These routes enable you to build simple to complex URLs to navigate around your 
 
 So far we've worked mostly within individual components and services. 
 
-Some Angular features, however, are global to the app and available at all times. Because routing is pervasive--the user can enter a new URL or take an action that causes a change to the URL--routing must be enabled and configured at the app level. 
+Some Angular features, however, are global to the app and available at all times. Because routing is pervasive--the user can enter a new URL or take an action that causes a change to the URL--routing must be enabled and configured at the app level. The Angular Router is provided as one singleton service throughout the application.
 
 To eanble routing in the app, you will: 
 
-1. Import and register RouterModule.
-2. Set up a RouterOutet as a placeholder to dislay routed components.
+1. Import and register `RouterModule.forRoot()` with an array of route definitions.
+2. Set up a `RouterOutet` as a placeholder to dislay routed components.
 
 
 #### 1. Open app.module.ts
 
 Open the `app.module.ts` file. 
-This file contains the root module, which is loaded first by the app. 
-Functionality that applies to the entire app is defined here. 
 
+The root `AppModule` is an `NgModule` that contains metadata about how the application is initialized. It contains the component or components that are bootstrapped, and is the point where the top level injectors are created.
+
+Before you register the router, look at the metadata `AppModule`.
+
+<code-example header="src/app/app.module.ts (AppModule)" path="getting-started/src/app/app.module.1.ts" region="app-module">
+</code-example>
+
+You have been using StackBlitz to generate components themselves, but as you see below, the components are also in the `declarations` of the `AppModule` NgModule metadata. That is because components need to be *declared* in an `NgModule` before they can be used in a template. Other things to note in the `AppModule`.
+
+- The `imports` are where you register NgModules to consume their publicly available components, directives, and pipes.
+- The `BrowserModule` registers specific providers needed for your app to run in a browser.
+- The `declarations` are where your components, directives, and pipes are registered so they can be used within your component templates.
+- The `bootstrap` array contains the components you want to initialize when the app is first initialized.
+
+This metadata is provided for the Angular compiler when compiling your app. Adding components to your `NgModule` files, in this case the `AppModule` is handled by `StackBlitz`, or by the `Angular CLI` generation commands. You should be aware of what it is an `NgModule`, and what is defined in its metadata, but their main use is as a registration point for the compiler.
+
+Now let's register the Angular Router and define some some routes.
 
 #### 2. Import RouterModule
 
@@ -623,19 +637,15 @@ Import `RouterModule` from the `@angular/router` package into the `app.module.ts
 <code-example header="src/app/app.module.ts (RouterModule)" path="getting-started/src/app/app.module.1.ts" region="router-module">
 </code-example>
 
-
 #### 2. Register RouterModule
 
 In the `imports` array, add the `RouterModule.forRoot([])` method with an empty array. 
-Configured routes will be stored in the array.
-
-*JAF: Terminology. Are these terms synonymous: "configured routes" or "defined routes" or "route configurations"?*
+Route definitions will be stored in the array.
 
 <code-example header="src/app/app.module.ts (imports)" path="getting-started/src/app/app.module.1.ts" region="router-module-imports">
 </code-example>
 
 At this point, your application is configured with Angular routing; the router is created and ready to listen.
-
 
 #### 3. Add a router outlet
 
@@ -644,12 +654,14 @@ The template needs a placeholder where it renders routed components. That placeh
 Recall that we're going to use routing for the product list area of the app. 
 So, we'll replace the product list view with a router outlet. 
 To do that, open `app.component.html` and
-replace `app-product-list` with `routeroutlet`. 
+replace `app-product-list` with `router-outlet`. 
 
 <code-example header="src/app/app.component.html (Router outlet)" path="getting-started/src/app/app.component.html">
 </code-example>
 
-Now the router is both ready to listen for changes in the browser URL, and it has a place to display the requested component. 
+Now the router is both ready to listen for changes in the browser URL, and it has a place to display the requested component(s).
+Where the product list component was rendered previously, nothing appears. The router doesn't know which component to place
+beneath the router outlet until you define some routes for it to match against the browser URL.
 
 ### Create a route that shows product list
 
@@ -664,13 +676,17 @@ In the `app.module.ts` file, add an object to the array defined in `RouterModule
 <code-example header="src/app/app.module.ts (Product list route)" path="getting-started/src/app/app.module.2.ts" region="product-list-route">
 </code-example>
 
-Now when you navigate to your example URL with only the `/`, the list of products is displayed.
+In your `StackBlitz` preview pane on the right, enter your preview URL without any additional URL paths and press the `Enter` key to reload the page. 
 
-*JAF: This isn't easy to see. Screen shot? Or show URL?*
+```
+https://[your-stackblitz-subdomain].stackblitz.io
+```
+
+The preview pane displays the top bar, side-nav, and the product list as shown previously.
 
 ### Create a route for product details
 
-To display more information for a particular product, you'll use a specific route for product details.
+Next, you'll add a variable route definition to display product details.
 
 #### 1. Generate the product details route component
 
@@ -688,7 +704,9 @@ To display more information for a particular product, you'll use a specific rout
 <code-example header="src/app/products/product-preview/product-preview.component.html (Product preview routerLink)" path="getting-started/src/app/products/product-preview/product-preview.component.html" linenums="false">
 </code-example>
 
-When the user clicks on the product title, the router will navigate to the product details route, with the specific `productId`. Only placeholder text is displayed, but you'll retrieve the product details in the data section.
+Navigation is done through the `RouterLink` directive provided by the `RouterModule` in a template, or imperatively using the `Router` service. Navigation is always done by string, or by array of URL paths, such as `['path', 'to', variable]` which results in a URL that looks like 'https://example.org/path/to/42'. For the product details `routerLink`, the router constructs a complete URL based on the array of paths provided.
+
+When the user clicks on the product title, the router will navigate to the product details route, with the specific `productId`. Only placeholder text is displayed, but you'll retrieve the product details in the [managing data](getting-started/getting-started-data) section.
 
 ### Navigating to the homepage
 
@@ -699,21 +717,11 @@ Wrap the header in the `TopBarComponent` template in a link to navigate back to 
 <code-example header="src/app/top-bar/top-bar.component.html" path="getting-started/src/app/top-bar/top-bar.component.html" region="home-route">
 </code-example>
 
-### How routing works
-
-Navigation is done through the `RouterLink` directive provided by the `Router` in a template, or imperatively using the `Router` service. Navigation is always done by string, or by array of URL paths, such as `['path', 'to', variable]` which results in a URL that looks like 'https://example.org/path/to/42'. 
-
-After you set up the router, you can continue to create more components and routes in your `RouteConfig`.
-
-
 <div class="alert is-helpful">
 
 To learn more about routing, see the [Router and Navigation Guide](guide/router).
 
 </div>
-
-*JAF: Much of the original content has been removed. Move this to the start of routing? Work it into the steps?*
-
 
 ## Review and next steps
 
