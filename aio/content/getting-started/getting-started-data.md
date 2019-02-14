@@ -188,6 +188,30 @@ Update the `ProductDetailsComponent` template to subscribe to `product`.
 
 In the example above, you assigned the `product` as an `productInfo` in the template. This allows you to reuse the same reference in multiple places, instead of using the `AsyncPipe` multiple times, which creates multiple subscriptions.
 
+In this section:
+
+<code-tabs>
+
+  <code-pane header="src/app/products/product.ts" path="getting-started/src/app/products/product.ts">
+  </code-pane>
+
+  <code-pane header="src/app/products/product.service.ts" path="getting-started/src/app/products/product.service.ts">
+  </code-pane>
+
+  <code-pane header="src/assets/products.json" path="getting-started/src/assets/products.json">
+  </code-pane>
+
+  <code-pane header="src/app/products/product-details/product-details.component.ts" path="getting-started/src/app/products/product-details/product-details.component.1.ts">
+  </code-pane>
+
+  <code-pane header="src/app/products/product-details/product-details.component.html" path="getting-started/src/app/products/product-details/product-details.component.1.html">
+  </code-pane>
+
+  <code-pane header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="httpclient">
+  </code-pane>  
+
+</code-tabs>
+
 ## Managing additional data with a service
 
 You've used the `ProductService` to retrieve a list of products, and to retrieve an individual product. To finish out the buying process, you'll need to store the products the user intends to buy. This data is managed separately from the products themselves, so you'll need a separate service to store information about items in the cart.
@@ -244,6 +268,21 @@ Add a click event listener to the Buy button that calls the `onBuy()` method you
 </code-example>
 
 Now you refresh the application, click on product details, click the Buy button, and the product is added to the stored list of items in the cart.
+
+In this section:
+
+<code-tabs>
+
+  <code-pane header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.ts">
+  </code-pane>
+
+  <code-pane header="src/app/products/product-details/product-details.component.ts" path="getting-started/src/app/products/product-details/product-details.component.ts">
+  </code-pane>
+
+  <code-pane header="src/app/products/product-details/product-details.component.html" path="getting-started/src/app/products/product-details/product-details.component.html">
+  </code-pane>  
+
+</code-tabs>
 
 ## Collecting data with Angular Reactive Forms
 
@@ -413,6 +452,24 @@ The checkout page route is registered, so you can type the URL in manually. To a
 
 After the user adds items to the cart, fills out the form, and submits the button, the customer data is logged to the browser console. 
 Your shopping cart is now accessing data from the internet and allowing users to checkout.
+
+In this section:
+
+<code-tabs>
+
+  <code-pane header="src/app/top-bar/top-bar.component.html" path="getting-started/src/app/top-bar/top-bar.component.html">
+  </code-pane>  
+
+  <code-pane header="src/app/checkout/checkout.component.ts" path="getting-started/src/app/checkout/checkout.component.ts">
+  </code-pane>
+
+  <code-pane header="src/app/checkout/checkout.component.html" path="getting-started/src/app/checkout/checkout.component.html">
+  </code-pane>
+
+  <code-pane header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts">
+  </code-pane>  
+
+</code-tabs>
 
 ## Review and next steps
 

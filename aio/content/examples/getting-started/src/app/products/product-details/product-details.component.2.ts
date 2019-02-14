@@ -16,15 +16,10 @@ import { Product } from '../product';
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css']
 })
-// #docregion product, flags
+// #docregion product
 export class ProductDetailsComponent {
-// #enddocregion flags
   product: Observable<Product>;
 // #enddocregion product
-// #docregion flags
-  showForm = false;
-  purchased = false;
-// #enddocregion flags
 
 // #docregion product-details
   constructor(
@@ -38,20 +33,6 @@ export class ProductDetailsComponent {
   }
 // #enddocregion product-details
 
-// #docregion buy
-  onBuy() {
-    this.showForm = true;
-  }
-// #enddocregion buy
-
-// #docregion on-submit
-  onSubmit(formData: any, product: Product) {
-    this.showForm = false;
-    this.purchased = true;
-
-    // Do something with form and customer data
-  }
-// #enddocregion on-submit
-// #docregion product, product-details, flags
+// #docregion product
 }
-// #enddocregion product, product-details, flags
+// #enddocregion product
