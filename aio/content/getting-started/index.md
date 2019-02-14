@@ -45,6 +45,7 @@ This tutorial is organized into three parts:
 
 Within each section, this tutorial introduces a new concept and then provides instructions to apply that concept to the online store app. 
 
+You can also see the <live-example noDownload></live-example>
 
 *JAF: Verify and update time estimates for each part.*
 
@@ -288,7 +289,27 @@ In this section, you learned:
     3. Define how the component will be displayed (in the component template file)
     4. Optionally, specify component-specific styles (in the component `.css` file)
 
+<code-tabs>
 
+  <code-pane header="src/app/top-bar/top-bar.component.ts" path="getting-started/src/app/top-bar/top-bar.component.ts">
+  </code-pane>
+
+  <code-pane header="src/app/top-bar/top-bar.component.html" path="getting-started/src/app/top-bar/top-bar.component.1.html" region="header">
+  </code-pane>
+
+  <code-pane header="src/app/side-nav/side-nav.component.ts" path="getting-started/src/app/side-nav/side-nav.component.ts">
+  </code-pane>
+
+  <code-pane header="src/app/side-nav/side-nav.component.html" path="getting-started/src/app/side-nav/side-nav.component.html">
+  </code-pane>
+
+  <code-pane header="src/app/side-nav/side-nav.component.css" path="getting-started/src/app/side-nav/side-nav.component.css">
+  </code-pane>
+
+  <code-pane header="src/app/app.component.html" path="getting-started/src/app/app.component.1.html" region="layout">
+  </code-pane>  
+
+</code-tabs>
 
 ## Communcating between components
 
@@ -408,6 +429,21 @@ In this case:
 * When the `product` data is updated (to be Pixel 3, as shown above), the property is also updated in `ProductPreviewComponent`. 
 * The `app-product-preview` component then displays the new product name and description. 
 
+<code-tabs>
+
+  <code-pane header="src/app/products/product.ts" path="getting-started/src/app/products/product.ts">
+  </code-pane>
+
+  <code-pane header="src/app/products/product-preview/product-preview.component.ts" path="getting-started/src/app/products/product-preview/product-preview.component.ts">
+  </code-pane>
+
+  <code-pane header="src/app/products/product-preview/product-preview.component.html" path="getting-started/src/app/products/product-preview/product-preview.component.1.html">
+  </code-pane>
+
+  <code-pane header="src/app/app.component.html" path="getting-started/src/app/app.component.1.html" region="communication">
+  </code-pane>  
+
+</code-tabs>
 
 
 ## Storing data with services
@@ -543,6 +579,23 @@ The `AsyncPipe` used in the template subscribes to the `products` observable tha
 <code-example header="src/app/app.component.html (Product List)" path="getting-started/src/app/app.component.1.html" region="product-list">
 </code-example>
 
+In this section:
+
+<code-tabs>
+
+  <code-pane header="src/app/products/product-list/product-list.component.ts" path="getting-started/src/app/products/product-list/product-list.component.ts">
+  </code-pane>
+
+  <code-pane header="src/app/products/product-list/product-list.component.html" path="getting-started/src/app/products/product-list/product-list.component.html">
+  </code-pane>
+
+  <code-pane header="src/app/products/product.service.ts" path="getting-started/src/app/products/product.service.2.ts">
+  </code-pane>  
+
+  <code-pane header="src/app/app.component.html" path="getting-started/src/app/app.component.2.html">
+  </code-pane>  
+
+</code-tabs>
 
 {@a routing}
 ## Navigating with the Angular router
@@ -722,6 +775,24 @@ Wrap the header in the `TopBarComponent` template in a link to navigate back to 
 To learn more about routing, see the [Router and Navigation Guide](guide/router).
 
 </div>
+
+In this section:
+
+<code-tabs>
+
+  <code-pane header="src/app/app.component.html" path="getting-started/src/app/app.component.html">
+  </code-pane>
+
+  <code-pane header="src/app/top-bar/top-bar.component.html" path="getting-started/src/app/top-bar/top-bar.component.html" region="home-route">
+  </code-pane>
+
+  <code-pane header="src/app/products/product-preview/product-preview.component.html" path="getting-started/src/app/products/product-preview/product-preview.component.html">
+  </code-pane>
+
+  <code-pane header="src/app/app.module.ts" path="getting-started/src/app/app.module.2.ts" region="routing">
+  </code-pane>  
+
+</code-tabs>
 
 ## Review and next steps
 

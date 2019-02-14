@@ -46,4 +46,3 @@ export class ProductService {
 }
 // #enddocregion product-data
 // #enddocregion provider
-// #docregion

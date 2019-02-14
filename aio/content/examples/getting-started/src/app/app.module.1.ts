@@ -14,7 +14,6 @@ import { SideNavComponent } from './side-nav/side-nav.component';
 import { ProductListComponent } from './products/product-list/product-list.component';
 import { ProductPreviewComponent } from './products/product-preview/product-preview.component';
 
-
 // #docregion router-module-imports
 @NgModule({
   imports: [
