@@ -1,0 +1,134 @@
+load("@build_bazel_rules_nodejs//:defs.bzl", "history_server", "rollup_bundle")
+load("@build_bazel_rules_nodejs//internal/web_package:web_package.bzl", "web_package")
+load("@build_bazel_rules_typescript//:defs.bzl", "ts_devserver")
+load("//tools:defaults.bzl", "ng_module", "ts_library")
+
+package(default_visibility = ["//visibility:public"])
+
+ng_module(
+    name = "toh-pt0",
+    srcs = glob(
+        include = ["**/*.ts"],
+        exclude = [
+            "**/*.spec.ts",
+            "main.ts",
+            "test.ts",
+            "initialize_testbed.ts",
+            "**/*.1.ts",
+            "**/*.2.ts",
+        ],
+    ),
+    type_check = False,
+    assets = glob([
+        "**/*.css",
+        "**/*.html",
+    ]),
+    deps = [
+        "//packages/common/http",
+        "//packages/core",
+        "//packages/platform-browser",
+        "//packages/forms",
+        "//packages/router",
+    ],
+)
+
+rollup_bundle(
+    name = "bundle",
+    entry_point = "src/main.prod",
+    deps = [":toh-pt0"],
+)
+
+web_package(
+    name = "prodapp",
+    assets = [
+        # do not sort
+        "@npm//node_modules/zone.js:dist/zone.min.js",
+        ":bundle.min.js",
+    ],
+    data = [
+        ":bundle",
+    ],
+    index_html = "index.html",
+)
+
+history_server(
+    name = "prodserver",
+    data = [":prodapp"],
+    templated_args = ["src/prodapp"],
+)
+
+# ts_devserver(
+#     name = "devserver",
+#     entry_module = "main",
+#     index_html = "index.html",
+#     port = 4200,
+#     scripts = ["@ngdeps//node_modules/tslib:tslib.js"],
+#     static_files = [
+#         "@ngdeps//node_modules/zone.js:dist/zone.js",
+#         # This is needed because the "ngComponentOutlet" test uses the JIT compiler
+#         # and needs to be able to read metadata at runtime.
+#         "@ngdeps//node_modules/reflect-metadata:Reflect.js",
+#     ],
+#     deps = [":toh-pt0"],
+# )
+
+ts_devserver(
+    name = "devserver",
+    port = 4200,
+    additional_root_paths = [
+        "npm/node_modules/zone.js/dist",
+        "npm/node_modules/tslib",
+    ],
+    entry_module = "aio/content/examples/toh-pt0/src/main.dev",
+    serving_path = "/bundle.min.js",
+    static_files = [
+        "@ngdeps//node_modules/zone.js:dist/zone.min.js",
+        "@ngdeps//node_modules/tslib:tslib.js",
+        "index.html",
+    ],
+    deps = [":toh-pt0"],
+)
+
+ts_library(
+    name = "test_lib",
+    testonly = 1,
+    srcs = glob(["**/*.spec.ts"]),
+    deps = [
+        ":src",
+        "//packages/core/testing",
+        "@npm//@types",
+    ],
+)
+
+ts_library(
+    name = "initialize_testbed",
+    testonly = 1,
+    srcs = [
+        "initialize_testbed.ts",
+    ],
+    deps = [
+        "//packages/core/testing",
+        "//packages/platform-browser-dynamic/testing",
+        "@npm//@types",
+    ],
+)
+
+# ts_web_test_suite(
+#     name = "test",
+#     srcs = ["@npm//node_modules/tslib:tslib.js"],
+#     runtime_deps = [
+#         ":initialize_testbed",
+#     ],
+#     # do not sort
+#     bootstrap = [
+#         "@npm//node_modules/zone.js:dist/zone-testing-bundle.js",
+#         "@npm//node_modules/reflect-metadata:Reflect.js",
+#     ],
+#     browsers = [
+#         "@io_bazel_rules_webtesting//browsers:chromium-local",
+#     ],
+#     deps = [
+#         ":test_lib",
+#         "@npm//karma-jasmine",
+#     ],
+# )
