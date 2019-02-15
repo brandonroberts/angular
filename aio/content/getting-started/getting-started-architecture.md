@@ -34,8 +34,7 @@ As mentioned earlier, an `NgModule` contains metadata about injector creation at
 
 Right click on the `app` folder, use the `Angular Generator` and generate an `NgModule` named `products`.
 
-<code-example header="src/app/products/products.module.ts (generated)" path="getting-started/src/app/products/products.module.1.ts">
-</code-example>
+*example snippet here*
 
 The `ProductsModule` contains its own metadata for its `declarations` and `imports`. Its doesn't need the `BrowserModule` because it only needs to be loaded once in your application.
 
@@ -45,28 +44,24 @@ The `ProductDetailsComponent` is owned by the `AppModule` currently. You'll need
 
 In the `product.module.ts` file, import `ProductDetailsComponent`.
 
-<code-example header="src/app/products/products.module.ts" path="getting-started/src/app/products/products.module.ts" linenums="false" region="components">
-</code-example>
+*example snippet here*
 
 #### Register `ProductDetailsComponent` declaration
 
 Add `ProductDetailsComponent` to the `declarations` array of the `ProductsModule`.
 
-<code-example header="src/app/products/products.module.ts" path="getting-started/src/app/products/products.module.ts" linenums="false" region="declarations">
-</code-example>
+*example snippet here*
 
 #### Register product details route
 
 Import `RouterModule` from the `@angular/router` package.
 
-<code-example header="src/app/products/products.module.ts" path="getting-started/src/app/products/products.module.ts" linenums="false" region="router-module">
-</code-example>
+*example snippet here*
 
 Add the `RouterModule.forChild()` method to the `imports` array of the `ProductsModule` and and a variable route for the product details. 
 Set the route path to `:productId`, and the component to `ProductDetailsComponent`.
 
-<code-example header="src/app/products/products.module.ts" path="getting-started/src/app/products/products.module.ts" linenums="false" region="router-module-imports">
-</code-example>
+*example snippet here*
 
 The `RouterModule.forChild()` method is used when you need to register additional routes. The `RouterModule.forRoot()` is only registered once in the `AppModule`.
 
@@ -78,8 +73,7 @@ The `AppModule` currently builds the application as one complete bundle. When yo
 2. Use the `loadChildren` property with a path to `./products/products.module.ts` file and the `ProductModule` symbol.
 3. Remove all references to `ProductDetailsComponent` in the `app.module.ts` file.
 
-<code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts">
-</code-example>
+*example snippet here*
 
 The string provided in `loadChildren` references the path of the module's TypeScript file, and then after the `#` sign, references the symbol that contains the module.
 
