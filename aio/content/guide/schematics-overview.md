@@ -31,17 +31,10 @@ ng generate my-schematic-name --collection collection-name
 
 A JSON schema associated with a schematic tells the Angular CLI what options are available to commands and subcommands, and determines the defaults.
 These defaults can be overridden by providing a different value for an option on the command line.
-See [Workspace Configuration](guide/workspace-config) for information about how you can change the generation and architect option defaults for your workspace.
+See [Workspace Configuration](guide/workspace-config) for information about how you can change the generation option defaults for your workspace.
 
-* Generation schematics: The JSON schemas for the default schematics used by the CLI to generate projects and parts of projects are collected in the package [`@schematics/angular`](https://raw.githubusercontent.com/angular/angular-cli/v7.0.0/packages/schematics/angular/application/schema.json).
+The JSON schemas for the default schematics used by the CLI to generate projects and parts of projects are collected in the package [`@schematics/angular`](https://raw.githubusercontent.com/angular/angular-cli/v7.0.0/packages/schematics/angular/application/schema.json).
 The schema describes the options available to the CLI for each of the `ng generate` sub-commands, as shown in the `--help` output.
-
-* Architect schematics: Angular also defines default schematics for use with the Architect tool and `ng run` command.
-The schematics provide instructions for using a particular tool to perform a complex operation.
-For example, the `@angular-devkit/dev-server` schematic tells the CLI how to prepare a project for Universal server-side rendering.
-Similarly, the  `@angular-devkit/extract-i18n` schematic tells the CLI how to prepare a project for internationalization by extracting strings for translation.
-The JSON schemas that the define the options and defaults for each of these schematics are collected in the [`@angular-devkit/build-angular`](https://github.com/angular/angular-cli/blob/v7.1.3/packages/angular/cli/lib/config/schema.json) package.
-The schemas configure options for each of the Architect targets.
 
 ## Developing schematics for libraries
 
