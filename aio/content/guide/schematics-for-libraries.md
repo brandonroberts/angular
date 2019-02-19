@@ -141,14 +141,14 @@ To tell the library how to build the schematics, add a `tsconfig.schematics.json
     "copy:schemas": "cp --parents schematics/*/schema.json ../../dist/my-lib/",
     "copy:files": "cp --parents -p schematics/*/files/** ../../dist/my-lib/",
     "copy:collection": "cp schematics/collection.json ../../dist/my-lib/schematics/collection.json",
-    "postbuild": "cp schematics/collection.json ../../dist/my-lib/schematics/collection.json"
+    "postbuild": "npm run copy:schemas && npm run copy:files && npm run copy:collection"
   }
 }
    </code-example>
 
    * The `build` script compiles your schematic using the custom `tsconfig.schematics.json` file.
    * The `copy:*` statements copy compiled schematic files into the proper locations in the library output folder in order to preserve the file structure.
-   * Your collection schema is not part of the compilation process, so you need the `postbuild` script to copy it into the `schematics` folder of the compiled library.
+   * The `postbuild` script copies the schematic files after the `build` script completes.
 
 ## Providing generation support
 
@@ -251,7 +251,7 @@ When you add a schematic to the collection, you have to point to it in the colle
 
 ### Add component and template files
 
-To add artifacts to a project, your schematic needs its own component and template files.
+To add artifacts to a project, your schematic needs its own template files.
 Schematic templates support special syntax to execute code and variable substitution.
 
 * The `classify` and `dasherize` methods are utility functions you schematic will use to transform your source template and filename.
