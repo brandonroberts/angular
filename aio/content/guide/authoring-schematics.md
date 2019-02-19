@@ -70,8 +70,6 @@ The options available to your rules, with their allowed values and defaults, are
 You can define variable or enumerated data types for the schema using TypeScript interfaces.
 
 You can see examples of schema files for the Angular CLI command schematics in [`@schematics/angular`](https://github.com/angular/angular-cli/blob/7.0.x/packages/schematics/angular/application/schema.json).
-You can also see the schemas for the schematics that the lower-level Architect tool uses in   [`@angular-devkit/build-angular`](https://github.com/angular/angular-cli/blob/v7.1.3/packages/angular/cli/lib/config/schema.json).
-
 
 {@a cli}
 
