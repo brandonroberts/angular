@@ -82,7 +82,7 @@ Using Node 6.9 or above, install the Schematics command line tool globally:
 npm install -g @angular-devkit/schematics-cli
 </code-example>
 
-This installs the `schematics` executable, which you can use to create a new schematics collection in its own workspace, add a new schematic to an existing collection, or extend an existing schematic.
+This installs the `schematics` executable, which you can use to create a new schematics collection in its own project folder, add a new schematic to an existing collection, or extend an existing schematic.
 
 In the following sections, we will create a new schematics collection using the CLI in order to introduce the files and file structure, and some of the basic concepts.
 
@@ -92,13 +92,13 @@ See [Schematics for Libraries](guide/schematics-for-libraries).
 
 ### Creating a schematics collection
 
-The following command creates a new schematic named `hello-world` in a new collection.
+The following command creates a new schematic named `hello-world` in a new project folder of the same name.
 
 <code-example language="bash" linenums="false">
 schematics blank --name=hello-world
 </code-example>
 
-The `blank` schematic is provided by the Schematics CLI. The command creates a new collection workspace folder with the given name, and an initial schematic with that name in the collection.
+The `blank` schematic is provided by the Schematics CLI. The command creates a new project folder (the root folder for the collection) and an initial named schematic in the collection.
 
 Go to the collection folder, install your npm dependencies, and open your new collection in your favorite editor to see the generated files. For example, if you are using VSCode:
 
@@ -108,13 +108,29 @@ npm install
 code .
 </code-example>
 
-The initial schematic gets the same name as the collection root, and is generated in `src/hello-world`.
+The initial schematic gets the same name as the project folder, and is generated in `src/hello-world`.
 You can add related schematics to this collection, and modify the generated skeleton code to define your schematic's functionality.
 Each schematic name must be unique within the collection.
 
+### Running a schematic
+
+Use the `schematics` command to run a named schematic.
+Provide the path to the project folder, the schematic name, and any mandatory options, in the following format.
+
+<code-example language="bash" linenums="false">
+schematics &lt;path-to-schematics-project&gt;:&lt;schematics-name&gt; --&lt;required-option&gt;=&lt;value&gt;
+</code-example>
+
+The path can be absolute or relative to the current working directory where the command is executed.
+For example, to run the schematic we just generated (which has no required options), use the following command.
+
+<code-example language="bash" linenums="false">
+schematics .:hello-world
+</code-example>
+
 ### Adding a schematic to a collection
 
-To add a schematic to an existing collection, use the same command you use to start a new schematics project, but run the command inside the collection workspace folder.
+To add a schematic to an existing collection, use the same command you use to start a new schematics project, but run the command inside the project folder.
 
 <code-example language="bash" linenums="false">
 cd hello-world
@@ -126,7 +142,8 @@ It also adds the name, description, and factory function for the new schematic t
 
 ## Collection contents
 
-The top level of the root folder for a collection contains configuration files, a `node_modules` folder, and a `src/` folder. The `src/` folder contains subfolders for named schematics in the colleciton, and a schema, `collection.json`, which describes the collected schematics.
+The top level of the root project folder for a collection contains configuration files, a `node_modules` folder, and a `src/` folder.
+The `src/` folder contains subfolders for named schematics in the collection, and a schema, `collection.json`, which describes the collected schematics.
 Each schematic is created with a name, description, and factory function.
 
 <code-example language="none" linenums="false">
