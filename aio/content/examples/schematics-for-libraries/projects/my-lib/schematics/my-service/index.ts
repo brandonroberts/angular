@@ -18,10 +18,10 @@ export function myService(options: MyServiceSchema): Rule {
     if (!workspaceConfig) {
       throw new SchematicsException('Could not find Angular workspace configuration');
     }
-    
+
     // convert workspace to string
     const workspaceContent = workspaceConfig.toString();
-    
+
     // parse workspace string into JSON object
     const workspace: experimental.workspace.WorkspaceSchema = JSON.parse(workspaceContent);
 // #enddocregion workspace
@@ -61,6 +61,6 @@ export function myService(options: MyServiceSchema): Rule {
       mergeWith(templateSource)
     ]);
 // #enddocregion chain
-// #docregion workspace    
+// #docregion workspace
   };
 }
