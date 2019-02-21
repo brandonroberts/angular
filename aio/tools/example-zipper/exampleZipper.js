@@ -103,6 +103,7 @@ class ExampleZipper {
       'src/environments/**/*',
       'src/tsconfig.*',
       'src/tslint.*',
+      // Only ignore root package.json
       '!package.json'
     ];
     var alwaysExcludes = [
