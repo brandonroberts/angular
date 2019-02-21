@@ -266,3 +266,55 @@ See a complete exampled of the schematic rule function.
 </code-example>
 
 For more information about rules and utility methods, see [Provided Rules](https://github.com/angular/angular-cli/tree/master/packages/angular_devkit/schematics#provided-rules).
+
+## Running your library schematic
+
+After you build your library and schematics, you can install the schematics collection to run against your project. The steps below show you how to generate a service using the schematic you created above.
+
+
+### Build your library and schematics
+
+From the root of your workspace, run the `ng build` command for your library. 
+
+<code-example language="bash" linenums="false">
+
+  ng build my-lib
+
+</code-example>
+
+Then, you change into your library directory to build the schematic
+
+<code-example language="bash" linenums="false">
+
+  cd projects/my-lib
+  npm run build
+
+</code-example>
+
+### Link the library 
+
+Your library and schematics are packaged and placed in the `dist/my-lib` folder at the root of your workspace. For running the schematic, you need to link the library into your `node_modules` folder. From the root of your workspace, run the `npm link` command with the path to your distributable library.
+
+<code-example language="bash" linenums="false">
+
+npm link dist/my-lib
+
+</code-example>
+
+### Run the schematic
+
+Now that your library is installed, you can run the schematic using the `ng generate` command.
+
+<code-example language="bash" linenums="false">
+
+ng generate my-lib:my-service --name my-data
+
+</code-example>
+
+In the console, you will see that the schematic was run and the `my-data.service.ts` file was created in your app folder.
+
+<code-example language="bash" linenums="false" hideCopy="true">
+
+CREATE src/app/my-data.service.ts (208 bytes)
+
+</code-example>
