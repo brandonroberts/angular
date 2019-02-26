@@ -1,0 +1,13 @@
+sh_binary(
+    name = "example-e2e",
+    srcs = [
+        "example-e2e.sh",
+    ],
+    data = glob([
+        "shared/package.json",
+        "shared/yarn.lock",
+        "shared/boilerplate/cli/**/*",
+    ]) + [
+        "//aio/content/examples",
+    ],
+)
