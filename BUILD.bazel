@@ -10,6 +10,8 @@ exports_files([
     "protractor-perf.conf.js",
     "karma-js.conf.js",
     "browser-providers.conf.js",
+    "package.json",
+    "yarn.lock",
 ])
 
 filegroup(
