@@ -1,0 +1,19 @@
+<h2>Products</h2>
+
+<!-- ngfor -->
+<div *ngFor="let product of products">
+
+  <h3>
+    <!-- property binding -->
+    <a [title]="product.name" [routerLink]="['/products', product.id]">
+      <!-- interpolation -->
+      {{ product.name }}
+    </a>
+  </h3>
+
+  <!-- ngif -->
+  <p *ngIf="product.description">
+    {{ product.description }}
+  </p>
+
+</div>

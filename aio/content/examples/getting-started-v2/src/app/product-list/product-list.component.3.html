@@ -1,0 +1,32 @@
+<h2>Products</h2>
+
+<!-- ngfor -->
+<div *ngFor="let product of products">
+
+  <h3>
+    <!-- property binding -->
+    <a [title]="product.name" (click)="selectProduct(product)">
+      <!-- interpolation -->
+      {{ product.name }}
+    </a>
+  </h3>
+
+  <!-- ngif -->
+  <p *ngIf="product.description">
+    {{ product.description }}
+  </p>
+
+  <!-- event binding -->
+  <button (click)="addToCart()">
+    Buy
+  </button>
+
+</div>
+
+<!-- #docregion product-details -->
+<app-product-details
+  *ngIf="product"
+  [product]="product"
+  (buy)="addToCart()">
+</app-product-details>
+<!-- #enddocregion product-details -->
