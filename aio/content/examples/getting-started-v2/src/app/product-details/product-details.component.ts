@@ -10,7 +10,7 @@ import { DataService } from '../data.service';
   styleUrls: ['./product-details.component.css']
 })
 export class ProductDetailsComponent {
-  product: any;
+  product;
 
   constructor(
     private route: ActivatedRoute,
@@ -19,13 +19,11 @@ export class ProductDetailsComponent {
 
   ngOnInit() {
     this.product = this.route.paramMap.pipe(
-      switchMap(params => this.dataService.getOne(+params.get('productId')))
+      switchMap(params => this.dataService.getOne(params.get('productId')))
     );
   }
 
-  onBuy(product: any) {
-    alert('Your item has been added to the cart!');
-
-    this.dataService.addToCart(product);
+  addToCart(product) {
+    this.dataService.addToCart(product);    
   }
 }
