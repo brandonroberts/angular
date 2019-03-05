@@ -17,8 +17,8 @@
   </p>
 
   <!-- event binding -->
-  <button (click)="addToCart()">
-    Buy
+  <button (click)="share()">
+    Share
   </button>
 
 </div>
@@ -27,6 +27,6 @@
 <app-product-details
   *ngIf="product"
   [product]="product"
-  (buy)="addToCart()">
+  (share)="share()">
 </app-product-details>
 <!-- #enddocregion product-details -->

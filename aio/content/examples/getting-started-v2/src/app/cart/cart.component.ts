@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
 import { DataService } from '../data.service';
 
@@ -9,8 +9,8 @@ import { DataService } from '../data.service';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent {
-  checkoutForm: FormGroup;
-  items: any[];
+  checkoutForm;
+  items;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -24,7 +24,7 @@ export class CartComponent {
     this.items = this.dataService.getCartItems();
   }
 
-  onSubmit(customerData: any) {
+  onSubmit(customerData) {
     // Process checkout data here
     console.log(customerData);
     alert('The order has been submitted');

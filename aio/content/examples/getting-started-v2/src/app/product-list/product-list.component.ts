@@ -21,13 +21,13 @@ export class ProductListComponent {
     }
   ];
 
-  product: any;
+  product;
 
-  selectProduct(product: any) {
+  selectProduct(product) {
     this.product = product;
   }
 
-  addToCart() {
-    alert('The item has been added to your cart!');
+  share() {
+    alert('The product has been shared!');
   }
 }

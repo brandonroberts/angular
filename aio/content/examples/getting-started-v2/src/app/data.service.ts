@@ -10,10 +10,10 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  getOne(productId: number) {
-    return this.http.get<any[]>('/assets/products.json')
+  getOne(productId) {
+    return this.http.get('/assets/products.json')
       .pipe(
-        map(products => products.find(product => product.id === productId))
+        map((products: any[]) => products.find(product => product.id === productId))
       );
   }
 

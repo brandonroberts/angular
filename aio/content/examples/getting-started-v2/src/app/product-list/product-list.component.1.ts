@@ -21,7 +21,7 @@ export class ProductListComponent {
     }
   ];
 
-  addToCart() {
-    alert('The item has been added to your cart!');
+  share() {
+    alert('The product has been shared!');
   }
 }

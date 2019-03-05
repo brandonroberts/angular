@@ -6,11 +6,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./product-details.component.css']
 })
 export class ProductDetailsComponent {
-  @Input() product: any;
-  @Output() buy = new EventEmitter();
-
-  onBuy() {
-    this.buy.emit();
-  }
-
+  @Input() product;
+  @Output() share = new EventEmitter();
 }
