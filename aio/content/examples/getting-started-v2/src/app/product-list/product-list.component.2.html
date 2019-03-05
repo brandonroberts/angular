@@ -1,0 +1,24 @@
+<h2>Products</h2>
+
+<!-- ngfor -->
+<div *ngFor="let product of products">
+
+  <h3>
+    <!-- property binding -->
+    <a [title]="product.name">
+      <!-- interpolation -->
+      {{ product.name }}
+    </a>
+  </h3>
+
+  <!-- ngif -->
+  <p *ngIf="product.description">
+    {{ product.description }}
+  </p>
+
+  <!-- event binding -->
+  <button (click)="addToCart()">
+    Buy
+  </button>
+
+</div>
