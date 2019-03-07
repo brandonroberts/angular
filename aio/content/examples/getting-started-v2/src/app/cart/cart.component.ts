@@ -1,13 +1,17 @@
+// #docplaster
+// #docregion imports
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
 import { DataService } from '../data.service';
+// #enddocregion imports
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
+// #docregion props-services, submit
 export class CartComponent {
   checkoutForm;
   items;
@@ -24,9 +28,14 @@ export class CartComponent {
     this.items = this.dataService.getCartItems();
   }
 
+// #enddocregion props-services
   onSubmit(customerData) {
     // Process checkout data here
     console.log(customerData);
-    alert('The order has been submitted');
+    window.alert('The order has been submitted');
+
+    this.items = this.dataService.clearCart();
+    this.checkoutForm.reset();
   }
+// #docregion props-services
 }

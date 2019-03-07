@@ -1,14 +1,24 @@
+// #docplaster
+// #docregion v1, imports
 import { Injectable } from '@angular/core';
+
+// #enddocregion v1
+
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+// #enddocregion imports
 
+// #docregion v1
 @Injectable({
   providedIn: 'root'
 })
+// #docregion http-client, ctor, get-one
 export class DataService {
   items = [];
 
+// #enddocregion v1
   constructor(private http: HttpClient) { }
+// #enddocregion ctor
 
   getOne(productId) {
     return this.http.get('/assets/products.json')
@@ -17,6 +27,8 @@ export class DataService {
       );
   }
 
+// #enddocregion get-one
+// #docregion v1
   addToCart(product) {
     this.items.push(product);
   }
@@ -39,4 +51,10 @@ export class DataService {
       return { product, quantity };
     });  
   }
+
+  clearCart() {
+    this.items = [];
+    return this.items;
+  }
+// #docregion ctor, get-one  
 }
