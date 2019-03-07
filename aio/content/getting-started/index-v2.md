@@ -420,7 +420,7 @@ Properties and Inject Services
 </code-example>
 
 1. Add a `submit` method to process the form data and clear the cart. In a real-world app, you would submit this data to an external server.
-1. Add an `alert` for confirmation, use the `DataService#clearCart()` method to empty the cart items, and reset the form after it is submitted.
+1. Use the `DataService#clearCart()` method to empty the cart items and reset the form after it is submitted.
 
 <code-example header="src/app/cart/cart.component.ts" path="getting-started-v2/src/app/cart/cart.component.ts" region="submit">
 </code-example>

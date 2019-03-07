@@ -49,12 +49,12 @@ export class DataService {
       const quantity = cartItems[id];
 
       return { product, quantity };
-    });  
+    });
   }
 
   clearCart() {
     this.items = [];
     return this.items;
   }
-// #docregion ctor, get-one  
+// #docregion ctor, get-one
 }

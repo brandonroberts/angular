@@ -35,11 +35,11 @@ import { CartComponent } from './cart/cart.component';
     TopBarComponent,
     ProductListComponent,
     ProductDetailsComponent,
-// #enddocregion product-details-route    
+// #enddocregion product-details-route
     CartComponent
-// #docregion product-details-route    
+// #docregion product-details-route
   ],
-  bootstrap:[
+  bootstrap: [
     AppComponent
   ]
 })

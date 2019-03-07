@@ -26,6 +26,6 @@ export class DataService {
       const quantity = cartItems[id];
 
       return { product, quantity };
-    });  
+    });
   }
 }
