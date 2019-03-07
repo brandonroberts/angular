@@ -8,20 +8,20 @@ import { Component } from '@angular/core';
 export class ProductListComponent {
   products = [
     {
-      "id": 1,
-      "name": "Phone XL",
-      "price": "799",
-      "description": "A large phone with one of the best screens"
+      id: 1,
+      name: 'Phone XL',
+      price: 799,
+      description: 'A large phone with one of the best screens'
     },
     {
-      "id": 2,
-      "name": "Phone Mini",
-      "price": "699",
-      "description": "A great phone with one of the best cameras"
+      id: 2,
+      name: 'Phone Mini',
+      price: 699,
+      description: 'A great phone with one of the best cameras'
     }
   ];
 
   share() {
-    alert('The product has been shared!');
+    window.alert('The product has been shared!');
   }
 }

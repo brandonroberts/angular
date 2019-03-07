@@ -32,5 +32,5 @@ export class ProductDetailsComponent implements OnInit {
     window.alert('Your product has been added to the cart!');
     this.dataService.addToCart(product);
   }
-// #docregion props-methods  
+// #docregion props-methods
 }
