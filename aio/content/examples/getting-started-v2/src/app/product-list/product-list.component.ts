@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
+// #docregion product
 export class ProductListComponent {
   products = [
     {
@@ -21,10 +22,10 @@ export class ProductListComponent {
     }
   ];
 
-  product;
+  selectedProduct;
 
   selectProduct(product) {
-    this.product = product;
+    this.selectedProduct = product;
   }
 
   share() {

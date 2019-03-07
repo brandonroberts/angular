@@ -1,32 +1,15 @@
 <h2>Products</h2>
 
-<!-- ngfor -->
 <div *ngFor="let product of products">
 
   <h3>
-    <!-- property binding -->
-    <a [title]="product.name" (click)="selectProduct(product)">
-      <!-- interpolation -->
+    <a [title]="product.name">
       {{ product.name }}
     </a>
   </h3>
 
-  <!-- ngif -->
   <p *ngIf="product.description">
     {{ product.description }}
   </p>
 
-  <!-- event binding -->
-  <button (click)="share()">
-    Share
-  </button>
-
 </div>
-
-<!-- #docregion product-details -->
-<app-product-details
-  *ngIf="product"
-  [product]="product"
-  (share)="share()">
-</app-product-details>
-<!-- #enddocregion product-details -->
