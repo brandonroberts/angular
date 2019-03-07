@@ -29,6 +29,6 @@ export class ProductListComponent {
   }
 
   share() {
-    alert('The product has been shared!');
+    window.alert('The product has been shared!');
   }
 }

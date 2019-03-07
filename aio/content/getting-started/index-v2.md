@@ -288,7 +288,7 @@ Update Template
 <code-example header="src/app/product-details/product-details.component.html" path="getting-started-v2/src/app/product-details/product-details.component.1.html">
 </code-example>
 
-1. Add a route in the AppModule for product details, with a `path` of `products/:productId` and `ProductDetailsComponent` for the `component`.
+1. Add a route in the `AppModule` for product details, with a `path` of `products/:productId` and `ProductDetailsComponent` for the `component`.
 
 <code-example header="src/app/app.module.ts" path="getting-started-v2/src/app/app.module.ts" region="product-details-route">
 </code-example>
@@ -299,3 +299,156 @@ No product details information is shown yet
 
 ## Success Point
 
+## Using and Managing Data
+
+### Using Services, HttpClient, and router to fetch product details
+
+*Skipping over HttpClientModule registration. We'll see how it goes*
+
+1. Here is a `DataService` defined with some cart functionality that you'll use later. You can define your own services to use also.
+
+<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="v1">
+</code-example>
+
+1. There is some product data in `assets/products.json` already defined. This is to show fetching data from an external source.
+
+<code-example header="src/assets/products.json" path="getting-started-v2/src/assets/products.json">
+</code-example>
+
+Import
+
+1. Import `HttpClient` from `@angular/common/http` package.
+1. Import `map` operator from `rxjs/operators` package.
+
+<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="imports">
+</code-example>
+
+Inject `HttpClient`
+
+1. Inject `HttpClient` into constructor of `DataService`
+
+<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="ctor">
+</code-example>
+
+Retrieve the product details
+
+1. Add `getOne()` method with a `productId` argument to the `DataService`. 
+1. Use the `HttpClient#get()` method to retrieve the products from the JSON file
+1. Use the `map` operator to find one product in the array of the products and return it
+
+<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="get-one">
+</code-example>
+
+Update Details Component
+
+Import
+
+1. Import the `ActivatedRoute` service from the `@angular/router` package.
+1. Import the `switchMap` operator from the `rxjs/operators` package.
+1. Import the `DataService` to use its `getOne()` method to fetch product details.
+
+<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="imports">
+</code-example>
+
+Product Property and Inject Services
+
+1. Remove the `Input` decorator from the `product` property in the product details component.
+1. Remove the `share` property from the component.
+1. Inject the `ActivatedRoute`, and `DataService` services to access route information and data access methods.
+
+<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="props-methods">
+</code-example>
+
+Retrive product details
+
+1. In the `ngOnInit()` method, set the `product` property to the current route that uses the `paramMap` property on the route to access the `productId` parsed from the URL.
+1. Use the `switchMap` operator on the route information stream to map it into a request for product details using the `DataService#getOne()` method
+with the `productId`.
+1. Subscribe to the details stream and and update the `product` property with the retrieved product details information.
+
+<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="get-product">
+</code-example>
+
+Add to cart
+
+1. Define a `addToCart()` method that receives a `product` and use the previously defined `DataService#addToCart()` method to add the product your cart. Also add an `alert` that the product has been added to the cart.
+
+<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="add-to-cart">
+</code-example>
+
+Update template
+
+1. Remove the `share` button in the template.
+1. Add a `button` that says `Buy` to the template with a `click` event binding to call the `addToCart()` method with the `product`.
+
+<code-example header="src/app/product-details/product-details.component.html" path="getting-started-v2/src/app/product-details/product-details.component.html">
+</code-example>
+
+## Success Point
+
+## Page 3 - Forms
+
+#### Create cart page
+
+1. Generate cart component
+
+Add cart route
+
+1. Add a route in the `AppModule` for the cart, with a `path` of `cart` and `CartComponent` for the `component`.
+
+<code-example header="src/app/app.module.ts" path="getting-started-v2/src/app/app.module.ts">
+</code-example>
+
+#### List cart items and create checkout form
+
+Import
+
+1. Import the `FormBuilder` service from the `@angular/forms` package.
+1. Import the `DataService` from the `data.service.ts` file.
+
+<code-example header="src/app/cart/cart.component.ts" path="getting-started-v2/src/app/cart/cart.component.ts" region="imports">
+</code-example>
+
+Properties and Inject Services
+
+1. Define `checkoutForm` and `items` properties in the cart component class to store the form model and cart items.
+1. Inject the `FormBuilder`, and `DataService` services to build form models and access cart information.
+1. Use the `FormBuilder#group()` method to set the `checkoutForm` property with a form model containing `name` and `address` fields.
+1. Set the `items` property using the `DataService#getCartItems()` that returns the items in the cart.
+
+<code-example header="src/app/cart/cart.component.ts" path="getting-started-v2/src/app/cart/cart.component.ts" region="props-services">
+</code-example>
+
+1. Add a `submit` method to process the form data and clear the cart. In a real-world app, you would submit this data to an external server.
+1. Add an `alert` for confirmation, use the `DataService#clearCart()` method to empty the cart items, and reset the form after it is submitted.
+
+<code-example header="src/app/cart/cart.component.ts" path="getting-started-v2/src/app/cart/cart.component.ts" region="submit">
+</code-example>
+
+Update Template
+
+Display cart items
+
+1. Update the template with a header and use a div with an `*ngFor` to display the cart items and totals.
+
+<code-example header="src/app/cart/cart.component.html" path="getting-started-v2/src/app/cart/cart.component.html" region="cart-items">
+</code-example>
+
+Checkout form
+
+1. Add an HTML form to your template to capture user information.
+1. Use a `formGroup` property binding to bind the `checkoutForm` to the `form` tag in the template.
+1. Use an `ngSubmit` event binding on the `form` tag to listen for form submission and call the `submit` method with the `checkoutForm` value.
+
+<code-example header="src/app/cart/cart.component.html" path="getting-started-v2/src/app/cart/cart.component.html" region="checkout-form-1">
+</code-example>
+
+
+1. Define input fields inside the `form` element for `name` and `address`.
+1. Use the `formControlName` attribute binding to bind the `checkoutForm` fields for `name` and `address` to their input fields.
+1. Add a `submit` button that says `Purchase` to trigger form submission.
+
+<code-example header="src/app/cart/cart.component.html" path="getting-started-v2/src/app/cart/cart.component.html" region="checkout-form-2">
+</code-example>
+
+## Finish

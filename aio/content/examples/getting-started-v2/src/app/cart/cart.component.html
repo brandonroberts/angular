@@ -1,6 +1,7 @@
+<!-- #docplaster -->
+<!-- #docregion cart-items, checkout-form-1, checkout-form-2 -->
 <h3>Cart</h3>
 
-<!-- #docregion cart-items -->
 <div class="cart-item" *ngFor="let item of items">
   <span>{{ item.quantity }}</span>
   <span>{{ item.product.name }}</span>
@@ -8,8 +9,8 @@
 </div>
 <!-- #enddocregion cart-items -->
 
-<!-- #docregion checkout-form -->
 <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
+<!-- #enddocregion checkout-form-1 -->  
   <div>
     <label>Name</label>
     <input type="text" formControlName="name">
@@ -21,5 +22,5 @@
   </div>
 
   <button class="button" type="submit">Purchase</button>
+<!-- #docregion checkout-form-1 -->  
 </form>
-<!-- #enddocregion checkout-form -->
