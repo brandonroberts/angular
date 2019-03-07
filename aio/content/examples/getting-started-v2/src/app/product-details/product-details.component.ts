@@ -19,7 +19,7 @@ export class ProductDetailsComponent {
 
   ngOnInit() {
     this.product = this.route.paramMap.pipe(
-      switchMap(params => this.dataService.getOne(params.get('productId')))
+      switchMap(params => this.dataService.getOne(+params.get('productId')))
     );
   }
 
