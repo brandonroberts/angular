@@ -182,7 +182,7 @@ In this section, you'll create a new project in StackBlitz, and then scaffold ou
 <!-- 
 You develop apps in the context of an Angular workspace. A workspace contains the files for one or more projects. A project is the set of files that comprise an app, a library, or end-to-end (e2e) tests.  -->
 
-To create a new project in StackBlitz, [click here](https://stackblitz.com/fork/ng-getting-started-ed34c9).
+<live-example name="getting-started-v0" noDownload title="Click here to create your new project in StackBlitz"></live-example>.
 
 StackBlitz creates a new Angular workspace and an initial app project. The initial app includes the `app-root` component mentioned above, as well as other app and configuration files. The `app-root` component is responsible for displaying "Angular Getting Started" in the preview pane on the right. 
 
