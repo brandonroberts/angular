@@ -3,7 +3,6 @@
 import { Injectable } from '@angular/core';
 
 // #enddocregion v1
-
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 // #enddocregion imports

@@ -216,7 +216,7 @@ Tips for working in Stackblitz:
 
 1. Add a button element to the HTML
 1. Add an event binding for a `click` event to call the `share()` method defined in the component TS file.
-1. Bind the click event to the addToCart() method in the TS file
+1. Bind the click event to the `share()` method in the `product-list.component.ts` file
 
 <code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.4.html">
 </code-example>
