@@ -303,7 +303,19 @@ No product details information is shown yet
 
 ### Using Services, HttpClient, and router to fetch product details
 
-*Skipping over HttpClientModule registration. We'll see how it goes*
+Add HttpClientModule
+
+1. Import `HttpClientModule` from `@angular/common/http` package.
+
+<code-example header="src/app/app.module.ts" path="getting-started-v2/src/app/app.module.ts" region="http-client-module-import">
+</code-example>
+
+1. Add `HttpClientModule` to the `imports` array of the `AppModule`.
+
+This registers Angular's Http Client providers globally.
+
+<code-example header="src/app/app.module.ts" path="getting-started-v2/src/app/app.module.ts" region="http-client-module">
+</code-example>
 
 1. Here is a `DataService` defined with some cart functionality that you'll use later. You can define your own services to use also.
 
