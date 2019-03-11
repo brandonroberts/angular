@@ -31,7 +31,7 @@ export class CartComponent {
 // #enddocregion props-services
   onSubmit(customerData) {
     // Process checkout data here
-    console.log(customerData);
+    console.warn('Your order has been submitted', customerData);
 
     this.items = this.dataService.clearCart();
     this.checkoutForm.reset();

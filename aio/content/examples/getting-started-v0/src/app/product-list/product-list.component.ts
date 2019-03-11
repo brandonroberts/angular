@@ -15,7 +15,7 @@ export class ProductListComponent {
     },
     {
       id: 2,
-      name: "Phone Mini",
+      name: 'Phone Mini',
       price: 699,
       description: 'A great phone with one of the best cameras'
     }
@@ -24,5 +24,4 @@ export class ProductListComponent {
   share() {
     window.alert('The product has been shared!');
   }
-
 }
