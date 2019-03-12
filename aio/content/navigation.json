@@ -62,11 +62,49 @@
     },
     {
       "url": "guide/quickstart",
-      "title": "Getting Started",
+      "title": "Getting Started Locally",
       "tooltip": "A brief introduction to Angular and Angular CLI essentials."
     },
     {
-      "title": "Getting Started (Beta)",
+      "title": "Getting Started (Alpha 2)",
+      "tooltip": "Learn the basics by building your first Angular application.",
+      "children": [
+        {
+          "url": "getting-started/index-v2",
+          "title": "Your First App",
+          "tooltip": "Learn Angular's component model, template syntax, component communication, and services"
+        },
+        {
+          "url": "getting-started/getting-started-data",
+          "title": "Managing Data",
+          "tooltip": "Learn about fetching and managing data from remote API and from users with forms"
+        },
+        {
+          "url": "getting-started/getting-started-deployment",
+          "title": "Deployment",
+          "tooltip": "Share your application with the world by hosting it on Firebase or your own server"
+        }
+
+      ]
+    },
+      {
+        "title": "Getting Started Outtakes",
+        "tooltip": "Learn the basics by building your first Angular application.",
+        "children": [
+        {
+          "url": "getting-started/getting-started-architecture",
+          "title": "Architecture",
+          "tooltip": "Share your application with the world by hosting it on Firebase or your own server"
+        },
+        {
+          "url": "getting-started/getting-started-snippets",
+          "title": "Snippets",
+          "tooltip": "Share your application with the world by hosting it on Firebase or your own server"
+        }
+      ]
+    },
+    {
+      "title": "Getting Started (Alpha)",
       "tooltip": "Learn the basics by building your first Angular application.",
       "children": [
         {

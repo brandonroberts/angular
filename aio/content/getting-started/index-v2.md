@@ -1,75 +1,75 @@
 # Getting Started with Angular: Your First App
 
-Angular is the modern web developer's platform. 
+Welcome to Angular! 
+
+Angular makes it easy to build modern applications for the web, mobile, or desktop. 
+Angular leverages what you already know to accelerate development in HTML and JavaScript (or TypeScript). 
+Angular's extensive [native capabilities](api) and robust [ecosystem](https://angular.io/resources) deliver the productivity and scalable infrastructure that supports Google's largest applications.
+
+<!-- 
+Angular's extensive [native capabilities](api) and robust [ecosystem](https://angular.io/resources) enable you to deliver more quickly, with less risk. 
+
+Angular's extensive native capabilities and robust [network of 3rd-party tools and libraries](https://angular.io/resources) enable you to deliver more quickly, with less risk. 
+
+Angular's extensive and robust [ecosystem](https://angular.io/resources) enables you to leverage the power of community to deliver more quickly, with less risk.*
+
+Angular is a platform that makes it easy to build modern applications for the web, mobile, or desktop. 
+
+Angular is a framework for building client applications in HTML and either JavaScript or a language like TypeScript that compiles to JavaScript.
+
+Angular is a platform and framework for building client applications in HTML and TypeScript. 
+
+Angular is written in TypeScript. 
+It implements core and optional functionality as a set of TypeScript libraries that you import into your apps.
+
 Angular gives you the tools and the ecosystem to build web applications that scale. 
-Angular provides advanced capabilities for internationalization, mobile apps, server-side rendering, and more, so that you can deliver more quickly, with less risk. 
+It provides advanced capabilities for internationalization, mobile apps, server-side rendering, and more, so that you can deliver more quickly, with less risk. 
 
+popular web framework
+
+extensible and robust ecosystem
+
+fast, robust, scalable 
+
+Angular delivers the productivity and scalable infrastructure that supports Google's largest applications. 
+
+From prototype through global deployment, Angular delivers the productivity and scalable infrastructure that supports Google's largest applications.
+
+
+You write Angular applications by composing HTML templates with Angularized markup, writing component classes to manage those templates, adding application logic in services, and boxing components and services in modules.
+--> 
+
+In this tutorial, you'll build a simple online store application, with a catalog, shopping cart, and check-out feature. 
+You don't need to install anything: you'll build the app using the [StackBlitz](https://stackblitz.com/) online development environment.
+
+<!-- 
 In this tutorial, we'll introduce you to the building blocks of Angular. We'll leverage what you already know about web development, and teach you the essentials of Angular so you can feel confident exploring Angular's extensive native capabilities and [network of 3rd-party tools and libraries](https://angular.io/resources). 
+--> 
 
-
-
-## Introduction
-
-This tutorial walks you through the steps to build a simple online store application. The application displays a catalog of products and their details. It also includes a shopping cart, with check out functionality. 
-
+<!-- 
+*JAF: Removed picture of what you'll build.
 
 <figure>
   <img src='generated/images/guide/toh/component-structure.gif' alt="Angular applications are broken down into a tree of components like on express.google.com">
 </figure>
 
+*JAF: Removed outline of the parts. Tell about the other parts at the end of part 1* 
 
-*JAF: Min: Replace image with one that is just the app without component overlays, fix sizing. Consider: Replace with final GS Store app*
+*JAF: Removed the prerequisite skills. Mentioned HTML and JavaScript base above*
 
+*JAF: Provide time estimates for each part* 
 
-{@a intro-tutorial}
-### What you'll learn
-<!-- Tutorial application -->
+-->
 
-The store app is simplified to help you focus on skills that you are most likely to use in developing your own apps. The techniques that you will learn are Angular best practices, intended to scale with your Angular apps. 
+<div class="callout is-helpful">
+<header>New to Web Development?</header>
 
-This tutorial is organized into three parts:
-
-* Part 1 - Your First App (1.5 hours): You'll create the catalog of products. You'll learn about:
-
-    - Components, which are the building blocks of an Angular application
-    - Angular's template syntax, which extends HTML to provide integration with data and services
-    - How to use services to deliver data to components
-    - How to use routing to synchronize URL changes and app changes in response to user actions 
-
-* Part 2 - Managing Data (2 hours): You'll add the shopping cart and checkout features. You'll learn about: 
-
-    - Retrieving data via an HTTP interface
-    - Using forms to manage user interactions with data
-
-* Part 3 - Deployment: You'll deploy your app to a live website (Firebase) or to your hosting environment. If you chose to deploy to your hosting environment, you'll learn how to use the [Angular CLI](cli) to build and deploy your app to the hosting environment of your choice. 
-
-Within each section, this tutorial introduces a new concept and then provides instructions to apply that concept to the online store app. 
-
-You can also see the <live-example noDownload></live-example>
-
-*JAF: Verify and update time estimates for each part.*
-
-
-{@a intro-skills}
-### Prerequisites
-
-
-To get the most benefit from Angular and this tutorial, we recommend that you have experience in the following areas: 
-
-* Basic programming
-* HTML, CSS, and JavaScript or TypeScript
-
-
-<div class="alert is-helpful">
-
-If you are new to web development, you'll find lots of resources available to compliment the Angular docs. Mozilla's MDN docs include both [HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML) and [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) introductions. [TypeScript's docs] (https://www.typescriptlang.org/docs/home.html) include a 5-minute tutorial. Various online course platforms, such as Udemy and CodeAcademy, also cover web development basics. 
+You'll find many resources to compliment the Angular docs. Mozilla's MDN docs include both [HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML) and [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) introductions. [TypeScript's docs] (https://www.typescriptlang.org/docs/home.html) include a 5-minute tutorial. Various online course platforms, such as Udemy and CodeAcademy, also cover web development basics. 
 
 </div> 
 
-{@a stackblitz}
-### Setup
+*JAF: Alternate intro text options in comments.*
 
-You don't need to install anything. You'll build the shopping cart using [StackBlitz](https://stackblitz.com/). StackBlitz is an online development environment with accelerators that make it easy to develop an Angular application. The accelerators are similar to what is offered by the [Angular CLI](cli) when you are working locally. 
 
 
 {@a components}
@@ -191,6 +191,10 @@ Tips for working in Stackblitz:
 * If you want to save a snapshot of your work at a given point, create a fork. You can edit the name of your Stackblitz project to make it easier to return to your work (such as `getting-started-part1`). To display all of your forks, click on your name in the top bar. 
 * If the preview pane isn't showing what you expect, save and then click the refresh button. 
 * To copy a code example from this tutorial, click the icon at the top right of the code example box to save the example to the clipboard. Then you can paste the code snippet into Stackblitz. 
+
+ <!-- with accelerators that make it easy to develop an Angular application. The accelerators are similar to what is offered by the [Angular CLI](cli) when you are working locally. 
+-->
+
 
 ### Learning Template Syntax
 
