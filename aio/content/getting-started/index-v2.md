@@ -72,6 +72,65 @@ You'll find many resources to compliment the Angular docs. Mozilla's MDN docs in
 
 
 
+{@a basic-app}
+## 1. Create a new project
+
+<!-- 
+<live-example name="getting-started-v0" noDownload title="Click here to create your new project in StackBlitz"></live-example>.
+-->
+
+[Click here to create a new Angular project in StackBlitz.](https://stackblitz.com/edit/ng-getting-started-ed34c9)
+
+*JAF: What is the right link to use for GDE review? live-example link commented out because it didn't work locally for me. Previous review version had https://stackblitz.com/fork/ng-getting-started* 
+
+<!--
+JAF: Add StackBlitz icon or Angular icon or some other graphic to launch to Stackblitz? 
+-->
+
+StackBlitz creates a new Angular app: 
+
+<figure>
+  <img src='generated/images/guide/getting-started/new-project.png' alt="New Angular project in Stackblitz">
+</figure>
+
+Notice that the right pane displays the running app. 
+Creating a new Angular app in Stackblitz (or locally using the Angular [CLI](cli)) always gives you a basic starter app that is ready to run. 
+
+We've seeded this particular app with a top bar&mdash;containing the store name and checkout icon&mdash;and the title for a product catalog. 
+
+<!-- 
+<div class="alert is-helpful">
+
+Creating a new Angular app in Stackblitz (or locally using the Angular CLI) always gives you a basic starter app that is ready to run. 
+For this Getting Started, we have provided 
+
+the Angular Console, Stackblitz, or any other CLI-based tool 
+
+</div>
+-->
+
+<div class="callout is-helpful">
+<header>Stackblitz Tips</header>
+
+* Log into StackBlitz, so you can save and resume your work. If you have a GitHub account, you can log into StackBlitz with that account. 
+* To copy a code example from this tutorial, click the icon at the top right of the code example box, and then paste the code snippet from the clipboard into Stackblitz. 
+* If the Stackblitz preview pane isn't showing what you expect, save and then click the refresh button. 
+
+<!-- 
+JAF: Removed tip about creating a fork, naming forks, reopening forks. Maybe introduce that at the end of Part 1 for users who continue.
+-->
+
+</div>
+
+<!-- 
+ Stackblitz has accelerators that make it easy to develop an Angular application. The accelerators are similar to what is offered by the [Angular CLI](cli) when you are working locally. 
+-->
+
+<!-- 
+You develop apps in the context of an Angular workspace. A workspace contains the files for one or more projects. A project is the set of files that comprise an app, a library, or end-to-end (e2e) tests. 
+-->
+
+
 {@a components}
 ## Key concepts
 
@@ -115,6 +174,9 @@ We can organize this app into the following tree of components:
     * app-product-preview: Product preview
     
 Just like HTML elements, components can be referred to or nested in another component's template. A component is referred to by its `selector`. The selector is the name you give the Angular component when it is rendered as an HTML element on the page. By convention, Angular component selectors begin with the prefix such as `app-`, followed by the component name. 
+
+Stackblitz contains an Angular workspace and an initial app project. The initial app includes the `app-root` component mentioned above, as well as other app and configuration files. The `app-root` component is responsible for displaying "Angular Getting Started" in the preview pane on the right. 
+
 
 
 {@a template-syntax}
@@ -167,33 +229,6 @@ To learn about the full capabilities of Angular's template syntax, see the [Temp
 
 </div>
 
-
-{@a basic-app}
-## Building the basic store app layout
-<!-- skeleton, framework, site layout, app layout -->
-
-Let's get started. 
-
-In this section, you'll create a new project in StackBlitz, and then scaffold out some components for your store. 
-
-
-#### 1. Create a new project
-<!-- does this def of project match local def? when and how do we introduce workspace? -->
-<!-- 
-You develop apps in the context of an Angular workspace. A workspace contains the files for one or more projects. A project is the set of files that comprise an app, a library, or end-to-end (e2e) tests.  -->
-
-<live-example name="getting-started-v0" noDownload title="Click here to create your new project in StackBlitz"></live-example>.
-
-StackBlitz creates a new Angular workspace and an initial app project. The initial app includes the `app-root` component mentioned above, as well as other app and configuration files. The `app-root` component is responsible for displaying "Angular Getting Started" in the preview pane on the right. 
-
-Tips for working in Stackblitz:
-* If you log into StackBlitz, you can easily take breaks and return to the current state of this tutorial app. If you have a GitHub account, you can log into StackBlitz with that account. See [Working in Stackblitz](#stackblitz) for more tips. 
-* If you want to save a snapshot of your work at a given point, create a fork. You can edit the name of your Stackblitz project to make it easier to return to your work (such as `getting-started-part1`). To display all of your forks, click on your name in the top bar. 
-* If the preview pane isn't showing what you expect, save and then click the refresh button. 
-* To copy a code example from this tutorial, click the icon at the top right of the code example box to save the example to the clipboard. Then you can paste the code snippet into Stackblitz. 
-
- <!-- with accelerators that make it easy to develop an Angular application. The accelerators are similar to what is offered by the [Angular CLI](cli) when you are working locally. 
--->
 
 
 ### Learning Template Syntax
