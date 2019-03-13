@@ -476,10 +476,9 @@ You have an online store application with a product catalog:
 * Users can click on the `Share` button to share a product from the list or details
 
 To continue exploring Angular, we recommend any of the following options:
-* Do the add-on Getting Started modules in order: Managing Data, Forms, Deployment. The add-on modules extend the online store app to be more robust and scalable, introducing more Angular foundation skills. 
-* Skip ahead to the Deployment add-on module to deploy the app you have or move to local development. 
-* Read the Architecture Guide
+* Do the add-on Getting Started lessons in order: Managing Data, Forms, Deployment. The add-on modules extend the online store app to be more robust and scalable, introducing more Angular foundation skills. 
+* Skip ahead to the [Deployment](getting-started/getting-started-deployment) add-on lesson to deploy your app to Firebase or move to local development. 
+* Read more about the Angular app [architecture](guide/architecture).
 
-
-[Continue to the next Getting Started module: Managing Data.](getting-started/getting-started-data-v2)
+[Continue to the next Getting Started lesson: Managing Data.](getting-started/getting-started-data-v2)
 
