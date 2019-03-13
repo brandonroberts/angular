@@ -86,9 +86,10 @@ JAF: Add StackBlitz icon or Angular icon or some other graphic to launch to Stac
 
 StackBlitz creates a new Angular app: 
 
-<figure>
-  <img src='generated/images/guide/getting-started/new-project.png' alt="New Angular project in Stackblitz">
-</figure>
+<img src='generated/images/guide/getting-started/new-project.png' alt="New Angular project in Stackblitz">
+<!-- 
+JAF: Formal style calls for a figure tag around the image, but the white drop-shadow box looks strange on full screen shots like this one.
+-->
 
 Notice that the right pane displays the running app. 
 Creating a new Angular app in Stackblitz (or locally using the Angular [CLI](cli)) always gives you a basic starter app that is ready to run. 
@@ -474,10 +475,11 @@ You have an online store application with a product catalog:
 * Users can click on a product name from the list to see details below
 * Users can click on the `Share` button to share a product from the list or details
 
-In the next section, you'll extend the app to be more scalable. You'll change how product details are displayed and how product data is managed:
-* Use routing to display them as a separate page
-* Use services
-* Use the HttpClient to retrieve data from a `json` file
+To continue exploring Angular, we recommend any of the following options:
+* Do the add-on Getting Started modules in order: Managing Data, Forms, Deployment. The add-on modules extend the online store app to be more robust and scalable, introducing more Angular foundation skills. 
+* Skip ahead to the Deployment add-on module to deploy the app you have or move to local development. 
+* Read the Architecture Guide
 
-[Continue to the next section.](getting-started/getting-started-data-v2)
+
+[Continue to the next Getting Started module: Managing Data.](getting-started/getting-started-data-v2)
 
