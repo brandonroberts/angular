@@ -1,33 +1,39 @@
 # Routing and Data
 
-In addition to building a general component structure in your Angular app, your application uses and manages data and from internal and external sources.
+Welcome to part 2 of Angular Getting Started. 
 
+At the end of [part 1](getting-started), the online store application had a basic product catalog: 
+
+* The app displays a top bar and a product list
+* Users can click on a product name from the list to see details below
+* Users can click on the `Share` button to share a product from the list or details
+
+In this part, you'll extend the app to be more scalable. You'll:
+* Change how product details are displayed so they are on their own page, using routing
+* Change how product data is managed, to use services, the HttpClient, and an external data source (`json` file)
+* Add a checkout page
+
+<!--
 ## Introduction
 
 Data your app needs can come from many different sources. Whether it be a static file, a backend API that exposes data through a JSON-based API, or other different formats, your app consumes and makes use of this data to make decisions and display content. Your app also needs data to be entered from users to fill out forms for processing. Angular provides libraries to help you consume and receive data by building on top of existing browser APIs. 
+-->
 
-### What you'll learn
+## Routing and navigation
 
-In the sections below, you'll focus on using data and receiving data from user input.
+At the end of part 1, the user displays product details by clicking a product name. The details are displayed in the same page, below the list. This is done by using a simple click event on the product name. Notice that the preview pane URL does not change. 
 
-- Retrieving external data using Angular's Http Client
-- Receiving form input through Angular Reactive Forms
+In this section, we'll modify the app to display the product details in a separate page.
 
-In the sections below, you'll build out your store with retreiving data from and external source, displaying product details,
- and adding a checkout page.
+To do this, you'll use the Angular router.
 
-
-## Routing
-
-Currently, the user displays product details by clicking a product name. The details are displayed in the same page, below the list. This is done by using a simple click event on the product name. The product details is a child of the product list. 
-
-In this section, we'll change the app to display the product details in a separate page.
-
-To do this, you'll use the Angular router. This app is already configured to use the router. 
+<!--
+JAF: Do we show them that the app is configured to use the router? Part 1 actually used the router to display the product list. Did it need to?
+-->
 
 1. Open the `product-list.component.html` file. 
 
-1. On the anchor that displays the product name, replace the click event binding with routerLink to Product List template.
+1. On the anchor that displays the product name, replace the click event binding (`(click)="selectProduct(product)"`) with a `routerLink` to the product list template (`/products`).
 
   ```
   <h3>
@@ -38,26 +44,131 @@ To do this, you'll use the Angular router. This app is already configured to use
   </h3>
   ```
 
-1. Remove the product list Share buttons 
+1. Remove the Share buttons from the product list. 
 
-1. Remove the product details component. 
+<!--
+JAF: Why? Extra step seems unnecessary
+-->
+
+1. Remove the product details component from below the product list. 
 
     <code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.html">
     </code-example>
 
-1. In the product details component template, wrap product details information with an `*ngIf`. 
+1. Update the product details component template (`product-list.component.html`), so that the title "Product Details" is always displayed, but the product details information are only displayed if they exist. To do this, wrap the product details with an `*ngIf`. 
 
     <code-example header="src/app/product-details/product-details.component.html" path="getting-started-v2/src/app/product-details/product-details.component.1.html">
     </code-example>
+
+
+
+    Now, when the user clicks on a name in the product list, the product list is replaced by the product details. 
 
 1. Add a route in the `AppModule` for product details, with a `path` of `products/:productId` and `ProductDetailsComponent` for the `component`.
 
 <code-example header="src/app/app.module.ts" path="getting-started-v2/src/app/app.module.ts" region="product-details-route">
 </code-example>
 
-Click on each product to display the product details. Notice that the URL in the preview window changes. 
+Click on each product to display the product details. Notice that the URL in the preview window changes. The final digit (1 or 2) is the product's `id` property. 
 
-No product details information is shown yet.
+No product detail information is shown yet.
+
+### Using Services, HttpClient, and router to fetch product details
+
+Add HttpClientModule
+
+1. Import `HttpClientModule` from `@angular/common/http` package.
+
+<code-example header="src/app/app.module.ts" path="getting-started-v2/src/app/app.module.ts" region="http-client-module-import">
+</code-example>
+
+1. Add `HttpClientModule` to the `imports` array of the `AppModule`.
+
+This registers Angular's Http Client providers globally.
+
+<code-example header="src/app/app.module.ts" path="getting-started-v2/src/app/app.module.ts" region="http-client-module">
+</code-example>
+
+1. Here is a `DataService` defined with some cart functionality that you'll use later. You can define your own services to use also.
+
+<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="v1">
+</code-example>
+
+1. There is some product data in `assets/products.json` already defined. This is to show fetching data from an external source.
+
+<code-example header="src/assets/products.json" path="getting-started-v2/src/assets/products.json">
+</code-example>
+
+Import
+
+1. Import `HttpClient` from `@angular/common/http` package.
+1. Import `map` operator from `rxjs/operators` package.
+
+<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="imports">
+</code-example>
+
+Inject `HttpClient`
+
+1. Inject `HttpClient` into constructor of `DataService`
+
+<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="ctor">
+</code-example>
+
+Retrieve the product details
+
+1. Add `getOne()` method with a `productId` argument to the `DataService`. 
+1. Use the `HttpClient#get()` method to retrieve the products from the JSON file
+1. Use the `map` operator to find one product in the array of the products and return it
+
+<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="get-one">
+</code-example>
+
+Update Details Component
+
+Import
+
+1. Import the `ActivatedRoute` service from the `@angular/router` package.
+1. Import the `switchMap` operator from the `rxjs/operators` package.
+1. Import the `DataService` to use its `getOne()` method to fetch product details.
+
+<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="imports">
+</code-example>
+
+Product Property and Inject Services
+
+1. Remove the `Input` decorator from the `product` property in the product details component.
+1. Remove the `share` property from the component.
+1. Inject the `ActivatedRoute`, and `DataService` services to access route information and data access methods.
+
+<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="props-methods">
+</code-example>
+
+Retrive product details
+
+1. In the `ngOnInit()` method, set the `product` property to the current route that uses the `paramMap` property on the route to access the `productId` parsed from the URL.
+1. Use the `switchMap` operator on the route information stream to map it into a request for product details using the `DataService#getOne()` method
+with the `productId`.
+1. Subscribe to the details stream and and update the `product` property with the retrieved product details information.
+
+<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="get-product">
+</code-example>
+
+Add to cart
+
+1. Define a `addToCart()` method that receives a `product` and use the previously defined `DataService#addToCart()` method to add the product your cart. Also add an `alert` that the product has been added to the cart.
+
+<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="add-to-cart">
+</code-example>
+
+Update template
+
+1. Remove the `share` button in the template.
+1. Add a `button` that says `Buy` to the template with a `click` event binding to call the `addToCart()` method with the `product`.
+
+<code-example header="src/app/product-details/product-details.component.html" path="getting-started-v2/src/app/product-details/product-details.component.html">
+</code-example>
+
+## Success Point
 
 
 ## Requesting data with the Angular Http Client
