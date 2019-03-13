@@ -419,45 +419,50 @@ JAF: I thought we were using price in the summary and adding description in the 
        </app-product-details>
         ```
 
+        <figure>
+          <img src='generated/images/guide/getting-started/product-details.png' alt="Display details for selected product">
+        </figure>
 
 ## Output
-Using @Output to add to the cart
 
+It would be nice if a user could share a product from the details. This gives us the opportunity to look at how Angular components handle output using events. 
 
-1. Return to the `product-details.component.ts` component class file, and import `Output` and `EventEmitter` from the `@angular/core` package.
+1. Set up the product details component to emit events: 
 
-    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.ts" region="imports">
-    </code-example>
+    1. Open the `product-details.component.ts` component class file.
 
-1. Define an output property named `share` with an `Output` decorator and an instance of `EventEmitter`
+    1. Import `Output` and `EventEmitter` from the `@angular/core` package.
 
-    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.ts" region="input-output">
-    </code-example>
+        <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.ts" region="imports">
+        </code-example>
 
-1. Add share button to the template with a event binding to call the `share.emit()` method
+    1. In the `ProductDetailsComponent` class, define an output property named `share` with an `@Output` decorator and an instance of `EventEmitter`:
+
+        <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.ts" region="input-output">
+        </code-example>
+
+1. In the product details template (`product-details.component.html`), add a Share button similar to the ones in the product list. In this case, set up an event binding to call the `share.emit()` method:
 
     <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.html" region="input-output">
     </code-example>
 
+1. In the product list template (`product-details.component.html`), add an event listener for the “share” event:
 
+  <!--
+  JAF: from the component that calls the same `share()` method
+  -->
 
-## Product List to Product Details
+  ```
+  <app-product-details
+      *ngIf="selectedProduct"
+      [product]="selectedProduct"
+      (share)="share()">
+  </app-product-details>
+  ```
 
-1. Add a `selectedProduct` property to the product list component TS
-1. Add a method named `selectProduct()` to the component TS that sets the `selectedProduct` property with the provided product
-
-<code-example header="src/app/product-list/product-list.component.ts" path="getting-started-v2/src/app/product-list/product-list.component.ts" region="product">
-</code-example>
-
-1. In the template, add an event binding to the anchor element to call selectProduct(product)
-1. Add product details component to bottom of the product-list component
-1. Use an *ngIf on the product details component for a product
-1. Use a property binding to pass the product property to the product details component
-1. Add an event listener for the “share” event from the component that calls the same `share()` method
-
-<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.5.html">
-</code-example>
-
+  <!--
+  JAF: Can we find a better use of output. Seems to duplicate a feature that we already have at the list level. Hmm
+  -->
 
 
 
