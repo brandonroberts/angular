@@ -479,5 +479,5 @@ In the next section, you'll extend the app to be more scalable. You'll change ho
 * Use services
 * Use the HttpClient to retrieve data from a `json` file
 
-[Continue to the next section.](getting-started/getting-started-data-v2.md)
+[Continue to the next section.](getting-started/getting-started-data-v2)
 
