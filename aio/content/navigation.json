@@ -75,7 +75,7 @@
           "tooltip": "Learn Angular's component model, template syntax, component communication, and services"
         },
         {
-          "url": "getting-started/getting-started-data",
+          "url": "getting-started/getting-started-data-v2",
           "title": "Managing Data",
           "tooltip": "Learn about fetching and managing data from remote API and from users with forms"
         },
