@@ -73,100 +73,162 @@ Click on each product to display the product details. Notice that the URL in the
 
 No product detail information is shown yet.
 
-### Using Services, HttpClient, and router to fetch product details
+## Predefined services and data
 
-Add HttpClientModule
+For the purpose of this Getting Started, we have provided a data service and product data. 
 
-1. Import `HttpClientModule` from `@angular/common/http` package.
+* `data.service.ts` contains the definition of a data service with cart functionality. 
 
-<code-example header="src/app/app.module.ts" path="getting-started-v2/src/app/app.module.ts" region="http-client-module-import">
-</code-example>
+    <code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="v1">
+    </code-example>
 
-1. Add `HttpClientModule` to the `imports` array of the `AppModule`.
+* `assets/products.json` defines some product data, to simulate fetching data from an external source.
 
-This registers Angular's Http Client providers globally.
+    <code-example header="src/assets/products.json" path="getting-started-v2/src/assets/products.json">
+    </code-example>
 
-<code-example header="src/app/app.module.ts" path="getting-started-v2/src/app/app.module.ts" region="http-client-module">
-</code-example>
 
-1. Here is a `DataService` defined with some cart functionality that you'll use later. You can define your own services to use also.
+## Accessing data with HttpClient
 
-<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="v1">
-</code-example>
+HttpClient can be used to access external data, in our case product details from a `json` file. 
 
-1. There is some product data in `assets/products.json` already defined. This is to show fetching data from an external source.
+### Import HttpClient
 
-<code-example header="src/assets/products.json" path="getting-started-v2/src/assets/products.json">
-</code-example>
+However, before you can use it, you must set up your app to use HttpClientModule. 
 
-Import
+1. Open `app.module.ts`. 
 
-1. Import `HttpClient` from `@angular/common/http` package.
-1. Import `map` operator from `rxjs/operators` package.
+1. Import `HttpClientModule` from the `@angular/common/http` package.
 
-<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="imports">
-</code-example>
+    <code-example header="src/app/app.module.ts" path="getting-started-v2/src/app/app.module.ts" region="http-client-module-import">
+    </code-example>
 
-Inject `HttpClient`
+1. Add `HttpClientModule` to the `imports` array of the app module.
+
+    This registers Angular's Http Client providers globally.
+
+    <code-example header="src/app/app.module.ts" path="getting-started-v2/src/app/app.module.ts" region="http-client-module">
+    </code-example>
+
+
+### Set up the data service to use HttpClient
+
+1. Open `data.service.ts`.
+
+1. Import `HttpClient` from the `@angular/common/http` package.
+
+1. Import `map` operator from the `rxjs/operators` package.
+
+    <code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="imports">
+    </code-example>
 
 1. Inject `HttpClient` into constructor of `DataService`
 
-<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="ctor">
-</code-example>
+    <code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="ctor">
+    </code-example>
 
-Retrieve the product details
+### Retrieve the product details
+
+Continue working in `data.service.ts`.
 
 1. Add `getOne()` method with a `productId` argument to the `DataService`. 
-1. Use the `HttpClient#get()` method to retrieve the products from the JSON file
-1. Use the `map` operator to find one product in the array of the products and return it
 
-<code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="get-one">
-</code-example>
+1. Use the `HttpClient#get()` method to retrieve the products from the JSON file.
 
-Update Details Component
+1. Use the `map` operator to find one product in the array of the products and return it.
 
-Import
+    <code-example header="src/app/data.service.ts" path="getting-started-v2/src/app/data.service.ts" region="get-one">
+    </code-example>
+
+### Update the details component
+
+#### Imports
+
+1. Open `product-details.component.ts`. 
 
 1. Import the `ActivatedRoute` service from the `@angular/router` package.
+
 1. Import the `switchMap` operator from the `rxjs/operators` package.
+
 1. Import the `DataService` to use its `getOne()` method to fetch product details.
 
-<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="imports">
-</code-example>
+    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="imports">
+    </code-example>
 
-Product Property and Inject Services
+#### Product property and inject services
 
-1. Remove the `Input` decorator from the `product` property in the product details component.
-1. Remove the `share` property from the component.
+Continue working in the product details component (`product-details.component.ts`). 
+
+1. Remove the `Input` decorator from the `product` property. Keep the property itself. 
+
+1. Remove the `share` output property.
+
 1. Inject the `ActivatedRoute`, and `DataService` services to access route information and data access methods.
 
-<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="props-methods">
-</code-example>
+    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="props-methods">
+    </code-example>
 
-Retrive product details
+
+#### Retrieve product details
+
+Continue working in the product details component (`product-details.component.ts`). 
 
 1. In the `ngOnInit()` method, set the `product` property to the current route that uses the `paramMap` property on the route to access the `productId` parsed from the URL.
+
 1. Use the `switchMap` operator on the route information stream to map it into a request for product details using the `DataService#getOne()` method
 with the `productId`.
+
 1. Subscribe to the details stream and and update the `product` property with the retrieved product details information.
 
-<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="get-product">
-</code-example>
+    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="get-product">
+    </code-example>
 
-Add to cart
+Now the product details are available. Click on a name in the list to display the product's details page. 
 
-1. Define a `addToCart()` method that receives a `product` and use the previously defined `DataService#addToCart()` method to add the product your cart. Also add an `alert` that the product has been added to the cart.
+<figure>
+  <img src='generated/images/guide/getting-started/product-details-routed.png' alt="Display details for selected product as a separate page">
+</figure>
 
-<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="add-to-cart">
-</code-example>
 
-Update template
+## Add products to cart
+
+
+1. Continue working in the product details component (`product-details.component.ts`). 
+
+1. Define an `addToCart()` method that receives a `product` and use the previously defined `DataService#addToCart()` method to add the product your cart. 
+
+1. Add an `alert` that the product has been added to the cart.
+
+    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.ts" region="add-to-cart">
+    </code-example>
+
+1. Open the product details template (`product-details.component.html`). 
 
 1. Remove the `share` button in the template.
-1. Add a `button` that says `Buy` to the template with a `click` event binding to call the `addToCart()` method with the `product`.
 
-<code-example header="src/app/product-details/product-details.component.html" path="getting-started-v2/src/app/product-details/product-details.component.html">
-</code-example>
+1. Add a `button` that says `Buy` with a `click` event binding to call the `addToCart()` method with the `product`.
+
+    <code-example header="src/app/product-details/product-details.component.html" path="getting-started-v2/src/app/product-details/product-details.component.html">
+    </code-example>
+
+Users can now click the Buy button to add a product to the cart. 
+
+    <figure>
+      <img src='generated/images/guide/getting-started/product-details-buy.png' alt="Display details for selected product with a Buy button">
+    </figure>
+
+
+    <figure>
+      <img src='generated/images/guide/getting-started/buy-alert.png' alt="Display details for selected product with a Buy button">
+    </figure>
+
+
+## Next steps
+
+[In the next part,](getting-started/getting-started-forms) you'll finish the app by adding a form-based checkout feature.
+
+
+
 
 ## Success Point
 
