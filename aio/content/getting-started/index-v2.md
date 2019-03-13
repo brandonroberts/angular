@@ -154,16 +154,12 @@ Our starter app has three components:
 
 Let's look at the product list component: 
 
-1. Open the `product-list` folder.
-
-    Notice that it contains one file for each part of the component: 
+1. Open the `product-list` folder. It contains one file for each part of the component: 
     * `product-list-component.ts` contains the component class definition
     * `product-list-component.html` is the HTML template 
     * `product-list-component.css` contains component-specific styles
 
-2. Open the `product-list-component.ts` file. 
-
-    Look at the `@Component` annotation. 
+2. Open the `product-list-component.ts` file and look at the `@Component` annotation. 
     
     ```
     @Component({
@@ -176,94 +172,94 @@ Let's look at the product list component:
 
 3. Notice that the `ProductListComponent` class defines two products: 
 
-```
-export class ProductListComponent {
-  products = [
-    {
-      id: 1,
-      name: 'Phone XL',
-      price: 799,
-      description: 'A large phone with one of the best screens'
-    },
-    {
-      id: 2,
-      name: "Phone Mini",
-      price: 699,
-      description: 'A great phone with one of the best cameras'
-    }
-  ```
+    ```
+    export class ProductListComponent {
+      products = [
+        {
+          id: 1,
+          name: 'Phone XL',
+          price: 799,
+          description: 'A large phone with one of the best screens'
+        },
+        {
+          id: 2,
+          name: "Phone Mini",
+          price: 699,
+          description: 'A great phone with one of the best cameras'
+        }
+    ```
 
-Right now, the app only displays the title "Products"; it does not display the individual products. In the next section, you'll modify the component's HTML template to display the list of products.
+Right now, the app only displays the title "Products"; it does not display the individual products. In the next section, you'll modify the component's HTML template to display the list of products defined in the component class.
 
 {@a template-syntax}
 ## Template syntax
 
-Angular builds off and extends HTML by providing a template syntax that gives components control over the display of content. 
-This section introduces five things you can do in an Angular template to affect what your user sees, based on the component's state and behavior: 
+Angular extends HTML with a template syntax that gives components control over the display of content. 
+This section introduces five constructs you can use in an Angular template to affect what your user sees, based on the component's state and behavior: 
 
-* Iterating over a list with `*ngFor`
-* Adding and removing elements dynamically with `*ngIf`
-* Property binding [ ], which lets you bind a component property to an element, so that whenever the property changes, the element is updated based on the template expression.
-* Interpolation {{ }}, which lets you display properties of components as text in HTML
+* `*ngFor`
+* `*ngIf`
+* Property binding [ ]
+* Interpolation {{ }}
 * Event binding ( ) 
 
 We'll use all five to add the product list to the "Products" area of the app. 
 
-
 1. In the `product-list` folder, open the component's template file `product-list-component.html`. 
 
-<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.1.html">
-</code-example>
+    <code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.1.html">
+    </code-example>
 
 2. Modify the template's `<div>` element to iterate over the list of products using the `*ngFor` directive. 
 
-```
-<h2>Products</h2>
+    ```
+    <h2>Products</h2>
 
-<!-- ngfor -->
-<div *ngFor="let product of products">
-```
+    <!-- ngfor -->
+    <div *ngFor="let product of products">
+    ```
 
-The `<div>` contents will be displayed once for each product in the list. 
+    The `<div>` contents will be displayed once for each product in the list. 
 
-<!--
-`*ngIf` is a "structural directive". Structural directives change which HTML or components are displayed.  Technically, they shape or reshape the DOM's structure, typically by adding, removing, and manipulating the elements to which they are attached. Any directive with an * is a structural directive.
--->
+    <div class="alert is-helpful">
+    `*ngIf` is a "structural directive". Structural directives change which HTML or components are displayed.  Technically, they shape or reshape the DOM's structure, typically by adding, removing, and manipulating the elements to which they are attached. Any directive with an * is a structural directive.
+    </div>
 
 
-3. Inside the anchor element, display the product name by using the interpolation syntax {{ }}: 
+3. Inside the anchor element, display the name property of the product by using the interpolation syntax {{ }}: 
 
-```
-<h2>Products</h2>
+    ```
+    <h2>Products</h2>
 
-  <!-- ngFor -->
-  <div *ngFor="let product of products">
+      <!-- ngFor -->
+      <div *ngFor="let product of products">
 
-  <h3>
-    <a>
-      <!-- interpolation -->
-      {{ product.name }}
-    </a>
+      <h3>
+        <a>
+          <!-- interpolation -->
+          {{ product.name }}
+        </a>
+      </h3>
+    ```
 
-  </h3>
-  ```
+    The app now displays the name of each product in the list. 
 
-The app now displays the name of each product in the list, as shown here: 
+    <figure>
+      <img src='generated/images/guide/getting-started/template-syntax-product-names.png' alt="Product names added to list">
+    </figure>
 
-<figure>
-  <img src='generated/images/guide/getting-started/template-syntax-product-names.png' alt="Product names added to list">
-</figure>
+    The product name anchors are inactive. Later we'll link the displayed names to product details.
 
-Reminder: You might need to save the product and reload the preview pane to see the changes. 
-
-(Right now the anchors don't link to anything. Later we'll link them to product details.)
+    <div class="alert is-helpful">
+    Reminder: You might need to save the project and reload the preview pane to see the changes. 
+    </div>
 
 4. Bind the title attribute of the anchor to the component's product name property by using the property binding syntax [ ]. 
 
-<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.2.html">
-</code-example>
+    <code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.2.html">
+    </code-example>
 
-Hover over a product name to display that anchor's title property (which is also the name of the product). 
+    Hover over a product name to display that anchor's title property (which is also the name of the product). 
 
 <!-- 
 JAF: Can we display something different from the name?
@@ -271,44 +267,30 @@ JAF: Can we display something different from the name?
 
 5. Now let's add the product descriptions. On the paragraph tag, use an `*ngIf` directive to show the element if it has a description.
 
+    <code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.3.html">
+    </code-example>
 
-<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.3.html">
-</code-example>
+    <!-- 
+    JAF: This might be more compelling if we had a product without a description. Then we can go add a description later.
+    -->
 
-<!-- 
-JAF: This might be more compelling if we had a product without a description. Then we can go add a description later.
--->
+    The app now displays the name and description of each product in the list, as shown here: 
 
-The app now displays the name and description of each product in the list, as shown here: 
-
-<figure>
-  <img src='generated/images/guide/getting-started/template-syntax-product-description.png' alt="Product descriptions added to list">
-</figure>
+    <figure>
+      <img src='generated/images/guide/getting-started/template-syntax-product-description.png' alt="Product descriptions added to list">
+    </figure>
 
 6. To see event binding in action, we'll add a button for sharing the product. 
 
     1. Add a button element to the HTML.
-    1. Add an event binding for a `click` event to call the `share()` method that was predefined in the component (in the `product-list.component.ts` file). 
+    1. Add an event binding for a `click` event to call the `share()` method in the component (in the `product-list.component.ts` file). 
 
-<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.4.html">
-</code-example>
+        <code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.4.html">
+        </code-example>
 
-<!--
-You can listen to standard HTML events or custom events (which you create through components). 
--->
-
-<figure>
-  <img src='generated/images/guide/getting-started/template-syntax-product-share-button.png' alt="Share button added for each product name">
-</figure>
-
-
-Click the "Share" button to see the alert.
-
-
-<figure>
-  <img src='generated/images/guide/getting-started/template-syntax-product-share-alert.png' alt="Alert displayed by Share button">
-</figure>
-
+        <figure>
+          <img src='generated/images/guide/getting-started/template-syntax-product-share-button.png' alt="Share button added for each product name">
+        </figure>
 
 
 <div class="alert is-helpful">
@@ -322,8 +304,7 @@ JAF: I want a break here
 -->
 
 
-
-### Inputs/Outputs
+## Inputs/Outputs
 
 1. Generate product details component
 
@@ -350,7 +331,7 @@ Update Template
 <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.html" region="input-output">
 </code-example>
 
-### Product List to Product Details
+## Product List to Product Details
 
 1. Add a `selectedProduct` property to the product list component TS
 1. Add a method named `selectProduct()` to the component TS that sets the `selectedProduct` property with the provided product
