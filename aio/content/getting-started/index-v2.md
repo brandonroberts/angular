@@ -129,7 +129,7 @@ You develop apps in the context of an Angular workspace. A workspace contains th
 
 
 {@a components}
-## Components
+## App structure
 
 Let's take a quick look at the structure of our app.
 
@@ -149,28 +149,33 @@ Our starter app has three components:
 
 * app-root: The application shell. This is first component to load, and the parent of all other components. You can think of it as the base page. 
 * app-top-bar: The top bar for our online store, with the store name and checkout button.
-* app-product-list: The product list for our online store, which currently only displays the title "Products". 
+* app-product-list: The product list for our online store.. 
+
+Right now, the app displays the title "Products", but it does not display the list of products. In the next section, you'll modify the component's HTML template to display the list of products defined in the component class.
 
 
-Let's look at the product list component: 
+{@a template-syntax}
+## Template syntax
+
+Angular extends HTML with a template syntax that gives components control over the display of content. 
+This section introduces five constructs you can use in an Angular template to affect what your user sees, based on the component's state and behavior: 
+
+* `*ngFor`
+* `*ngIf`
+* Property binding [ ]
+* Interpolation {{ }}
+* Event binding ( ) 
+
+We'll use these to add the product list to the "Products" area of the app. 
+
 
 1. Open the `product-list` folder. It contains one file for each part of the component: 
     * `product-list-component.ts` contains the component class definition
     * `product-list-component.html` is the HTML template 
     * `product-list-component.css` contains component-specific styles
 
-2. Open the `product-list-component.ts` file and look at the `@Component` annotation. 
-    
-    ```
-    @Component({
-      selector: 'app-product-list',
-      templateUrl: './product-list.component.html',
-      styleUrls: ['./product-list.component.css']
-    })
-    ```
-    The *selector* `app-product-list` is the name you use to refer to the Angular component when it is rendered as an HTML element on the page. By convention, Angular component selectors begin with the prefix such as `app-`, followed by the component name. 
 
-3. Notice that the `ProductListComponent` class defines two products: 
+1. Open the `product-list-component.ts` file. The `ProductListComponent` class defines properties for two products: 
 
     ```
     export class ProductListComponent {
@@ -189,28 +194,14 @@ Let's look at the product list component:
         }
     ```
 
-Right now, the app only displays the title "Products"; it does not display the individual products. In the next section, you'll modify the component's HTML template to display the list of products defined in the component class.
+    We want to display the name and description of these products in our "Products" list. 
 
-{@a template-syntax}
-## Template syntax
-
-Angular extends HTML with a template syntax that gives components control over the display of content. 
-This section introduces five constructs you can use in an Angular template to affect what your user sees, based on the component's state and behavior: 
-
-* `*ngFor`
-* `*ngIf`
-* Property binding [ ]
-* Interpolation {{ }}
-* Event binding ( ) 
-
-We'll use all five to add the product list to the "Products" area of the app. 
-
-1. In the `product-list` folder, open the component's template file `product-list-component.html`. 
+1. Open the component's template file `product-list-component.html`. This is the file we'll modify to display the product list.
 
     <code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.1.html">
     </code-example>
 
-2. Modify the template's `<div>` element to iterate over the list of products using the `*ngFor` directive. 
+2. We want the `<div>` element to appear once for each product in the list. To do that, use the `*ngFor` directive inside the `<div>`, as shown below:  
 
     ```
     <h2>Products</h2>
@@ -219,14 +210,12 @@ We'll use all five to add the product list to the "Products" area of the app.
     <div *ngFor="let product of products">
     ```
 
-    The `<div>` contents will be displayed once for each product in the list. 
-
     <div class="alert is-helpful">
-    `*ngIf` is a "structural directive". Structural directives change which HTML or components are displayed.  Technically, they shape or reshape the DOM's structure, typically by adding, removing, and manipulating the elements to which they are attached. Any directive with an * is a structural directive.
+    `*ngFor` is a "structural directive". Structural directives change which HTML or components are displayed.  Technically, they shape or reshape the DOM's structure, typically by adding, removing, and manipulating the elements to which they are attached. Any directive with an * is a structural directive.
     </div>
 
 
-3. Inside the anchor element, display the name property of the product by using the interpolation syntax {{ }}: 
+3. Inside the anchor, display the product's name by using the interpolation syntax {{ }}. Interpolation renders a property's value as text.  
 
     ```
     <h2>Products</h2>
@@ -254,24 +243,22 @@ We'll use all five to add the product list to the "Products" area of the app.
     Reminder: You might need to save the project and reload the preview pane to see the changes. 
     </div>
 
-4. Bind the title attribute of the anchor to the component's product name property by using the property binding syntax [ ]. 
+4. To create hover text for each anchor, we'll use property binding. Bind the anchor's title attribute to the component's product name property by using the property binding syntax [ ]. 
 
     <code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.2.html">
     </code-example>
 
-    Hover over a product name to display that anchor's title property (which is also the name of the product). 
+    <!-- 
+    JAF: Can we display something different from the name?
+    -->
 
-<!-- 
-JAF: Can we display something different from the name?
--->
-
-5. Now let's add the product descriptions. On the paragraph tag, use an `*ngIf` directive to show the element if it has a description.
+5. Add the product descriptions. On the paragraph tag, use an `*ngIf` directive to show the element if it has a description.
 
     <code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.3.html">
     </code-example>
 
     <!-- 
-    JAF: This might be more compelling if we had a product without a description. Then we can go add a description later.
+    JAF: This might be more compelling if we had a product without a description. Then we can go add a description later. One idea: add a product property for "in stock" and only display products that are in stock. 
     -->
 
     The app now displays the name and description of each product in the list, as shown here: 
@@ -280,10 +267,10 @@ JAF: Can we display something different from the name?
       <img src='generated/images/guide/getting-started/template-syntax-product-description.png' alt="Product descriptions added to list">
     </figure>
 
-6. To see event binding in action, we'll add a button for sharing the product. 
+6. Add a button so users can share a product with friends. The `ProductListComponent` class (in the `product-list.component.ts` file) already defines a `share()` method, which we can bind to the `click` event. Event binding is done by using ( ) around the event. 
 
     1. Add a button element to the HTML.
-    1. Add an event binding for a `click` event to call the `share()` method in the component (in the `product-list.component.ts` file). 
+    1. Add an event binding for a `click` event to call the `share()` method in the component. 
 
         <code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.4.html">
         </code-example>
@@ -291,6 +278,7 @@ JAF: Can we display something different from the name?
         <figure>
           <img src='generated/images/guide/getting-started/template-syntax-product-share-button.png' alt="Share button added for each product name">
         </figure>
+
 
 
 <div class="alert is-helpful">
