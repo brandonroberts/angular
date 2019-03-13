@@ -62,18 +62,15 @@ In this tutorial, we'll introduce you to the building blocks of Angular. We'll l
 -->
 
 <div class="callout is-helpful">
-<header>New to Web Development?</header>
+<header>New to web development?</header>
 
 You'll find many resources to compliment the Angular docs. Mozilla's MDN docs include both [HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML) and [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) introductions. [TypeScript's docs] (https://www.typescriptlang.org/docs/home.html) include a 5-minute tutorial. Various online course platforms, such as Udemy and CodeAcademy, also cover web development basics. 
 
 </div> 
 
-*JAF: Alternate intro text options in comments.*
-
-
 
 {@a basic-app}
-## 1. Create a new project
+## Create a new project
 
 <!-- 
 <live-example name="getting-started-v0" noDownload title="Click here to create your new project in StackBlitz"></live-example>.
@@ -110,7 +107,7 @@ the Angular Console, Stackblitz, or any other CLI-based tool
 -->
 
 <div class="callout is-helpful">
-<header>Stackblitz Tips</header>
+<header>Stackblitz tips</header>
 
 * Log into StackBlitz, so you can save and resume your work. If you have a GitHub account, you can log into StackBlitz with that account. 
 * To copy a code example from this tutorial, click the icon at the top right of the code example box, and then paste the code snippet from the clipboard into Stackblitz. 
@@ -132,59 +129,39 @@ You develop apps in the context of an Angular workspace. A workspace contains th
 
 
 {@a components}
-## Key concepts
+## Components: Angular building blocks
 
+Let's take a quick look at the structure of our app.
 
-
-
-{@a components}
-### Components
-
-Components are the building blocks of Angular apps. 
+*Components* are the building blocks of Angular apps. 
 A component is comprised of three things: 
-
-* An HTML template, which determines what is presented to the user 
 * A class that handles data and functionality 
+* An HTML template, which determines what is presented to the user 
 * Styles that define the look and feel 
 
-This structure provides a consistent way to combine and present HTML, CSS, and Javascript on a page. 
-Angular components behave similarly to HTML elements, and they can be given state or generate events.
-
 An Angular application is composed of a tree of components, in which each Angular component has a specific purpose and responsibility. 
-The components at each level of the tree have progressively fewer responsibilities. 
 
-Imagine a typical shopping experience, such as [Google Express](https://express.google.com): 
-
-*JAF: Use the shopping cart that we'll build. Fix size.*
+Our starter app has three components: 
 
 <figure>
-  <img src='generated/images/guide/toh/component-structure.png' alt="Angular applications are broken down into a tree of components like on express.google.com">
+  <img src='generated/images/guide/getting-started/starter-app-components.png' alt="Online store with three components">
 </figure>
 
-We can organize this app into the following tree of components:
+* app-root: The application shell. This is first component to load, and the parent of all other components. You can think of it as the base page. 
+* app-top-bar: The top bar for our online store, with the store name and checkout button
+* app-product-list: The product list for our online store, which currently only displays the title "Products"
 
-* app-root: The first component to load, the parent of all other components. You can think of this as the overall page or app shell. 
-  * app-top-bar: Top bar, with branding and site-wide controls
-  * app-side-nav: Side navigation, which includes the list of product categories 
-  * app-product-list: Product list 
-    * app-product-carousel): Product carousel, which displays a rotating series of highlighted products
-    * app-product-preview: Product preview, with basic information such as name and description
-    * app-product-preview: Product preview
-    * app-product-preview: Product preview
-    * app-product-preview: Product preview
-    
-Just like HTML elements, components can be referred to or nested in another component's template. A component is referred to by its `selector`. The selector is the name you give the Angular component when it is rendered as an HTML element on the page. By convention, Angular component selectors begin with the prefix such as `app-`, followed by the component name. 
-
-Stackblitz contains an Angular workspace and an initial app project. The initial app includes the `app-root` component mentioned above, as well as other app and configuration files. The `app-root` component is responsible for displaying "Angular Getting Started" in the preview pane on the right. 
-
+Notice that the product list only contains a title. In the next section, you'll modify the component's HTML template to display a list of products.
 
 
 {@a template-syntax}
-### Template syntax
+## Template syntax
 
-Angular extends and builds on top of HTML. Angular provides template syntax that gives components control over the display of content. 
+Angular extends HTML by providing a template syntax that gives components control over the display of content. 
 
 This section introduces five of the things you can do within an Angular template to affect what your user sees, based on the component's state and behavior. You'll use these throughout this tutorial. 
+
+
 
 Experiment by playing with different values in the input boxes below. 
 
