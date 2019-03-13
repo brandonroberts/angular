@@ -129,7 +129,7 @@ You develop apps in the context of an Angular workspace. A workspace contains th
 
 
 {@a components}
-## Components: Angular building blocks
+## Components
 
 Let's take a quick look at the structure of our app.
 
@@ -148,56 +148,167 @@ Our starter app has three components:
 </figure>
 
 * app-root: The application shell. This is first component to load, and the parent of all other components. You can think of it as the base page. 
-* app-top-bar: The top bar for our online store, with the store name and checkout button
-* app-product-list: The product list for our online store, which currently only displays the title "Products"
+* app-top-bar: The top bar for our online store, with the store name and checkout button.
+* app-product-list: The product list for our online store, which currently only displays the title "Products". 
 
-Notice that the product list only contains a title. In the next section, you'll modify the component's HTML template to display a list of products.
 
+Let's look at the product list component: 
+
+1. Open the `product-list` folder.
+
+    Notice that it contains one file for each part of the component: 
+    * `product-list-component.ts` contains the component class definition
+    * `product-list-component.html` is the HTML template 
+    * `product-list-component.css` contains component-specific styles
+
+2. Open the `product-list-component.ts` file. 
+
+    Look at the `@Component` annotation. 
+    
+    ```
+    @Component({
+      selector: 'app-product-list',
+      templateUrl: './product-list.component.html',
+      styleUrls: ['./product-list.component.css']
+    })
+    ```
+    The *selector* `app-product-list` is the name you use to refer to the Angular component when it is rendered as an HTML element on the page. By convention, Angular component selectors begin with the prefix such as `app-`, followed by the component name. 
+
+3. Notice that the `ProductListComponent` class defines two products: 
+
+```
+export class ProductListComponent {
+  products = [
+    {
+      id: 1,
+      name: 'Phone XL',
+      price: 799,
+      description: 'A large phone with one of the best screens'
+    },
+    {
+      id: 2,
+      name: "Phone Mini",
+      price: 699,
+      description: 'A great phone with one of the best cameras'
+    }
+  ```
+
+Right now, the app only displays the title "Products"; it does not display the individual products. In the next section, you'll modify the component's HTML template to display the list of products.
 
 {@a template-syntax}
 ## Template syntax
 
-Angular extends HTML by providing a template syntax that gives components control over the display of content. 
+Angular builds off and extends HTML by providing a template syntax that gives components control over the display of content. 
+This section introduces five things you can do in an Angular template to affect what your user sees, based on the component's state and behavior: 
 
-This section introduces five of the things you can do within an Angular template to affect what your user sees, based on the component's state and behavior. You'll use these throughout this tutorial. 
+* Iterating over a list with `*ngFor`
+* Adding and removing elements dynamically with `*ngIf`
+* Property binding [ ], which lets you bind a component property to an element, so that whenever the property changes, the element is updated based on the template expression.
+* Interpolation {{ }}, which lets you display properties of components as text in HTML
+* Event binding ( ) 
+
+We'll use all five to add the product list to the "Products" area of the app. 
 
 
+1. In the `product-list` folder, open the component's template file `product-list-component.html`. 
 
-Experiment by playing with different values in the input boxes below. 
+<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.1.html">
+</code-example>
 
-#### {{ }} Interpolation
+2. Modify the template's `<div>` element to iterate over the list of products using the `*ngFor` directive. 
 
-Interpolation lets you render the contents of a property of a component as text in HTML. 
+```
+<h2>Products</h2>
 
-<aio-gs-interpolation></aio-gs-interpolation>
+<!-- ngfor -->
+<div *ngFor="let product of products">
+```
 
-#### [ ] Property binding
+The `<div>` contents will be displayed once for each product in the list. 
 
-Following the mental model of HTML, components have state being given to them. This is accomplished by binding to the property of a component or HTML element.
-
-You can bind to a property on an element, so that whenever the property changes, the element is updated based on the template expression.
-
-<aio-gs-property-binding></aio-gs-property-binding>
-
-#### ( ) Event binding
-
-You can listen to standard HTML events or custom events (which you create through components). 
-
-<aio-gs-event-binding></aio-gs-event-binding>
-
-#### *ngIf
-
-You can add and remove elements from the page dynamically using `*ngIf`. 
-
+<!--
 `*ngIf` is a "structural directive". Structural directives change which HTML or components are displayed.  Technically, they shape or reshape the DOM's structure, typically by adding, removing, and manipulating the elements to which they are attached. Any directive with an * is a structural directive.
+-->
 
-<aio-gs-ng-if></aio-gs-ng-if>
 
-#### *ngFor
+3. Inside the anchor element, display the product name by using the interpolation syntax {{ }}: 
 
-*ngFor is another structural directive. It iterates over a list, rendering the HTML or component once for each item in the list. 
+```
+<h2>Products</h2>
 
-<aio-gs-ng-for></aio-gs-ng-for>
+  <!-- ngFor -->
+  <div *ngFor="let product of products">
+
+  <h3>
+    <a>
+      <!-- interpolation -->
+      {{ product.name }}
+    </a>
+
+  </h3>
+  ```
+
+The app now displays the name of each product in the list, as shown here: 
+
+<figure>
+  <img src='generated/images/guide/getting-started/template-syntax-product-names.png' alt="Product names added to list">
+</figure>
+
+Reminder: You might need to save the product and reload the preview pane to see the changes. 
+
+(Right now the anchors don't link to anything. Later we'll link them to product details.)
+
+4. Bind the title attribute of the anchor to the component's product name property by using the property binding syntax [ ]. 
+
+<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.2.html">
+</code-example>
+
+Hover over a product name to display that anchor's title property (which is also the name of the product). 
+
+<!-- 
+JAF: Can we display something different from the name?
+-->
+
+5. Now let's add the product descriptions. On the paragraph tag, use an `*ngIf` directive to show the element if it has a description.
+
+
+<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.3.html">
+</code-example>
+
+<!-- 
+JAF: This might be more compelling if we had a product without a description. Then we can go add a description later.
+-->
+
+The app now displays the name and description of each product in the list, as shown here: 
+
+<figure>
+  <img src='generated/images/guide/getting-started/template-syntax-product-description.png' alt="Product descriptions added to list">
+</figure>
+
+6. To see event binding in action, we'll add a button for sharing the product. 
+
+    1. Add a button element to the HTML.
+    1. Add an event binding for a `click` event to call the `share()` method that was predefined in the component (in the `product-list.component.ts` file). 
+
+<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.4.html">
+</code-example>
+
+<!--
+You can listen to standard HTML events or custom events (which you create through components). 
+-->
+
+<figure>
+  <img src='generated/images/guide/getting-started/template-syntax-product-share-button.png' alt="Share button added for each product name">
+</figure>
+
+
+Click the "Share" button to see the alert.
+
+
+<figure>
+  <img src='generated/images/guide/getting-started/template-syntax-product-share-alert.png' alt="Alert displayed by Share button">
+</figure>
+
 
 
 <div class="alert is-helpful">
@@ -206,40 +317,11 @@ To learn about the full capabilities of Angular's template syntax, see the [Temp
 
 </div>
 
+<!-- 
+JAF: I want a break here
+-->
 
 
-### Learning Template Syntax
-
-1. Look at the product-list.component.ts file
-1. Note the “products” data defined in the component
-1. Look at the initial product list component HTML. This is what we’ll use for showing template syntax
-
-<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.1.html">
-</code-example>
-
-1. Add *ngFor directive to the div to iterate over each item and display them
-1. Inside the anchor element, use interpolation to display the product name
-1. On the anchor element, use a property binding bind the title attribute to the product name
-
-<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.2.html">
-</code-example>
-
-1. On the paragraph tag, use an *ngIf directive to show the element if it has a description
-1. Use interpolation to show the description inside the paragraph tag
-
-<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.3.html">
-</code-example>
-
-1. Add a button element to the HTML
-1. Add an event binding for a `click` event to call the `share()` method defined in the component TS file.
-1. Bind the click event to the `share()` method in the `product-list.component.ts` file
-
-<code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.4.html">
-</code-example>
-
-Now when you click the button you see an alert
-
-## Success Point
 
 ### Inputs/Outputs
 
