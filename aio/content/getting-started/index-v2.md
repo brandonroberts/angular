@@ -129,7 +129,7 @@ You develop apps in the context of an Angular workspace. A workspace contains th
 
 
 {@a components}
-## App structure
+## Components
 
 Let's take a quick look at the structure of our app.
 
@@ -158,12 +158,12 @@ Right now, the app displays the title "Products", but it does not display the li
 ## Template syntax
 
 Angular extends HTML with a template syntax that gives components control over the display of content. 
-This section introduces five constructs you can use in an Angular template to affect what your user sees, based on the component's state and behavior: 
+This section introduces five things you can do in an Angular template to affect what your user sees, based on the component's state and behavior: 
 
 * `*ngFor`
 * `*ngIf`
-* Property binding [ ]
 * Interpolation {{ }}
+* Property binding [ ]
 * Event binding ( ) 
 
 We'll use these to add the product list to the "Products" area of the app. 
@@ -237,7 +237,9 @@ We'll use these to add the product list to the "Products" area of the app.
       <img src='generated/images/guide/getting-started/template-syntax-product-names.png' alt="Product names added to list">
     </figure>
 
+    <!--
     The product name anchors are inactive. Later we'll link the displayed names to product details.
+    --> 
 
     <div class="alert is-helpful">
     Reminder: You might need to save the project and reload the preview pane to see the changes. 
@@ -291,33 +293,153 @@ To learn about the full capabilities of Angular's template syntax, see the [Temp
 JAF: I want a break here
 -->
 
+## Input
 
-## Inputs/Outputs
+At this point, our app is just a product catalog, displaying a list of products, with names and descriptions. 
 
-1. Generate product details component
+You might have noticed that the `ProductListComponent` class also defined a price property for each product. We're going to use the anchor on each product name to display additional product details, which will include the price. We'll create that product details view as a new component. We'll pass the selected product in to the product details component. 
 
-Import
+<!-- 
+JAF: I thought we were using price in the summary and adding description in the details.
+-->
 
-1. Import `Input`, `Output`, `EventEmitter` from the `@angular/core` package.
+1. Generate a new component for product details. 
 
-<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.ts" region="imports">
-</code-example>
+    Stackblitz includes an Angular Generator, which makes it easy to create new Angular components. 
 
-Define Properties
+    1. In the file list, right-click the `app` folder, choose `Angular Generator` and `Component`.
 
-1. Define a property named `product` in the product-details.component class with an `Input` decorator
+        <figure>
+          <img src='generated/images/guide/getting-started/generate-component.png' alt="Generate component">
+        </figure>
+
+    1. In the input field, give the new component the name `product-details`.
+
+    Stackblitz creates a skeleton component class, HTML template, and component style sheet. 
+
+1. Open the `product-details.component.ts` component class file. 
+
+    Notice the `@Component` annotation:
+    
+    ```
+    @Component({
+      selector: 'app-product-details',
+      templateUrl: './product-details.component.html',
+      styleUrls: ['./product-details.component.css']
+    })
+    ```
+    
+    The *selector* `app-product-details` is the name you use to refer to the Angular component when it is rendered as an HTML element on the page. By convention, Angular component selectors begin with the prefix such as `app-`, followed by the component name. 
+
+    You'll use this name to include the product details element at the bottom of the product list. 
+
+1. Display the product details below the product list. 
+
+    1. Open the `product-list.component.html` template file. 
+    1. Below the closing `<div>`, add the product details component as shown here: 
+        ```
+            <button (click)="share()">
+                Share
+            </button>
+        </div>
+        <app-product-details></app-product-details>
+        ```
+        In the app preview pane, the words "product-details works!" appear the product list. That text is coming from the product details component's template. 
+
+1. Update the product details template (`product-details.component.html`) to display the product name, price, and description instead of "product-details works!":
+    ```
+    <h2>Product Details</h2>
+      <h3>{{ product.name }}</h3>
+      <h4>{{ product.price | currency }}</h4>
+      <p>{{ product.description }}</p>
+    ```
+  
+    The "Product Details" heading appears instead of "product-details works!". The product properties don't yet appear because the product is unassigned. We need to pass the selected product from the product list into the product details. 
+
+1. Set up the product details component to receive input: 
+
+    1. Return to the `product-details.component.ts` component class file.
+    
+    1. Import `Input` from the `@angular/core` package.
+
+        <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.ts" region="imports">
+        </code-example>
+
+        <!--
+        JAF: Stackblitz doesn't match. Might be less confusing to add the new 3 as a new import statement. 
+        -->
+
+        <!--
+        JAF: Do we need to explain importing here? 
+        -->
+
+    1. In the `ProductDetailsComponent` class, define a property named `product` with an `Input` decorator.
+
+        <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.ts" region="input-output">
+        </code-example>
+    
+        The @Input decorator specifies that the product data can be passed into your component. 
+
+1. Set up the product list component to manage the selected product: 
+
+    1. Open the `product-list.component.ts` component class file.
+    1. In the `ProductListComponent` class, add a `selectedProduct` property.
+    1. In the `ProductListComponent` class, add a method named `selectProduct()`. This method sets the `selectedProduct` property with the provided product. 
+
+        <code-example header="src/app/product-list/product-list.component.ts" path="getting-started-v2/src/app/product-list/product-list.component.ts" region="product">
+        </code-example>
+
+1. Set up the product list template so that users can select a product name to display the details. 
+
+    1. Open the `product-list.component.html` template file.
+    1. To let app users select a product by clicking on a name, add an event binding to the product name anchor element to call `selectProduct(product)`.
+        ```
+        <h3>
+        <!-- property binding -->
+           <a [title]="product.name" (click)="selectProduct(product)">
+           <!-- interpolation -->
+           {{ product.name }}
+           </a>
+        </h3>
+        ```
+    1. To display the details for the selected product, update the `<app-product-details>` element to use an `*ngIf` on the product details component for a product
+        ```
+        <app-product-details
+            *ngIf="selectedProduct"
+       </app-product-details>
+        ```
+
+        If there is no selected product, the "Product Details" section does not display. Reload the preview pane to reset the app to not having a selected product. 
+
+    1. Pass the selected product to the product details component using a property binding:
+        ```
+        <app-product-details
+            *ngIf="selectedProduct"
+            [product]="selectedProduct"
+       </app-product-details>
+        ```
+
+
+## Output
+Using @Output to add to the cart
+
+
+1. Return to the `product-details.component.ts` component class file, and import `Output` and `EventEmitter` from the `@angular/core` package.
+
+    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.ts" region="imports">
+    </code-example>
+
 1. Define an output property named `share` with an `Output` decorator and an instance of `EventEmitter`
 
-<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.ts" region="input-output">
-</code-example>
+    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.ts" region="input-output">
+    </code-example>
 
-Update Template
-
-1. Update the template with similar interpolation for product name, price, and description
 1. Add share button to the template with a event binding to call the `share.emit()` method
 
-<code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.html" region="input-output">
-</code-example>
+    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started-v2/src/app/product-details/product-details.component.1.html" region="input-output">
+    </code-example>
+
+
 
 ## Product List to Product Details
 
@@ -335,6 +457,9 @@ Update Template
 
 <code-example header="src/app/product-list/product-list.component.html" path="getting-started-v2/src/app/product-list/product-list.component.5.html">
 </code-example>
+
+
+
 
 ## Success Point
 
