@@ -2,7 +2,7 @@
 
 Welcome to lesson 2 of Angular Getting Started. 
 
-At the end of [Lesson 1: Your First App](getting-started), the online store application had a basic product catalog: 
+At the end of [Lesson 1: Your First App](getting-started/index-v2), the online store application had a basic product catalog: 
 
 * The app displays a top bar and a product list
 * Users can click on a product name from the list to see details below
@@ -10,7 +10,7 @@ At the end of [Lesson 1: Your First App](getting-started), the online store appl
 
 <div class="alert is-helpful">
 
-[Return to the previous Getting Started lesson: Your First App.](getting-started/getting-started-index-v2)
+[Return to the previous Getting Started lesson: Your First App.](getting-started/index-v2)
 
 </div>
 

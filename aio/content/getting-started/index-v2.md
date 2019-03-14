@@ -72,13 +72,13 @@ You'll find many resources to compliment the Angular docs. Mozilla's MDN docs in
 {@a basic-app}
 ## Create a new project
 
-<!-- 
 <live-example name="getting-started-v0" noDownload title="Click here to create your new project in StackBlitz"></live-example>.
--->
 
+<!-- 
 [Click here to create a new Angular project in StackBlitz.](https://stackblitz.com/edit/ng-getting-started-ed34c9)
 
 *JAF: What is the right link to use for GDE review? live-example link commented out because it didn't work locally for me. Previous review version had https://stackblitz.com/fork/ng-getting-started* 
+-->
 
 <!--
 JAF: Add StackBlitz icon or Angular icon or some other graphic to launch to Stackblitz? 
