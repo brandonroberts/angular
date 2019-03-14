@@ -1,4 +1,4 @@
-# UNUSED SNIPPETS 
+# UNUSED SNIPPETS
 
 DO NOT ADD TO NAV. DELETE BEFORE RELEASE.
 
@@ -15,7 +15,7 @@ There are many more things you can do using Angular's template syntax that aren'
 <div class="alert is-important">
 
  **Note:** The `$` used to suffix the `products` property is a convention to denote the variable as an observable
- stream. It's used to easily glance at a property to distinguish it from other class properties. 
+ stream. It's used to easily glance at a property to distinguish it from other class properties.
 
 </div>
 
@@ -81,6 +81,6 @@ Read more about observable streams in the [Observables guide](guide/observables)
 
 ### How routing works
 
-Navigation is done through the `RouterLink` directive provided by the `Router` in a template, or imperatively using the `Router` service. Navigation is always done by string, or by array of URL paths, such as `['path', 'to', variable]` which results in a URL that looks like 'https://example.org/path/to/42'. 
+Navigation is done through the `RouterLink` directive provided by the `Router` in a template, or imperatively using the `Router` service. Navigation is always done by string, or by array of URL paths, such as `['path', 'to', variable]` which results in a URL that looks like 'https://example.org/path/to/42'.
 
 After you set up the router, you can continue to create more components and routes in your `RouteConfig`.

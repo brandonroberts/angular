@@ -1,16 +1,16 @@
 # Getting Started with Angular: Your First App
 
-Angular is the modern web developer's platform. 
-Angular gives you the tools and the ecosystem to build web applications that scale. 
-Angular provides advanced capabilities for internationalization, mobile apps, server-side rendering, and more, so that you can deliver more quickly, with less risk. 
+Angular is the modern web developer's platform.
+Angular gives you the tools and the ecosystem to build web applications that scale.
+Angular provides advanced capabilities for internationalization, mobile apps, server-side rendering, and more, so that you can deliver more quickly, with less risk.
 
-In this tutorial, we'll introduce you to the building blocks of Angular. We'll leverage what you already know about web development, and teach you the essentials of Angular so you can feel confident exploring Angular's extensive native capabilities and [network of 3rd-party tools and libraries](https://angular.io/resources). 
+In this tutorial, we'll introduce you to the building blocks of Angular. We'll leverage what you already know about web development, and teach you the essentials of Angular so you can feel confident exploring Angular's extensive native capabilities and [network of 3rd-party tools and libraries](https://angular.io/resources).
 
 
 
 ## Introduction
 
-This tutorial walks you through the steps to build a simple online store application. The application displays a catalog of products and their details. It also includes a shopping cart, with check out functionality. 
+This tutorial walks you through the steps to build a simple online store application. The application displays a catalog of products and their details. It also includes a shopping cart, with check out functionality.
 
 
 <figure>
@@ -25,7 +25,7 @@ This tutorial walks you through the steps to build a simple online store applica
 ### What you'll learn
 <!-- Tutorial application -->
 
-The store app is simplified to help you focus on skills that you are most likely to use in developing your own apps. The techniques that you will learn are Angular best practices, intended to scale with your Angular apps. 
+The store app is simplified to help you focus on skills that you are most likely to use in developing your own apps. The techniques that you will learn are Angular best practices, intended to scale with your Angular apps.
 
 This tutorial is organized into three parts:
 
@@ -34,16 +34,16 @@ This tutorial is organized into three parts:
     - Components, which are the building blocks of an Angular application
     - Angular's template syntax, which extends HTML to provide integration with data and services
     - How to use services to deliver data to components
-    - How to use routing to synchronize URL changes and app changes in response to user actions 
+    - How to use routing to synchronize URL changes and app changes in response to user actions
 
-* Part 2 - Managing Data (2 hours): You'll add the shopping cart and checkout features. You'll learn about: 
+* Part 2 - Managing Data (2 hours): You'll add the shopping cart and checkout features. You'll learn about:
 
     - Retrieving data via an HTTP interface
     - Using forms to manage user interactions with data
 
-* Part 3 - Deployment: You'll deploy your app to a live website (Firebase) or to your hosting environment. If you chose to deploy to your hosting environment, you'll learn how to use the [Angular CLI](cli) to build and deploy your app to the hosting environment of your choice. 
+* Part 3 - Deployment: You'll deploy your app to a live website (Firebase) or to your hosting environment. If you chose to deploy to your hosting environment, you'll learn how to use the [Angular CLI](cli) to build and deploy your app to the hosting environment of your choice.
 
-Within each section, this tutorial introduces a new concept and then provides instructions to apply that concept to the online store app. 
+Within each section, this tutorial introduces a new concept and then provides instructions to apply that concept to the online store app.
 
 You can also see the <live-example noDownload></live-example>
 
@@ -54,7 +54,7 @@ You can also see the <live-example noDownload></live-example>
 ### Prerequisites
 
 
-To get the most benefit from Angular and this tutorial, we recommend that you have experience in the following areas: 
+To get the most benefit from Angular and this tutorial, we recommend that you have experience in the following areas:
 
 * Basic programming
 * HTML, CSS, and JavaScript or TypeScript
@@ -62,14 +62,14 @@ To get the most benefit from Angular and this tutorial, we recommend that you ha
 
 <div class="alert is-helpful">
 
-If you are new to web development, you'll find lots of resources available to compliment the Angular docs. Mozilla's MDN docs include both [HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML) and [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) introductions. [TypeScript's docs] (https://www.typescriptlang.org/docs/home.html) include a 5-minute tutorial. Various online course platforms, such as Udemy and CodeAcademy, also cover web development basics. 
+If you are new to web development, you'll find lots of resources available to compliment the Angular docs. Mozilla's MDN docs include both [HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML) and [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) introductions. [TypeScript's docs] (https://www.typescriptlang.org/docs/home.html) include a 5-minute tutorial. Various online course platforms, such as Udemy and CodeAcademy, also cover web development basics.
 
-</div> 
+</div>
 
 {@a stackblitz}
 ### Setup
 
-You don't need to install anything. You'll build the shopping cart using [StackBlitz](https://stackblitz.com/). StackBlitz is an online development environment with accelerators that make it easy to develop an Angular application. The accelerators are similar to what is offered by the [Angular CLI](cli) when you are working locally. 
+You don't need to install anything. You'll build the shopping cart using [StackBlitz](https://stackblitz.com/). StackBlitz is an online development environment with accelerators that make it easy to develop an Angular application. The accelerators are similar to what is offered by the [Angular CLI](cli) when you are working locally.
 
 
 {@a components}
@@ -81,20 +81,20 @@ You don't need to install anything. You'll build the shopping cart using [StackB
 {@a components}
 ### Components
 
-Components are the building blocks of Angular apps. 
-A component is comprised of three things: 
+Components are the building blocks of Angular apps.
+A component is comprised of three things:
 
-* An HTML template, which determines what is presented to the user 
-* A class that handles data and functionality 
-* Styles that define the look and feel 
+* An HTML template, which determines what is presented to the user
+* A class that handles data and functionality
+* Styles that define the look and feel
 
-This structure provides a consistent way to combine and present HTML, CSS, and Javascript on a page. 
+This structure provides a consistent way to combine and present HTML, CSS, and Javascript on a page.
 Angular components behave similarly to HTML elements, and they can be given state or generate events.
 
-An Angular application is composed of a tree of components, in which each Angular component has a specific purpose and responsibility. 
-The components at each level of the tree have progressively fewer responsibilities. 
+An Angular application is composed of a tree of components, in which each Angular component has a specific purpose and responsibility.
+The components at each level of the tree have progressively fewer responsibilities.
 
-Imagine a typical shopping experience, such as [Google Express](https://express.google.com): 
+Imagine a typical shopping experience, such as [Google Express](https://express.google.com):
 
 *JAF: Use the shopping cart that we'll build. Fix size.*
 
@@ -104,31 +104,31 @@ Imagine a typical shopping experience, such as [Google Express](https://express.
 
 We can organize this app into the following tree of components:
 
-* app-root: The first component to load, the parent of all other components. You can think of this as the overall page or app shell. 
+* app-root: The first component to load, the parent of all other components. You can think of this as the overall page or app shell.
   * app-top-bar: Top bar, with branding and site-wide controls
-  * app-side-nav: Side navigation, which includes the list of product categories 
-  * app-product-list: Product list 
+  * app-side-nav: Side navigation, which includes the list of product categories
+  * app-product-list: Product list
     * app-product-carousel): Product carousel, which displays a rotating series of highlighted products
     * app-product-preview: Product preview, with basic information such as name and description
     * app-product-preview: Product preview
     * app-product-preview: Product preview
     * app-product-preview: Product preview
-    
-Just like HTML elements, components can be referred to or nested in another component's template. A component is referred to by its `selector`. The selector is the name you give the Angular component when it is rendered as an HTML element on the page. By convention, Angular component selectors begin with the prefix such as `app-`, followed by the component name. 
+
+Just like HTML elements, components can be referred to or nested in another component's template. A component is referred to by its `selector`. The selector is the name you give the Angular component when it is rendered as an HTML element on the page. By convention, Angular component selectors begin with the prefix such as `app-`, followed by the component name.
 
 
 {@a template-syntax}
 ### Template syntax
 
-Angular extends and builds on top of HTML. Angular provides template syntax that gives components control over the display of content. 
+Angular extends and builds on top of HTML. Angular provides template syntax that gives components control over the display of content.
 
-This section introduces five of the things you can do within an Angular template to affect what your user sees, based on the component's state and behavior. You'll use these throughout this tutorial. 
+This section introduces five of the things you can do within an Angular template to affect what your user sees, based on the component's state and behavior. You'll use these throughout this tutorial.
 
-Experiment by playing with different values in the input boxes below. 
+Experiment by playing with different values in the input boxes below.
 
 #### {{ }} Interpolation
 
-Interpolation lets you render the contents of a property of a component as text in HTML. 
+Interpolation lets you render the contents of a property of a component as text in HTML.
 
 <aio-gs-interpolation></aio-gs-interpolation>
 
@@ -142,13 +142,13 @@ You can bind to a property on an element, so that whenever the property changes,
 
 #### ( ) Event binding
 
-You can listen to standard HTML events or custom events (which you create through components). 
+You can listen to standard HTML events or custom events (which you create through components).
 
 <aio-gs-event-binding></aio-gs-event-binding>
 
 #### *ngIf
 
-You can add and remove elements from the page dynamically using `*ngIf`. 
+You can add and remove elements from the page dynamically using `*ngIf`.
 
 `*ngIf` is a "structural directive". Structural directives change which HTML or components are displayed.  Technically, they shape or reshape the DOM's structure, typically by adding, removing, and manipulating the elements to which they are attached. Any directive with an * is a structural directive.
 
@@ -156,7 +156,7 @@ You can add and remove elements from the page dynamically using `*ngIf`.
 
 #### *ngFor
 
-*ngFor is another structural directive. It iterates over a list, rendering the HTML or component once for each item in the list. 
+*ngFor is another structural directive. It iterates over a list, rendering the HTML or component once for each item in the list.
 
 <aio-gs-ng-for></aio-gs-ng-for>
 
@@ -172,25 +172,25 @@ To learn about the full capabilities of Angular's template syntax, see the [Temp
 ## Building the basic store app layout
 <!-- skeleton, framework, site layout, app layout -->
 
-Let's get started. 
+Let's get started.
 
-In this section, you'll create a new project in StackBlitz, and then scaffold out some components for your store. 
+In this section, you'll create a new project in StackBlitz, and then scaffold out some components for your store.
 
 
 #### 1. Create a new project
 <!-- does this def of project match local def? when and how do we introduce workspace? -->
-<!-- 
+<!--
 You develop apps in the context of an Angular workspace. A workspace contains the files for one or more projects. A project is the set of files that comprise an app, a library, or end-to-end (e2e) tests.  -->
 
 To create a new project in StackBlitz, [click here](https://stackblitz.com/fork/ng-getting-started).
 
-StackBlitz creates a new Angular workspace and an initial app project. The initial app includes the `app-root` component mentioned above, as well as other app and configuration files. The `app-root` component is responsible for displaying "Angular Getting Started" in the preview pane on the right. 
+StackBlitz creates a new Angular workspace and an initial app project. The initial app includes the `app-root` component mentioned above, as well as other app and configuration files. The `app-root` component is responsible for displaying "Angular Getting Started" in the preview pane on the right.
 
 Tips for working in Stackblitz:
-* If you log into StackBlitz, you can easily take breaks and return to the current state of this tutorial app. If you have a GitHub account, you can log into StackBlitz with that account. See [Working in Stackblitz](#stackblitz) for more tips. 
-* If you want to save a snapshot of your work at a given point, create a fork. You can edit the name of your Stackblitz project to make it easier to return to your work (such as `getting-started-part1`). To display all of your forks, click on your name in the top bar. 
-* If the preview pane isn't showing what you expect, save and then click the refresh button. 
-* To copy a code example from this tutorial, click the icon at the top right of the code example box to save the example to the clipboard. Then you can paste the code snippet into Stackblitz. 
+* If you log into StackBlitz, you can easily take breaks and return to the current state of this tutorial app. If you have a GitHub account, you can log into StackBlitz with that account. See [Working in Stackblitz](#stackblitz) for more tips.
+* If you want to save a snapshot of your work at a given point, create a fork. You can edit the name of your Stackblitz project to make it easier to return to your work (such as `getting-started-part1`). To display all of your forks, click on your name in the top bar.
+* If the preview pane isn't showing what you expect, save and then click the refresh button.
+* To copy a code example from this tutorial, click the icon at the top right of the code example box to save the example to the clipboard. Then you can paste the code snippet into Stackblitz.
 
 
 ####  2. Create the top bar component
@@ -211,7 +211,7 @@ Tips for working in Stackblitz:
 
 </code-tabs>
 
-A component definition includes: 
+A component definition includes:
 
  * The `Component` decorator, which provides metadata about the component, including its templates, styles, and a selector.
  * An exported class, which handles functionality for the component.
@@ -225,7 +225,7 @@ Right now, the `TopBarComponent` doesn't do much, but you'll update it to show t
 <code-example header="src/app/top-bar/top-bar.component.ts" path="getting-started/src/app/top-bar/top-bar.component.ts" region="name">
 </code-example>
 
-3. Update the `TopBarComponent` template to display a welcome message with an interpolation of the `name` property. Delete the original "top bar works" message. 
+3. Update the `TopBarComponent` template to display a welcome message with an interpolation of the `name` property. Delete the original "top bar works" message.
 
 <code-example header="src/app/top-bar/top-bar.component.html" path="getting-started/src/app/top-bar/top-bar.component.1.html" region="header">
 </code-example>
@@ -241,14 +241,14 @@ Now your shopping cart displays the title of your store at the top of your appli
 
 The side navigation lists categories for the products in your store.
 
-To create the side navigation, you'll repeat the pattern of steps you did to create the top navigation component: 
+To create the side navigation, you'll repeat the pattern of steps you did to create the top navigation component:
 
 1. Right click on the `app` folder, and use the `Angular Generator` to generate a component named `side-nav`.
 
 2. Define a `categories` property in the `SideNavComponent` as an array with two items: `Phones` and `Shoes`.
 
 <code-example header="src/app/side-nav/side-nav.component.ts" path="getting-started/src/app/side-nav/side-nav.component.ts">
-</code-example> 
+</code-example>
 
 3. Update the `side-nav.component.html` to display a list of categories using an `*ngFor` directive.
 
@@ -260,8 +260,8 @@ To create the side navigation, you'll repeat the pattern of steps you did to cre
 <code-example header="src/app/side-nav/side-nav.component.css" path="getting-started/src/app/side-nav/side-nav.component.css" linenums="false">
 </code-example>
 
-The styles that are defined for a component are specific to that component. 
-They do not impact the styles of other components in the application. 
+The styles that are defined for a component are specific to that component.
+They do not impact the styles of other components in the application.
 
 <div class="alert is-helpful">
 
@@ -282,8 +282,8 @@ In this section, you learned:
 
 * The general structure of Angular project files
 * About the `app-root` component, which is generated when you create a new Angular project
-* How to use the `Angular Generator` and app preview to accelerate development in StackBlitz 
-* How to create all three parts of a component, following this pattern: 
+* How to use the `Angular Generator` and app preview to accelerate development in StackBlitz
+* How to create all three parts of a component, following this pattern:
     1. Generate the skeleton component
     2. Define the properties and functionality (in the component `.ts` file)
     3. Define how the component will be displayed (in the component template file)
@@ -307,13 +307,13 @@ In this section, you learned:
   </code-pane>
 
   <code-pane header="src/app/app.component.html" path="getting-started/src/app/app.component.1.html" region="layout">
-  </code-pane>  
+  </code-pane>
 
 </code-tabs>
 
 ## Communcating between components
 
-Just like any element in HTML, Angular components take state (input) and emit events (output). 
+Just like any element in HTML, Angular components take state (input) and emit events (output).
 
 You define the inputs and outputs as properties in the component class. `Input` and `Output` are decorators provided by Angular that provide metadata for properties that are defined in the component class. Use these decorators with Angular's change detection system to communicate when changes occur from within a component and when the component conveys that some interesting event has happened.
 
@@ -360,14 +360,14 @@ export class EditableNameComponent {
 
 Outputs are used to create custom events in your component. You create a new `EventEmitter` and store it as an `@Output()` property of the component. This newly created `EventEmitter` instance has a method `emit` that you call whenever your custom event has occurred, in response to some action from the template, or based on some asynchronous process.
 
-With inputs and outputs, you can build elaborate tree structures of components that take in state, and give back events using property and event bindings. 
+With inputs and outputs, you can build elaborate tree structures of components that take in state, and give back events using property and event bindings.
 
 Read more about these bindings in the [Template Syntax Guide](guide/template-syntax).
 
 
 ### Displaying a product preview
 
-The steps below show you how to use an `Input` decorator to display details for a single product. You'll create a product preview component and pass in the product to display. 
+The steps below show you how to use an `Input` decorator to display details for a single product. You'll create a product preview component and pass in the product to display.
 
 #### 1. Create a products folder
 
@@ -375,9 +375,9 @@ Right click on the `app` folder and create a new folder named `products`. This f
 
 #### 2. Create a product interface
 
-Right click on the `products` folder, and use the `Angular Generator` to generate an interface named `product`. 
+Right click on the `products` folder, and use the `Angular Generator` to generate an interface named `product`.
 
-Add the `name` and `description` properties shown below:  
+Add the `name` and `description` properties shown below:
 
 <code-example header="src/app/products/product.ts" path="getting-started/src/app/products/product.1.ts">
 </code-example>
@@ -388,14 +388,14 @@ This interface defines the structure of a product, including its id, name, and d
 
 1. Right click on the `products` folder and generate a new component named `product-preview`.
 
-2. In the `ProductPreviewComponent` class, add `Input` to the imports from the `@angular/core` package. 
+2. In the `ProductPreviewComponent` class, add `Input` to the imports from the `@angular/core` package.
 
 The initial component that is generated only imports the most basic functionality. As you expand the component's properties and behavior, you often need to import additional functionality, so that it's avialable to the component.
 
 <code-example header="src/app/products/product-preview/product-preview.component.ts" path="getting-started/src/app/products/product-preview/product-preview.component.ts" region="core-imports">
 </code-example>
 
-3. Import the `Product` interface using its path relative to the `product-preview` folder. Add this line below the other `import` statement. 
+3. Import the `Product` interface using its path relative to the `product-preview` folder. Add this line below the other `import` statement.
 
 <code-example header="src/app/products/product-preview/product-preview.component.ts" path="getting-started/src/app/products/product-preview/product-preview.component.ts" region="product-imports">
 </code-example>
@@ -420,14 +420,14 @@ When the `app-product-preview` component is used within a template and its `prod
 
 The `app-product-preview` component displays a single product with the product name and description.
 
-Let's look at that in detail. Recall that Inputs define what data can be passed into a component. The data is updated through bindings, defined in a parent component's template. Whenever a parent component's property binding is updated, the property you mark with @Input() is also updated. 
+Let's look at that in detail. Recall that Inputs define what data can be passed into a component. The data is updated through bindings, defined in a parent component's template. Whenever a parent component's property binding is updated, the property you mark with @Input() is also updated.
 
-In this case: 
+In this case:
 
 * `AppComponent` is the parent component, and `ProductPreviewComponent` is the child component.
-* The template for `AppComponent` (`app-component.html`) contains the property binding for `[product]`. 
-* When the `product` data is updated (to be Pixel 3, as shown above), the property is also updated in `ProductPreviewComponent`. 
-* The `app-product-preview` component then displays the new product name and description. 
+* The template for `AppComponent` (`app-component.html`) contains the property binding for `[product]`.
+* When the `product` data is updated (to be Pixel 3, as shown above), the property is also updated in `ProductPreviewComponent`.
+* The `app-product-preview` component then displays the new product name and description.
 
 <code-tabs>
 
@@ -441,7 +441,7 @@ In this case:
   </code-pane>
 
   <code-pane header="src/app/app.component.html" path="getting-started/src/app/app.component.1.html" region="communication">
-  </code-pane>  
+  </code-pane>
 
 </code-tabs>
 
@@ -465,10 +465,10 @@ import { Injectable } from '@angular/core';
 export class MyService {}
 ```
 
-The service now has defined metadata used for requesting an instance of the service. 
+The service now has defined metadata used for requesting an instance of the service.
 
-Before you use a service, you must make sure it is provided in your application. 
-The `providedIn: 'root'` syntax provides the Angular compiler information to register the provider globally within Angular's dependency injection. Services necessary for your application functionality are often provided using this syntax. 
+Before you use a service, you must make sure it is provided in your application.
+The `providedIn: 'root'` syntax provides the Angular compiler information to register the provider globally within Angular's dependency injection. Services necessary for your application functionality are often provided using this syntax.
 
 Providers created with this syntax are tree-shakable, meaning that the Angular compiler removes the associated services from the final output when it determines that they are not used in your application. This significantly reduces the size of your bundles.
 
@@ -479,7 +479,7 @@ When you add a service provider to the root application injector (as shown above
 
 You should always provide your service in the root injector unless there is a case where you want the service to be available only if the consumer imports a particular @NgModule. You don't need to focus much on how an `NgModule` works for this guide, but you can learn more about them in the [NgModules guide](guide/ngmodules).
 
-Learn more about Angular's dependency injection system in the [Dependency Injection guide](guide/dependency-injection). 
+Learn more about Angular's dependency injection system in the [Dependency Injection guide](guide/dependency-injection).
 
 </div>
 
@@ -497,9 +497,9 @@ Right click on the the `products` folder, and use the `Angular Generator` to gen
 
 #### 2. Import functionality to manage the array of products
 
-[Observables](guide/glossary#observable) provide support for passing messages between publishers and subscribers in your application. They are ysed for asynchronous event handling throughout Angular. 
+[Observables](guide/glossary#observable) provide support for passing messages between publishers and subscribers in your application. They are ysed for asynchronous event handling throughout Angular.
 
-We'll use observables from the RxJS library to manage the values for array of products. 
+We'll use observables from the RxJS library to manage the values for array of products.
 
 * Import the `Observable` type to get the type information for an observable.
 * Import the `of` method to create an observable from a predefined value. We'll use this method to return an observable array of products.
@@ -567,7 +567,7 @@ Right click on the `products` folder, use the `Angular Generator` to generate a 
 
 To wire up the product data in the component template, you'll need to subscribe and listen to the values from the `products` observable. This is done in the component template using an `AsyncPipe` that handles subscribing to observables in the template and cleaning up after the component is destroyed.
 
-1. Update the `product-list.component.html` to display the products using an `NgFor` directive, an `AsyncPipe`, and the `app-product-preview` component. 
+1. Update the `product-list.component.html` to display the products using an `NgFor` directive, an `AsyncPipe`, and the `app-product-preview` component.
 
 <code-example header="src/app/products/product-list/product-list.component.html (Product List)" path="getting-started/src/app/products/product-list/product-list.component.html">
 </code-example>
@@ -590,35 +590,35 @@ In this section:
   </code-pane>
 
   <code-pane header="src/app/products/product.service.ts" path="getting-started/src/app/products/product.service.2.ts">
-  </code-pane>  
+  </code-pane>
 
   <code-pane header="src/app/app.component.html" path="getting-started/src/app/app.component.2.html">
-  </code-pane>  
+  </code-pane>
 
 </code-tabs>
 
 {@a routing}
 ## Navigating with the Angular router
 
-Up to this point, the application doesn't have any variable states or navigation. There is one URL, and that URL always displays the "My Store" page with a fixed list of categories and products. 
+Up to this point, the application doesn't have any variable states or navigation. There is one URL, and that URL always displays the "My Store" page with a fixed list of categories and products.
 
-The Angular [router](guide/glossary#router) allows us to show different components and data to the user based on where the user is in the application. 
+The Angular [router](guide/glossary#router) allows us to show different components and data to the user based on where the user is in the application.
 
-In the simplest form, the router takes the state of the browser's URL bar (also called navigation or location bar) and maps it to a set of components to render to the screen. When the user navigates to another part of the app (by performing application tasks or entering a new URL), the router swaps one set of components for another. 
+In the simplest form, the router takes the state of the browser's URL bar (also called navigation or location bar) and maps it to a set of components to render to the screen. When the user navigates to another part of the app (by performing application tasks or entering a new URL), the router swaps one set of components for another.
 
-In this section, you'll: 
+In this section, you'll:
 * Learn about common types of routes
 * Enable routing in the Store app
 * Make the product list area routable, meaning that user actions in this area will change the URL, and changes to the URL will replace the contents of this area
 * Create and configure a new product details route to transition from the product list area when a single product is selected
 
-In this section, we'll update the Store app to use routing for the product list area of the app. 
-The top bar and side navigation will remain fixed, while the product list changes. 
-The URL and displayed components will change together, based on the user's selections. 
+In this section, we'll update the Store app to use routing for the product list area of the app.
+The top bar and side navigation will remain fixed, while the product list changes.
+The URL and displayed components will change together, based on the user's selections.
 
 ### Types of routes
 
-A "route" defines a mapping of a URL suffix (a path) to the parent component to display. 
+A "route" defines a mapping of a URL suffix (a path) to the parent component to display.
 
 Most applications include these common types of routes:
 
@@ -628,19 +628,19 @@ Most applications include these common types of routes:
     { path: '', component: HomePageComponent }
     ```
 
-* Static routes for defined pages, such as the About page: 
+* Static routes for defined pages, such as the About page:
 
     ```ts
     { path: 'about', component: AboutPageComponent }
     ```
 
-* Variable routes, which are determined at runtime, include a variable prefixed with a colon to designate substitution. Variable routes are useful for creating URLs that correlate to data values, such as product IDs. This is the type of routing we'll use for the product details. 
+* Variable routes, which are determined at runtime, include a variable prefixed with a colon to designate substitution. Variable routes are useful for creating URLs that correlate to data values, such as product IDs. This is the type of routing we'll use for the product details.
 
     ```ts
     { path: 'products/:productId', component: ProductDetailsComponent }
     ```
 
-* Catch-all routes for error handling, such as displaying a 404 for non-existent pages. 
+* Catch-all routes for error handling, such as displaying a 404 for non-existent pages.
 
     ```ts
     { path: '**', component: PageNotFoundComponent }
@@ -651,11 +651,11 @@ These routes enable you to build simple to complex URLs to navigate around your 
 
 ### Configure the app to use routing
 
-So far we've worked mostly within individual components and services. 
+So far we've worked mostly within individual components and services.
 
 Some Angular features, however, are global to the app and available at all times. Because routing is pervasive--the user can enter a new URL or take an action that causes a change to the URL--routing must be enabled and configured at the app level. The Angular Router is provided as one singleton service throughout the application.
 
-To eanble routing in the app, you will: 
+To eanble routing in the app, you will:
 
 1. Import and register `RouterModule.forRoot()` with an array of route definitions.
 2. Set up a `RouterOutet` as a placeholder to dislay routed components.
@@ -663,7 +663,7 @@ To eanble routing in the app, you will:
 
 #### 1. Open app.module.ts
 
-Open the `app.module.ts` file. 
+Open the `app.module.ts` file.
 
 The root `AppModule` is an `NgModule` that contains metadata about how the application is initialized. It contains the component or components that are bootstrapped, and is the point where the top level injectors are created.
 
@@ -685,14 +685,14 @@ Now let's register the Angular Router and define some some routes.
 
 #### 2. Import RouterModule
 
-Import `RouterModule` from the `@angular/router` package into the `app.module.ts` file: 
+Import `RouterModule` from the `@angular/router` package into the `app.module.ts` file:
 
 <code-example header="src/app/app.module.ts (RouterModule)" path="getting-started/src/app/app.module.1.ts" region="router-module">
 </code-example>
 
 #### 2. Register RouterModule
 
-In the `imports` array, add the `RouterModule.forRoot([])` method with an empty array. 
+In the `imports` array, add the `RouterModule.forRoot([])` method with an empty array.
 Route definitions will be stored in the array.
 
 <code-example header="src/app/app.module.ts (imports)" path="getting-started/src/app/app.module.1.ts" region="router-module-imports">
@@ -704,10 +704,10 @@ At this point, your application is configured with Angular routing; the router i
 
 The template needs a placeholder where it renders routed components. That placeholder is called a "router outlet."
 
-Recall that we're going to use routing for the product list area of the app. 
-So, we'll replace the product list view with a router outlet. 
+Recall that we're going to use routing for the product list area of the app.
+So, we'll replace the product list view with a router outlet.
 To do that, open `app.component.html` and
-replace `app-product-list` with `router-outlet`. 
+replace `app-product-list` with `router-outlet`.
 
 <code-example header="src/app/app.component.html (Router outlet)" path="getting-started/src/app/app.component.html">
 </code-example>
@@ -729,7 +729,7 @@ In the `app.module.ts` file, add an object to the array defined in `RouterModule
 <code-example header="src/app/app.module.ts (Product list route)" path="getting-started/src/app/app.module.2.ts" region="product-list-route">
 </code-example>
 
-In your `StackBlitz` preview pane on the right, enter your preview URL without any additional URL paths and press the `Enter` key to reload the page. 
+In your `StackBlitz` preview pane on the right, enter your preview URL without any additional URL paths and press the `Enter` key to reload the page.
 
 ```
 https://[your-stackblitz-subdomain].stackblitz.io
@@ -752,7 +752,7 @@ Next, you'll add a variable route definition to display product details.
 <code-example header="src/app/app.module.ts (Product details route)" path="getting-started/src/app/app.module.2.ts" region="product-details-route">
 </code-example>
 
-2. In the `ProductPreviewComponent`, update the template to link to the product details page with the `productId` using a `RouterLink`. 
+2. In the `ProductPreviewComponent`, update the template to link to the product details page with the `productId` using a `RouterLink`.
 
 <code-example header="src/app/products/product-preview/product-preview.component.html (Product preview routerLink)" path="getting-started/src/app/products/product-preview/product-preview.component.html" linenums="false">
 </code-example>
@@ -790,13 +790,13 @@ In this section:
   </code-pane>
 
   <code-pane header="src/app/app.module.ts" path="getting-started/src/app/app.module.2.ts" region="routing">
-  </code-pane>  
+  </code-pane>
 
 </code-tabs>
 
 ## Review and next steps
 
-Congratulations! You have a running Angular app. You have the first piece of the shopping cart app, which is the product catalog. 
+Congratulations! You have a running Angular app. You have the first piece of the shopping cart app, which is the product catalog.
 
 In this part you learned:
 * How to create components, the basic building block of Angular apps
@@ -804,6 +804,6 @@ In this part you learned:
 * How to create and use services to deliver data
 * How to use routing to create a relationship between URLs and app states
 
-Continue to the next part to learn more about [managing data](getting-started/getting-started-data), as you build the shopping cart and checkout features of the app. 
+Continue to the next part to learn more about [managing data](getting-started/getting-started-data), as you build the shopping cart and checkout features of the app.
 
 

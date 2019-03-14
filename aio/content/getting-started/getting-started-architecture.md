@@ -30,7 +30,7 @@ To get started with lazy loading, start in your route configuration at the top o
 
 #### Create products NgModule
 
-As mentioned earlier, an `NgModule` contains metadata about injector creation at runtime. Because you are lazy loading the product details, a separate child injector will need to be created at runtime. Use an `NgModule` to store the metadata for the injector in the code that will be lazy loaded. 
+As mentioned earlier, an `NgModule` contains metadata about injector creation at runtime. Because you are lazy loading the product details, a separate child injector will need to be created at runtime. Use an `NgModule` to store the metadata for the injector in the code that will be lazy loaded.
 
 Right click on the `app` folder, use the `Angular Generator` and generate an `NgModule` named `products`.
 
@@ -58,7 +58,7 @@ Import `RouterModule` from the `@angular/router` package.
 
 *example snippet here*
 
-Add the `RouterModule.forChild()` method to the `imports` array of the `ProductsModule` and and a variable route for the product details. 
+Add the `RouterModule.forChild()` method to the `imports` array of the `ProductsModule` and and a variable route for the product details.
 Set the route path to `:productId`, and the component to `ProductDetailsComponent`.
 
 *example snippet here*

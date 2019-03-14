@@ -4,7 +4,7 @@ In addition to building a general component structure in your Angular app, your 
 
 ## Introduction
 
-Data your app needs can come from many different sources. Whether it be a static file, a backend API that exposes data through a JSON-based API, or other different formats, your app consumes and makes use of this data to make decisions and display content. Your app also needs data to be entered from users to fill out forms for processing. Angular provides libraries to help you consume and receive data by building on top of existing browser APIs. 
+Data your app needs can come from many different sources. Whether it be a static file, a backend API that exposes data through a JSON-based API, or other different formats, your app consumes and makes use of this data to make decisions and display content. Your app also needs data to be entered from users to fill out forms for processing. Angular provides libraries to help you consume and receive data by building on top of existing browser APIs.
 
 ### What you'll learn
 
@@ -18,9 +18,9 @@ In the sections below, you'll build out your store with retreiving data from and
 
 ## Requesting data with the Angular Http Client
 
-Data coming back from servers in Angular applications most frequently take the form of a stream. Streams are useful because they make it easy to transform the data that is coming back, and to make modifications to the way data is requested. The Angular Http Client is a built-in way to fetch data from external APIs and provide them to your application as a stream. 
+Data coming back from servers in Angular applications most frequently take the form of a stream. Streams are useful because they make it easy to transform the data that is coming back, and to make modifications to the way data is requested. The Angular Http Client is a built-in way to fetch data from external APIs and provide them to your application as a stream.
 
-Similarly with the Angular Router, the `HttpClientModule` registers the providers needed to use a single instance of the `HttpClient` service throughout your application. The `HttpClient` service is what you inject into your services to fetch data and interact with external APIs and resources. The `HttpClient` also uses observables to handle requests and provide responses. 
+Similarly with the Angular Router, the `HttpClientModule` registers the providers needed to use a single instance of the `HttpClient` service throughout your application. The `HttpClient` service is what you inject into your services to fetch data and interact with external APIs and resources. The `HttpClient` also uses observables to handle requests and provide responses.
 
 In this section you'll:
 
@@ -48,7 +48,7 @@ Add the `HttpClientModule` to the `imports` array of the `AppModule`.
 
 #### 3. Create external JSON data file
 
-Currently, the data for the product list is hard-coded into the `ProductService`, which is not something you want to do often. Instead, you request the data from an external file or resource that is more dynamic. Below, you'll create an external file for the `HttpClient` to retrieve the product list data. 
+Currently, the data for the product list is hard-coded into the `ProductService`, which is not something you want to do often. Instead, you request the data from an external file or resource that is more dynamic. Below, you'll create an external file for the `HttpClient` to retrieve the product list data.
 
 1. Right click on the `src` folder and create an `assets` folder.  the src folder to contain the products JSON file.
 2. Create a `products.json` file in the `assets` folder to contain the object data is currently hard-coded in the `ProductService`.
@@ -85,8 +85,8 @@ Update the `getAll()` method to transform the results of the `HttpClient#get()` 
 <code-example header="src/app/products/product.service.ts (Http.get)" path="getting-started/src/app/products/product.service.ts" linenums="false" region="httpclient-get-all">
 </code-example>
 
-- The `HttpClient#get()` method returns an observable of the external request made to fetch the `products`. This observable will not execute until the method is subscribed to. 
-- The `products.json` is an object with a `products` property. The `{ products: Product[] }` provides type information about the observable stream being returned from the request. 
+- The `HttpClient#get()` method returns an observable of the external request made to fetch the `products`. This observable will not execute until the method is subscribed to.
+- The `products.json` is an object with a `products` property. The `{ products: Product[] }` provides type information about the observable stream being returned from the request.
 - The `map()` operator is a function that is called with the results from the request, which then transforms the data into a new observable array of the products.
 
 Remove the `Observable` and `of` imports from the rxjs package, and the data property in the `ProductService`.
@@ -94,7 +94,7 @@ Remove the `Observable` and `of` imports from the rxjs package, and the data pro
 <code-example header="src/app/products/product.service.ts" path="getting-started/src/app/products/product.service.ts" linenums="false" region="complete">
 </code-example>
 
-When you reload the page, the product list still displays the same information, but the data can be changed dynamically without changing your code. 
+When you reload the page, the product list still displays the same information, but the data can be changed dynamically without changing your code.
 
 ### Retrieving details for a product
 
@@ -102,7 +102,7 @@ You've retrieved a list of the products with their associated information. You'l
 
 #### Add properties to product
 
-Update the `Product` interface in the `product.ts` file with more properties about a given product, 
+Update the `Product` interface in the `product.ts` file with more properties about a given product,
 such as its price, and categories.
 
 <code-example header="src/app/products/product.ts (Product interface)" path="getting-started/src/app/products/product.ts" linenums="false">
@@ -133,7 +133,7 @@ In the `product-details.component.ts`:
 
 #### Import current route information
 
-To see information provided by the router for a routed component, each routed component is provided an `ActivatedRoute` service. You inject the `ActivatedRoute` service to access its route parameters, route data, and other necessary information. 
+To see information provided by the router for a routed component, each routed component is provided an `ActivatedRoute` service. You inject the `ActivatedRoute` service to access its route parameters, route data, and other necessary information.
 
 Import the `ActivatedRoute` from the `@angular/router` package
 
@@ -208,7 +208,7 @@ In this section:
   </code-pane>
 
   <code-pane header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="httpclient">
-  </code-pane>  
+  </code-pane>
 
 </code-tabs>
 
@@ -232,12 +232,12 @@ Update the `CartService` file with functionality to add products, and return a l
 
 * The `ProductService` is injected into the `CartService` as a dependency to retrieve all products.
 * The `items` property stores a list of the current products in the cart.
-* The `add()` method appends a product to an array of `items` defined in the `CartService`. 
+* The `add()` method appends a product to an array of `items` defined in the `CartService`.
 * The `getAll()` method collects the items added to the cart and returns each item with its associated quantity.
 
 ### Adding products to the cart
 
-The `CartService` adds the product each time the `CartService#add` method is called. Because services are shared, the `ProductDetailsComponent` can use the service to add products to the cart. Update the `ProductDetailsComponent` to add the `product` to the cart when the `Buy` button is clicked. 
+The `CartService` adds the product each time the `CartService#add` method is called. Because services are shared, the `ProductDetailsComponent` can use the service to add products to the cart. Update the `ProductDetailsComponent` to add the `product` to the cart when the `Buy` button is clicked.
 
 #### Import CartService
 
@@ -280,7 +280,7 @@ In this section:
   </code-pane>
 
   <code-pane header="src/app/products/product-details/product-details.component.html" path="getting-started/src/app/products/product-details/product-details.component.html">
-  </code-pane>  
+  </code-pane>
 
 </code-tabs>
 
@@ -321,7 +321,7 @@ The form lives in a component's TypeScript class and its template. In the compon
 Right click on the `app` folder, use the `Angular Generator`, and generate a component named `checkout`.
 
 #### Import reactive forms classes
- 
+
 To build out the form model, you'll need to import some building blocks from the forms package.
 
 Import `FormGroup`, `FormBuilder` from `@angular/forms` package.
@@ -347,7 +347,7 @@ Create an `items` property with type `CartItem[]`. You'll reference the items in
 
 #### Create form property
 
-In a reactive form, the form model, which is the source of truth for the form value and validation status, is defined in the component class. 
+In a reactive form, the form model, which is the source of truth for the form value and validation status, is defined in the component class.
 
 Create a `checkoutForm` property with type `FormGroup`. You'll create the `FormGroup` in the constructor using the `FormBuilder`.
 
@@ -391,7 +391,7 @@ The form model is defined in the `CheckoutComponent` class. The template needs t
 <code-example header="src/app/checkout/checkout.component.html (cart items)" path="getting-started/src/app/checkout/checkout.component.1.html" linenums="false" region="list">
 </code-example>
 
-1. Define a `form` tag in the template and bind the `checkoutForm` from the component class to the `formGroup` attribute on the form. 
+1. Define a `form` tag in the template and bind the `checkoutForm` from the component class to the `formGroup` attribute on the form.
 2. Set an event listener for the `ngSubmit` event and call the `onSubmit()` method with the checkoutForm value.
 3. Add input fields for name and address using `formControlName` directive.
 4. Add a `submit` button to trigger the form submission.
@@ -419,12 +419,12 @@ The checkout page will display the items that have been added to the card above 
 
 To end the checkout process, you'll want to hide the checkout form upon clicking the `Purchase` button. Because you can use the `NgIf` discussed earlier to add and remove elements from the page dynamically, you'll use this flag to trigger the display and removal of an element in the component template.
 
-1. Add a `submitted` property to the `CheckoutComponent` class that defaults to `false`. 
+1. Add a `submitted` property to the `CheckoutComponent` class that defaults to `false`.
 
 <code-example header="src/app/checkout/checkout.component.ts (submitted property)" path="getting-started/src/app/checkout/checkout.component.ts" region="submitted">
 </code-example>
 
-2. Add a message to the `CheckoutComponent` template with an attached `NgIf` directive that is based on the `submitted` property. 
+2. Add a message to the `CheckoutComponent` template with an attached `NgIf` directive that is based on the `submitted` property.
 
 <code-example header="src/app/checkout/checkout.component.html (submitted message)" path="getting-started/src/app/checkout/checkout.component.html" region="submitted">
 </code-example>
@@ -450,7 +450,7 @@ The checkout page route is registered, so you can type the URL in manually. To a
 <code-example header="src/app/top-bar/top-bar.component.html (checkout link)" path="getting-started/src/app/top-bar/top-bar.component.html" linenums="false" region="checkout-link">
 </code-example>
 
-After the user adds items to the cart, fills out the form, and submits the button, the customer data is logged to the browser console. 
+After the user adds items to the cart, fills out the form, and submits the button, the customer data is logged to the browser console.
 Your shopping cart is now accessing data from the internet and allowing users to checkout.
 
 In this section:
@@ -458,7 +458,7 @@ In this section:
 <code-tabs>
 
   <code-pane header="src/app/top-bar/top-bar.component.html" path="getting-started/src/app/top-bar/top-bar.component.html">
-  </code-pane>  
+  </code-pane>
 
   <code-pane header="src/app/checkout/checkout.component.ts" path="getting-started/src/app/checkout/checkout.component.ts">
   </code-pane>
@@ -467,13 +467,13 @@ In this section:
   </code-pane>
 
   <code-pane header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts">
-  </code-pane>  
+  </code-pane>
 
 </code-tabs>
 
 ## Review and next steps
 
-You did it! You have built an Angular app. 
+You did it! You have built an Angular app.
 
 In this part you learned:
 * How to register and use Angular's Http Client

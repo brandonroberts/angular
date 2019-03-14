@@ -1,6 +1,6 @@
 # Forms
 
-Welcome to lesson 3 of Angular Getting Started. 
+Welcome to lesson 3 of Angular Getting Started.
 
 At the end of [Lesson 2: Routing and Managing Data](getting-started), you had an online store application with a product catalog and shopping cart.
 
@@ -10,7 +10,7 @@ At the end of [Lesson 2: Routing and Managing Data](getting-started), you had an
 
 </div>
 
-In this lesson, you'll finish the app by adding the shopping cart page and a form-based checkout feature. 
+In this lesson, you'll finish the app by adding the shopping cart page and a form-based checkout feature.
 
 
 
@@ -79,7 +79,7 @@ Checkout form
 
 ## Next steps
 
-Congratulations! You have a complete online store application with a product catalog, a shopping cart, and a checkout function.  
+Congratulations! You have a complete online store application with a product catalog, a shopping cart, and a checkout function.
 
 * The app displays a top bar and a product list
 * Product data is retrieved from an external `json` file by a dedicated data service using the HttpClient
@@ -89,7 +89,7 @@ Congratulations! You have a complete online store application with a product cat
 
 
 To continue exploring Angular, we recommend any of the following options:
-* Do the next add-on Getting Started lesson: Deployment to deploy your app to Firebase or move to local development. 
+* Do the next add-on Getting Started lesson: Deployment to deploy your app to Firebase or move to local development.
 * Read more about the Angular app [architecture](guide/architecture).
 
 
