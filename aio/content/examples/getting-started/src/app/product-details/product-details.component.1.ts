@@ -11,7 +11,7 @@ import { products } from '../products';
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css']
 })
-// #docregion props-methods, get-product, add-to-cart
+// #docregion props-methods, add-to-cart
 export class ProductDetailsComponent implements OnInit {
   product;
 
@@ -20,10 +20,12 @@ export class ProductDetailsComponent implements OnInit {
   ) { }
 
   // #enddocregion props-methods
+  // #docregion get-product
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.product = products[+params.get('productId')];
     });
   }
+  // #enddocregion get-product
   // #docregion props-methods
 }
