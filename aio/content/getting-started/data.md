@@ -8,42 +8,25 @@ Users can click on a product name from the list to see details in a new view, wi
 In this lesson, you'll create the shopping cart. You'll:
 * Define a service and use it in product details
 * Change how product data is managed, to use a data service and Angular's HttpClient to retrieve data from an external source (`json` file)
+* You'll build out your store with retreiving data from and external source, displaying product details,
+ and adding a checkout page.
+ * You will define a data service for cart data. 
 
-<!--
-## Introduction
+## Create the shopping cart 
 
-Data your app needs can come from many different sources. Whether it be a static file, a backend API that exposes data through a JSON-based API, or other different formats, your app consumes and makes use of this data to make decisions and display content. Your app also needs data to be entered from users to fill out forms for processing. Angular provides libraries to help you consume and receive data by building on top of existing browser APIs. 
--->
+Up to this point, users can view product information, and simulate sharing and being notified about product changes. They cannot, however, buy products. 
 
-<!--
-JAF: I'd like to move routing to its own lesson between first app and managing data, but we'd have to redesign the flow or the app to make routing work at that point. 
--->
+In this section, you'll add a "Buy" button the product details page. 
+You'll also set up a cart service to store information about products in the cart.
 
-## Predefined services and data
+<div class="alert is-helpful">
 
-Data your app needs can come from many different sources. Whether it is a static file, a backend API that exposes data through a JSON-based API, or other different formats, your app consumes and makes use of this data to make decisions and display content. Your app also needs data to be entered from users to fill out forms for processing. Angular provides libraries to help you consume and receive data by building on top of existing browser APIs. 
+Later, in the [Forms](getting-started/forms) part of this tutorial, this cart service will be accessible from the page where the user checks out.
 
-For the purpose of this Getting Started, we have provided a data service and product data. These are already in the starter Stackblitz app. 
-
-### Data service 
-
-`data.service.ts` contains the definition of a data service with cart functionality. 
-
-    <code-example header="src/app/data.service.ts" path="getting-started/src/app/data.service.ts" region="v1">
-    </code-example>
-
-### Product data
-
-`assets/products.json` defines some product data, to simulate fetching data from an external source.
-
-    <code-example header="src/assets/products.json" path="getting-started/src/assets/products.json">
-    </code-example>
+</div>
 
 
-
-## Define the cart service
-
-You'll store the cart items using a service that is accessible from the page where the user checks out.
+### Define a cart service
 
 1. Generate a cart service.
 
@@ -57,34 +40,45 @@ You'll store the cart items using a service that is accessible from the page whe
 
     <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.ts" region="props"></code-example>
 
-1. In the `CartService` class, define methods to add items to the cart, return cart items, and clear the cart items: 
+1. Define methods to add items to the cart, return cart items, and clear the cart items: 
 
     <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.ts" region="methods"></code-example>
 
+    <!-- 
     * The `addToCart()` method appends a product to an array of `items`. 
 
     * The `getItems()` method collects the items added to the cart and returns each item with its associated quantity.
 
     * The `clearCart()` method returns an empty array of items. 
+    -->
 
+### Use the cart service 
 
+In this section, you'll update the product details component to use the cart service. 
+You'll add a "Buy" button to the product details view. 
+When the "Buy" button is clicked, you'll use the cart service to add the current product to the cart. 
 
-## Use the cart service 
+1. Open `product-details.component.ts`.
 
-Use the cart service in product details.
+1. Set up the component to be able to use the cart service. 
 
-1. Open `product-details/product-details.component.ts`.
+    1. Import the cart service. 
 
-1. Import the cart service. 
+        <code-example header="src/app/product-details/product-details.component.ts" path="getting-started/src/app/product-details/product-details.component.ts" region="cart-service">
+        </code-example>
 
-    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started/src/app/product-details/product-details.component.ts" region="cart-service"></code-example>
+    1. Inject the cart service.
 
-1. Inject the cart service.
-
-    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started/src/app/product-details/product-details.component.ts" region="inject-cart-service"></code-example>
+        <code-example header="src/app/product-details/product-details.component.ts" path="getting-started/src/app/product-details/product-details.component.ts" region="inject-cart-service">
+        </code-example>
 
 1. Define the `addToCart()` method, which adds the current product to the cart. 
 
+    The `addToCart()` method:
+    * Receives the current `product`
+    * Uses the cart service's `#addToCart()` method to add the product the cart
+    * Displays a message that the product has been added to the cart
+    
     <code-example header="src/app/product-details/product-details.component.ts" path="getting-started/src/app/product-details/product-details.component.ts" region="add-to-cart"></code-example>
 
 1. Update the product details template to have a "Buy" button that adds the current product to the cart. 
@@ -93,11 +87,24 @@ Use the cart service in product details.
 
     1. Add a button with the label "Buy", and bind the `click()` event to the `addToCart()` method: 
 
-    <code-example header="src/app/product-details/product-details.component.html" path="getting-started/src/app/product-details/product-details.component.html"></code-example>
+        <code-example header="src/app/product-details/product-details.component.html" path="getting-started/src/app/product-details/product-details.component.html">
+        </code-example>
 
+1. To see the new "Buy" button, refresh the application and click on a product's name to display its details.
 
+   <figure>
+     <img src='generated/images/guide/getting-started/product-details-buy.png' alt="Display details for selected product with a Buy button">
+   </figure>
+ 
+ 1. Click the "Buy" button. The product is added to the stored list of items in the cart, and a message is displayed. 
 
+    <figure>
+      <img src='generated/images/guide/getting-started/buy-alert.png' alt="Display details for selected product with a Buy button">
+    </figure>
 
+<!-- 
+JAF: Is there an easy way that we can see what's in the cart at this point?
+-->
 
 <!-- JAF RESUME WORK HERE -->
 
@@ -209,38 +216,6 @@ Now the product details are available. Click on a name in the list to display th
   <img src='generated/images/guide/getting-started/product-details-routed.png' alt="Display details for selected product as a separate page">
 </figure>
 
-
-## Add products to cart
-
-
-1. Continue working in the product details component (`product-details.component.ts`). 
-
-1. Define an `addToCart()` method that receives a `product` and use the previously defined `DataService#addToCart()` method to add the product your cart. 
-
-1. Add an `alert` that the product has been added to the cart.
-
-    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started/src/app/product-details/product-details.component.ts" region="add-to-cart">
-    </code-example>
-
-1. Open the product details template (`product-details.component.html`). 
-
-1. Remove the `share` button in the template.
-
-1. Add a `button` that says `Buy` with a `click` event binding to call the `addToCart()` method with the `product`.
-
-    <code-example header="src/app/product-details/product-details.component.html" path="getting-started/src/app/product-details/product-details.component.html">
-    </code-example>
-
-Users can now click the Buy button to add a product to the cart. 
-
-    <figure>
-      <img src='generated/images/guide/getting-started/product-details-buy.png' alt="Display details for selected product with a Buy button">
-    </figure>
-
-
-    <figure>
-      <img src='generated/images/guide/getting-started/buy-alert.png' alt="Display details for selected product with a Buy button">
-    </figure>
 
 
 ## Next steps
