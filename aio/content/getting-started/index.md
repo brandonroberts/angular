@@ -252,9 +252,9 @@ You might have noticed that the `ProductListComponent` class also defined a pric
 -->
 
 Currently, the product list displays the name and description for each product. 
-You might have noticed that product list component also defines a price property for each product. (See the `ProductListComponent` class in `product-list.component.ts`.)
+You might have noticed that product list component also defines a `products` property that contains imported data for each product. (See the `products` array in `products.ts`.)
 
-We're going to create a new alert feature. The alert feature will take a product as input. It will then check the product's price, and, if the price is greater than $700, it will display a " Notify Me" button that lets users sign up for notifications when the product goes on sale. 
+We're going to create a new alert feature. The alert feature will take a product as input. It will then check the product's price, and, if the price is greater than $700, it will display a "Notify Me" button that lets users sign up for notifications when the product goes on sale. 
 
 1. Create a new product alerts component. 
 
@@ -319,9 +319,9 @@ We're going to create a new alert feature. The alert feature will take a product
     1. Pass the current product as input to the component using property binding. 
 
         ```
-          <button (click)="share()">
-            Share
-        </button>   
+        <button (click)="share()">
+          Share
+        </button>
 
         <app-product-alerts
           [product]="product">
@@ -355,7 +355,6 @@ The "Notify Me" button doesn't do anything yet. In this section, you'll set up t
     export class ProductAlertsComponent {
       @Input() product;
       @Output() notify = new EventEmitter();
-      
     }
     ```
 
@@ -381,7 +380,7 @@ The "Notify Me" button doesn't do anything yet. In this section, you'll set up t
 
       ```
       <button (click)="share()">
-          Share
+        Share
       </button>   
 
       <app-product-alerts
