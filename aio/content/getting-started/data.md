@@ -7,7 +7,7 @@ Users can click on a product name from the list to see details in a new view, wi
 
 In this lesson, you'll create the shopping cart. You'll:
 * Update the product details page to include a "Buy" button, which adds the current product to a list of products managed by a cart service
-* Add a shipping component, which retrieves shipping prices for the items in the cart by using Angular's HttpClient to retrieve shipping data from a .json file
+* Add a shipping component, which retrieves shipping prices for the items in the cart by using Angular's HttpClient to retrieve shipping data from a `.json` file
 
 
 ## Create the shopping cart 
@@ -211,15 +211,11 @@ In this section, you'll create a new shipping component and associated template.
 
     <code-example header="src/app/shipping/shipping.component.html" path="getting-started/src/app/shipping/shipping.component.html"></code-example>
 
+1. The new shipping component isn't hooked into any other component yet, but we can see it in the preview pane by entering the URL specified by its route. The URL has the pattern: `https://getting-started.stackblitz.io/shipping` where the `getting-started.stackblitz.io` part may be different for your StackBlitz project. 
 
-<div class="callout is-critical">
-<header>To Do</header>
-
-JAF: A lot happens in this section, but there is very little to see in the app. We can't see the contents of the cart. We can't see the shipping data or view. We can't see or choose a shipping level. Is there an easy way to resolve that? 
-
-The shipping component is here just so HttpClient has something to retrieve? Why not revert to switching product list to come from products.json at this point?
-
-</div>
+    <figure>
+      <img src='generated/images/guide/getting-started/shipping-prices-via-route.png' alt="Display shipping prices">
+    </figure>
 
 
 ## Next steps
