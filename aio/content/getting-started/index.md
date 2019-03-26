@@ -1,12 +1,15 @@
 # Getting Started with Angular: Your First App
 
-Welcome to Angular! 
+Welcome to Angular!
 
+<!-- 
 Angular makes it easy to build modern applications for the web, mobile, or desktop. 
-Angular leverages what you already know to accelerate development in HTML and JavaScript (or TypeScript). 
+Angular leverages what you already know to accelerate development in HTML and JavaScript (or Typescript). 
 Angular's extensive [native capabilities](api) and robust [ecosystem](https://angular.io/resources) deliver the productivity and scalable infrastructure that supports Google's largest applications.
+-->
 
-In this tutorial, you'll build a simple online store application, with a catalog, shopping cart, and check-out feature. 
+This tutorial introduces you to the essentials of Angular. 
+It leverages what you already know about HTML and JavaScript&mdash;plus some useful Angular accelerators&mdash;to build a simple online store application, with a catalog, shopping cart, and check-out feature. 
 You don't need to install anything: you'll build the app using the [StackBlitz](https://stackblitz.com/) online development environment.
 
 <div class="callout is-helpful">
@@ -20,39 +23,20 @@ You'll find many resources to compliment the Angular docs. Mozilla's MDN docs in
 {@a basic-app}
 ## Create a new project
 
-<!--
-<live-example name="getting-started" noDownload title="Click here to create your new project in StackBlitz"></live-example>.
--->
+<h4>
+<live-example name="getting-started-v0" noDownload>Click here to create new project in StackBlitz.</live-example> 
+</h4>
 
-<a href="https://stackblitz.com/angular/mjovpkpbdlg"><img src='generated/images/guide/getting-started/stackblitz-icon.png' alt="Stackblitz logo"></a> <live-example name="getting-started" noDownload>Click here to create a new Getting Started project in StackBlitz.</live-example> 
-
-
-
-    <div class="callout is-critical">
-    <header>To Do</header>
-
-    The Stackblitz link above assumed getting-started-v0, but I changed it to getting-started without a version. Also, the link has has never worked for me. I get a page not found in my local running AIO. For review, use https://stackblitz.com/angular/mjovpkpbdlg. 
-
-    The `live-example` tag does not seem to allow for an image to be inside the element at all, but it would be nice to have both text and a clickable icon to open the example. I faked it here using the review URL in the comment above and regular HTML tagging for clickable image. 
-
-    Alternate icons: 
-  
-    <a href="https://stackblitz.com/angular/mjovpkpbdlg"><img src='generated/images/guide/getting-started/stackblitz-angular-icon.png' alt="Stackblitz and Angular project logo"></a>
-
-    </div>
-
-StackBlitz creates a new Angular app. 
-We've seeded this particular app with a top bar&mdash;containing the store name and checkout icon&mdash;and the title for a product catalog. 
+StackBlitz creates a starter Angular app. 
+We've seeded this particular app with a top bar&mdash;containing the store name and checkout icon&mdash;and the title for a product list. 
 
 <!-- 
-<img src='generated/images/guide/getting-started/new-project.png' alt="New Angular project in Stackblitz">
+<img src="generated/images/guide/getting-started/new-project.png" alt="New Angular project in Stackblitz">
 -->
 
 <figure>
-    <img src='generated/images/guide/getting-started/new-app.png' alt="Starter online store app in Stackblitz">
+    <img src="generated/images/guide/getting-started/new-app.png" alt="Starter online store app">
 </figure>
-
-In the next section, you'll modify the app to display a list of products under the "Products" heading. 
 
 <div class="callout is-helpful">
 <header>Stackblitz tips</header>
@@ -120,7 +104,7 @@ In this section, you'll learn about Angular's template syntax by enhancing the "
       The app now displays the name of each product in the list. 
 
       <figure>
-        <img src='generated/images/guide/getting-started/template-syntax-product-names.png' alt="Product names added to list">
+        <img src="generated/images/guide/getting-started/template-syntax-product-names.png" alt="Product names added to list">
       </figure>
 
 1. In the final app, each product name will be a link to product details. Add the anchor now, and set the anchor's title to the product name by using property binding [ ], as shown below: 
@@ -157,7 +141,7 @@ In this section, you'll learn about Angular's template syntax by enhancing the "
     The app now displays the name and description of each product in the list, as shown here: 
 
     <figure>
-      <img src='generated/images/guide/getting-started/template-syntax-product-description.png' alt="Product descriptions added to list">
+      <img src="generated/images/guide/getting-started/template-syntax-product-description.png" alt="Product descriptions added to list">
     </figure>
 
 1. Add a button so users can share a product with friends. The `ProductListComponent` class (in the same `product-list.component.ts` file as the product data) already defines a `share()` method, which we can bind to the `click` event. Event binding is done by using ( ) around the event. 
@@ -169,13 +153,13 @@ In this section, you'll learn about Angular's template syntax by enhancing the "
         </code-example>
 
         <figure>
-          <img src='generated/images/guide/getting-started/template-syntax-product-share-button.png' alt="Share button added for each product name">
+          <img src="generated/images/guide/getting-started/template-syntax-product-share-button.png" alt="Share button added for each product name">
         </figure>
 
     1. Test the Share button: 
 
         <figure>
-          <img src='generated/images/guide/getting-started/template-syntax-product-share-alert.png' alt="Alert box indicating product has been shared">
+          <img src="generated/images/guide/getting-started/template-syntax-product-share-alert.png" alt="Alert box indicating product has been shared">
         </figure>
 
 The app now has a product list and sharing feature. 
@@ -228,7 +212,7 @@ An Angular application is composed of a tree of components, in which each Angula
 Currently, our app has three components: 
 
 <figure>
-  <img src='generated/images/guide/getting-started/starter-app-components.png' alt="Online store with three components">
+  <img src="generated/images/guide/getting-started/starter-app-components.png" alt="Online store with three components">
 </figure>
 
 * `app-root` is the application shell. This is first component to load, and the parent of all other components. You can think of it as the base page. 
@@ -280,7 +264,7 @@ We're going to create a new alert feature. The alert feature will take a product
     1. Right click on the `app` folder and use the `Angular Generator` to generate a new component named `product-alerts`.
 
         <figure>
-          <img src='generated/images/guide/getting-started/generate-component.png' alt="Stackblitz generate component">
+          <img src="generated/images/guide/getting-started/generate-component.png" alt="Stackblitz generate component">
         </figure>
 
         The generator creates starter files for all three parts of the component: 
@@ -343,7 +327,7 @@ We're going to create a new alert feature. The alert feature will take a product
 
 
 <figure>
-  <img src='generated/images/guide/getting-started/product-alert-button.png' alt="Product alert button added to products over $700">
+  <img src="generated/images/guide/getting-started/product-alert-button.png" alt="Product alert button added to products over $700">
 </figure>
 
 The product alert component takes a product as input from the product list. With that input, the product alert component shows or hides the "Notify Me" button. The Phone XL price is over $700, so the "Notify Me" button appears on that product. 
@@ -407,8 +391,9 @@ The "Notify Me" button doesn't do anything yet. In this section, you'll set up t
 1. Try out the "Notify Me" Button: 
 
     <figure>
-      <img src='generated/images/guide/getting-started/product-alert-notification.png' alt="Product alert notification confirmation dialog">
+      <img src="generated/images/guide/getting-started/product-alert-notification.png" alt="Product alert notification confirmation dialog">
     </figure>
+
 
 
 ## Next steps
@@ -417,7 +402,7 @@ Congratulations! You've completed your first Angular app!
 
 You have a product list, with Share and Notify Me buttons. You've learned about the foundation of Angular: components and template syntax. You've learned how the component class and template interact, and how components communicate with each other. 
 
-To continue exploring Angular, we recommend any of the following options:
-* [Continue to the next Getting Started lesson: Routing](getting-started/routing)
-* [Skip ahead to the Deployment section](getting-started/deployment) to deploy your app to Firebase or move to local development. 
+To continue exploring Angular, choose either of the following options:
+* [Continue to the "Routing" section](getting-started/routing) to create a product details page that can be accessed by clicking a product name and that has its own URL pattern. 
+* [Skip ahead to the "Deployment" section](getting-started/deployment) to deploy your app to Firebase or move to local development. 
 
