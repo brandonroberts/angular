@@ -172,39 +172,32 @@ The `HttpClient` service is what you inject into your services to fetch data and
 
 1. Define a new `getShippingPrices()` method  that uses the `HttpClient#get()` method to retrieve the shipping prices.
 
-    <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.ts" region="shipping">
-    </code-example>
+    <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.ts" region="shipping"></code-example>
 
 
 ## Define the shipping page
 
-In this section, you'll create a new shipping component and associated view. 
-
+In this section, you'll create a new shipping component and associated template. 
 
 1. Generate a new component named `shipping`.
 
     Reminder: In the file list, right-click the `app` folder, choose `Angular Generator` and `Component`. 
     
-    <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts">
-    </code-example>
+    <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts"></code-example>
 
 1. In `app.module.ts`, add a route for shipping. Specify a `path` of `shipping` and a component of `ShippingComponent`. 
 
-    <code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="shipping-route">
-    </code-example>
-
+    <code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="shipping-route"></code-example>
 
 1. In the shipping component: 
 
     1. Import Cart Service
 
-        <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts" region="imports">
-        </code-example>
+        <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts" region="imports"></code-example>
 
     1. Define shippingCosts property
 
-        <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts" region="props">
-        </code-example>
+        <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts" region="props"></code-example>
 
     1. Inject the cart service into the `ShippingComponent` class: 
 
@@ -214,81 +207,26 @@ In this section, you'll create a new shipping component and associated view.
 
     1. Set `shippingCosts` property using `getShippingPrices()` method from cart service
 
-        <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts" region="ctor">
-        </code-example>
+        <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts" region="ctor"></code-example>
 
-1. Update shipping component's template to display the shipping costs using async pipe:
+1. Update the shipping component's template to display the shipping costs using async pipe:
 
-    <code-example header="src/app/shipping/shipping.component.html" path="getting-started/src/app/shipping/shipping.component.html">
-    <code-example>
+    <code-example header="src/app/shipping/shipping.component.html" path="getting-started/src/app/shipping/shipping.component.html"></code-example>
 
 
+<div class="callout is-critical">
+<header>To Do</header>
 
+JAF: A lot happens in this section, but there is very little to see in the app. We can't see the contents of the cart. We can't see the shipping data or view. We can't see or choose a shipping level. Is there an easy way to resolve that? 
 
+The shipping component is here just so HttpClient has something to retrieve? Why not revert to switching product list to come from products.json at this point?
 
-<!-- NO LONGER USED 
-
-### Update the details component
-
-#### Imports
-
-1. Open `product-details.component.ts`. 
-
-1. Import the `ActivatedRoute` service from the `@angular/router` package.
-
-1. Import the `switchMap` operator from the `rxjs/operators` package.
-
-1. Import the `DataService` to use its `getOne()` method to fetch product details.
-
-    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started/src/app/product-details/product-details.component.ts" region="imports">
-    </code-example>
-
-#### Product property and inject services
-
-Continue working in the product details component (`product-details.component.ts`). 
-
-1. Remove the `Input` decorator from the `product` property. Keep the property itself. 
-
-1. Remove the `share` output property.
-
-1. Inject the `ActivatedRoute`, and `DataService` services to access route information and data access methods.
-
-    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started/src/app/product-details/product-details.component.ts" region="props-methods">
-    </code-example>
-
-
-#### Retrieve product details
-
-Continue working in the product details component (`product-details.component.ts`). 
-
-1. In the `ngOnInit()` method, set the `product` property to the current route that uses the `paramMap` property on the route to access the `productId` parsed from the URL.
-
-1. Use the `switchMap` operator on the route information stream to map it into a request for product details using the `DataService#getOne()` method
-with the `productId`.
-
-1. Subscribe to the details stream and and update the `product` property with the retrieved product details information.
-
-    <code-example header="src/app/product-details/product-details.component.ts" path="getting-started/src/app/product-details/product-details.component.ts" region="get-product">
-    </code-example>
-
-Now the product details are available. Click on a name in the list to display the product's details page. 
-
-<figure>
-  <img src='generated/images/guide/getting-started/product-details-routed.png' alt="Display details for selected product as a separate page">
-</figure>
-
--->
-
+</div>
 
 
 ## Next steps
 
-Congratulations! You have an online store application with a product catalog and shopping cart: 
-
-* The app displays a top bar and a product list
-* Product data is retrieved from an external `json` file by a dedicated data service using the HttpClient
-* Users can click on a product name from the list to see details in a new view, with a distinct URL (route)
-* Users can click on the `Buy` button to add a product to the shopping cart
+Congratulations! You have an online store application with a product catalog and shopping cart. You also have the ability to look up and display shipping prices. 
 
 
 To continue exploring Angular, choose either of the following options:
