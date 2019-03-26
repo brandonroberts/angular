@@ -1,9 +1,9 @@
 // #docplaster
-// #docregion imports-inject
+// #docregion imports-inject, imports
 import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-
+// #enddocregion imports
 @Injectable({
   providedIn: 'root'
 })

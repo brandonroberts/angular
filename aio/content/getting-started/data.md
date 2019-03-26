@@ -109,17 +109,30 @@ JAF: Is there an easy way that we can see what's in the cart at this point?
 <!-- JAF RESUME WORK HERE -->
 
 
-## Accessing data with the HTTP client
+## Retrieve shipping prices
+<!-- Accessing data with the HTTP client -->
 
-Data returned from servers often takes the form of a stream. Streams are useful because they make it easy to transform the data that is returned, and to make modifications to the way data is requested. The Angular HTTP client (`HttpClient`) is a built-in way to fetch data from external APIs and provide them to your application as a stream.
+Data returned from servers often takes the form of a stream. 
+Streams are useful because they make it easy to transform the data that is returned, and to make modifications to the way data is requested. 
+The Angular HTTP client (`HttpClient`) is a built-in way to fetch data from external APIs and provide them to your application as a stream.
 
-HttpClient can be used to access external data, in our case product details from a `json` file. 
+In this section, you'll use the HTTP client to look up and add shipping prices to the items in the cart. 
 
-### Import HttpClient
+### Predefined shipping data
 
-Before you can use Angular's HTTP client, you must set up your app to use HttpClientModule. 
+For the purpose of this Getting Started, we have provided shipping data in `assets/shipping.json`. 
+You'll use this data to add shipping prices for items in the cart. 
 
-Angular's HttpClientModule registers the providers needed to use a single instance of the HttpClient service throughout your app. The HttpClient service is what you inject into your services to fetch data and interact with external APIs and resources. 
+<code-example header="src/app/assets/shipping.json" path="src/app/assets/shipping.json">
+</code-example>
+
+
+### Enable HttpClient for app
+
+Before you can use Angular's HTTP client, you must set up your app to use `HttpClientModule`. 
+
+Angular's `HttpClientModule` registers the providers needed to use a single instance of the `HttpClient` service throughout your app. 
+The `HttpClient` service is what you inject into your services to fetch data and interact with external APIs and resources. 
 
 1. Open `app.module.ts`. 
 
@@ -132,40 +145,40 @@ Angular's HttpClientModule registers the providers needed to use a single instan
 
 1. Add `HttpClientModule` to the `imports` array of the app module.
 
-    This registers Angular's HttpClient providers globally.
+    This registers Angular's `HttpClient` providers globally.
 
     <code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="http-client-module">
     </code-example>
 
 
-### Set up the data service to use HttpClient
+### Enable HttpClient for cart service 
 
-1. Open `data.service.ts`.
+1. Open `cart.service.ts`.
 
 1. Import `HttpClient` from the `@angular/common/http` package.
 
-1. Import `map` operator from the `rxjs/operators` package.
-
-    <code-example header="src/app/data.service.ts" path="getting-started/src/app/data.service.ts" region="imports">
+    <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.ts" region="imports">
     </code-example>
 
-1. Inject `HttpClient` into constructor of `DataService`
+1. Inject `HttpClient` into the constructor of the `CartService` component class: 
 
-    <code-example header="src/app/data.service.ts" path="getting-started/src/app/data.service.ts" region="ctor">
+    <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.ts" region="import-inject">
     </code-example>
 
-### Retrieve the product details
 
-Continue working in `data.service.ts`.
+### Define the get() method
 
-1. Add `getOne()` method with a `productId` argument to the `DataService`. 
+Continue working in `cart.service.ts`.
 
-1. Use the `HttpClient#get()` method to retrieve the products from the JSON file.
+1. Define a new `getShippingPrices()` method  that uses the `HttpClient#get()` method to retrieve the shipping prices.
 
-1. Use the `map` operator to find one product in the array of the products and return it.
-
-    <code-example header="src/app/data.service.ts" path="getting-started/src/app/data.service.ts" region="get-one">
+    <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.ts" region="shipping">
     </code-example>
+
+
+
+
+<!-- NO LONGER USED 
 
 ### Update the details component
 
@@ -215,6 +228,8 @@ Now the product details are available. Click on a name in the list to display th
 <figure>
   <img src='generated/images/guide/getting-started/product-details-routed.png' alt="Display details for selected product as a separate page">
 </figure>
+
+-->
 
 
 
