@@ -4,13 +4,13 @@
 <div *ngFor="let product of products; index as productId">
 
   <h3>
-    <a [title]="product.name" [routerLink]="['/products', productId]">
+    <a [title]="product.name + ' details'" [routerLink]="['/products', productId]">
       {{ product.name }}
     </a>
   </h3>
 <!-- #enddocregion router-link -->  
   <p *ngIf="product.description">
-    {{ product.description }}
+    Description: {{ product.description }}
   </p>
   
   <button (click)="share()">

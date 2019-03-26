@@ -135,3 +135,7 @@ app-top-bar h1 {
   border-radius: 2px;
   background-color: #EEEEEE;
 }
+
+.shipping-item {
+  width: 600px;
+}

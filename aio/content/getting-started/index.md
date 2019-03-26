@@ -31,7 +31,7 @@ StackBlitz creates a starter Angular app.
 We've seeded this particular app with a top bar&mdash;containing the store name and checkout icon&mdash;and the title for a product list. 
 
 <!-- 
-<img src="generated/images/guide/getting-started/new-project.png" alt="New Angular project in Stackblitz">
+<img src="generated/images/guide/getting-started/new-project.png" alt="New Angular project in StackBlitz">
 -->
 
 <figure>
@@ -39,11 +39,12 @@ We've seeded this particular app with a top bar&mdash;containing the store name 
 </figure>
 
 <div class="callout is-helpful">
-<header>Stackblitz tips</header>
+<header>StackBlitz tips</header>
 
 * Log into StackBlitz, so you can save and resume your work. If you have a GitHub account, you can log into StackBlitz with that account. 
-* To copy a code example from this tutorial, click the icon at the top right of the code example box, and then paste the code snippet from the clipboard into Stackblitz. 
-* If the Stackblitz preview pane isn't showing what you expect, save and then click the refresh button. 
+* To copy a code example from this tutorial, click the icon at the top right of the code example box, and then paste the code snippet from the clipboard into StackBlitz. 
+* If the StackBlitz preview pane isn't showing what you expect, save and then click the refresh button. 
+* StackBlitz is continually improving, so there may be slight differences in generated code, but the end result will be the same.
 
 </div>
 
@@ -260,7 +261,7 @@ We're going to create a new alert feature. The alert feature will take a product
     1. Right click on the `app` folder and use the `Angular Generator` to generate a new component named `product-alerts`.
 
         <figure>
-          <img src="generated/images/guide/getting-started/generate-component.png" alt="Stackblitz generate component">
+          <img src="generated/images/guide/getting-started/generate-component.png" alt="StackBlitz generate component">
         </figure>
 
         The generator creates starter files for all three parts of the component: 

@@ -4,14 +4,14 @@
 
 <!-- #docregion product-details -->
   <h3>
-    <a [title]="product.name">
+    <a [title]="product.name + ' details'">
       {{ product.name }}
     </a>
   </h3>
 <!-- #enddocregion product-details -->
 
   <p *ngIf="product.description">
-    {{ product.description }}
+    Description: {{ product.description }}
   </p>
 
   <button (click)="share()">
