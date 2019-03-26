@@ -15,7 +15,7 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
 // #enddocregion http-client-module
 import { ShippingComponent } from './shipping/shipping.component';
 import { CartComponent } from './cart/cart.component';
-// #docregion product-details-route, http-client-module, shipping-route
+// #docregion product-details-route, http-client-module, shipping-route, cart-route
 
 @NgModule({
   imports: [
@@ -31,7 +31,8 @@ import { CartComponent } from './cart/cart.component';
       { path: 'shipping', component: ShippingComponent },
 // #enddocregion shipping-route
       { path: 'cart', component: CartComponent }
-// #docregion product-details-route, http-client-module, shipping-route
+// #enddocregion cart-route
+// #docregion product-details-route, http-client-module, shipping-route, cart-route
     ])
   ],
   declarations: [
