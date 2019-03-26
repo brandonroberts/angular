@@ -123,7 +123,7 @@ In this section, you'll use the HTTP client to look up and add shipping prices t
 For the purpose of this Getting Started, we have provided shipping data in `assets/shipping.json`. 
 You'll use this data to add shipping prices for items in the cart. 
 
-<code-example header="src/app/assets/shipping.json" path="src/app/assets/shipping.json">
+<code-example header="src/assets/shipping.json" path="getting-started/src/assets/shipping.json">
 </code-example>
 
 
@@ -168,12 +168,60 @@ The `HttpClient` service is what you inject into your services to fetch data and
 
 ### Define the get() method
 
-Continue working in `cart.service.ts`.
+1. Continue working in `cart.service.ts`.
 
 1. Define a new `getShippingPrices()` method  that uses the `HttpClient#get()` method to retrieve the shipping prices.
 
     <code-example header="src/app/cart.service.ts" path="getting-started/src/app/cart.service.ts" region="shipping">
     </code-example>
+
+
+## Define the shipping page
+
+In this section, you'll create a new shipping component and associated view. 
+
+
+1. Generate a new component named `shipping`.
+
+    Reminder: In the file list, right-click the `app` folder, choose `Angular Generator` and `Component`. 
+    
+    <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts">
+    </code-example>
+
+1. In `app.module.ts`, add a route for shipping. Specify a `path` of `shipping` and a component of `ShippingComponent`. 
+
+    <code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="shipping-route">
+    </code-example>
+
+
+1. In the shipping component: 
+
+    1. Import Cart Service
+
+        <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts" region="imports">
+        </code-example>
+
+    1. Define shippingCosts property
+
+        <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts" region="props">
+        </code-example>
+
+    1. Inject the cart service into the `ShippingComponent` class: 
+
+        ```
+        constructor(private cartService: CartService) { }
+        ```
+
+    1. Set `shippingCosts` property using `getShippingPrices()` method from cart service
+
+        <code-example header="src/app/shipping/shipping.component.ts" path="getting-started/src/app/shipping/shipping.component.ts" region="ctor">
+        </code-example>
+
+1. Update shipping component's template to display the shipping costs using async pipe:
+
+    <code-example header="src/app/shipping/shipping.component.html" path="getting-started/src/app/shipping/shipping.component.html">
+    <code-example>
+
 
 
 
