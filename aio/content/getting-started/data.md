@@ -1,22 +1,11 @@
-# Routing and Managing Data
+# Managing Data
 
-Welcome to lesson 2 of Angular Getting Started. 
+Welcome to lesson 3 of Angular Getting Started. 
 
-At the end of [Lesson 1: Your First App](getting-started), the online store application had a basic product catalog: 
-
-* The app displays a top bar and a product list
-* Users can click on a product name from the list to see details below
-* Users can click on the `Share` button to share a product from the list or details
-
-<div class="alert is-helpful">
-
-[Return to the previous Getting Started lesson: Your First App.](getting-started)
-
-</div>
-
+At the end of [Lesson 2: Routing](getting-started/routing), the online store application had a product catalog with two views: a product list and product details. 
+Users can click on a product name from the list to see details in a new view, with a distinct URL (route).
 
 In this lesson, you'll extend the app to be more robust and scalable. You'll:
-* Change how product details are displayed so they are on their own page, using Angular routing
 * Change how product data is managed, to use a data service and Angular's HttpClient to retrieve data from an external source (`json` file)
 
 <!--
@@ -28,61 +17,6 @@ Data your app needs can come from many different sources. Whether it be a static
 <!--
 JAF: I'd like to move routing to its own lesson between first app and managing data, but we'd have to redesign the flow or the app to make routing work at that point. 
 -->
-## Routing
-
-Up to this point, the app doesn't have any variable states or navigation. There is one URL, and that URL always displays the "My Store" page with a fixed list of products and changeable details below. You can see the URL in  the Stackblitz preview pane: `https://ng-getting-started-lesson2.stackblitz.io`.
-
-In this section, you'll modify the app to display the product details in separate pages, with their own URLs.
-
-To do this, you'll use the Angular *router*. 
-The Angular [router](guide/glossary#router) allows us to show different components and data to the user based on where the user is in the application. 
-The router enables navigation from one view to the next as users perform application tasks. 
-
-* Enter a URL in the address bar and the browser navigates to a corresponding page.
-* Click links on the page and the browser navigates to a new page.
-* Click the browser's back and forward buttons and the browser navigates backward and forward through the history of pages you've seen.
-
-*JAF: Do we show them that the app is configured to use the router? And that the router outlet is already defined and was actually used to display the product list?* 
-
-1. Open the `product-list.component.html` file. 
-
-1. On the anchor that displays the product name, replace the click event binding (`(click)="selectProduct(product)"`) with a `routerLink` to the product list template (`/products`).
-
-  ```
-  <h3>
-    <a [title]="product.name"  [routerLink]="['/products', product.id]">
-      <!-- interpolation -->
-      {{ product.name }}
-    </a>
-  </h3>
-  ```
-
-  The RouterLink directive give the router control over the anchor element. In this case, the route (URL) contains one fixed segment (`/products`) and the final segment is variable, inserting the id property of the current product. For example, the URL for a product with an `id` of 1 will be similar to `https://ng-getting-started-lesson2.stackblitz.io/products/1`. 
-
-1. Remove the Share buttons from the product list. We'll be replacing them with a Buy button on the new product details view. 
-
-    *JAF: We might choose to leave them, to reduce steps and changes. Cleaner look without them, but..."*
-
-1. Remove the product details component from below the product list. 
-
-    <code-example header="src/app/product-list/product-list.component.html" path="getting-started/src/app/product-list/product-list.component.html">
-    </code-example>
-
-1. Update the product details component template (`product-list.component.html`), so that the title "Product Details" is always displayed, but the product details information is only displayed if a product exists. To do this, wrap the product details with an `*ngIf`. 
-
-
-    Now, when the user clicks on a name in the product list, the product list is replaced by a product details view. 
-
-1. Add a route in the `AppModule` for product details, with a `path` of `products/:productId` and `ProductDetailsComponent` for the `component`.
-
-<code-example header="src/app/app.module.ts" path="getting-started/src/app/app.module.ts" region="product-details-route">
-</code-example>
-
-
-
-Click on each product to display the product details. Notice that the URL in the preview window changes. The final digit (1 or 2) is the product's `id` property. 
-
-No product detail information is shown yet.
 
 ## Predefined services and data
 
@@ -256,11 +190,8 @@ Congratulations! You have an online store application with a product catalog and
 * Users can click on the `Buy` button to add a product to the shopping cart
 
 
-To continue exploring Angular, we recommend any of the following options:
-* Do the next add-on Getting Started lessons in order: Forms, Deployment. The add-on modules extend the online store app to be more robust and scalable, introducing more Angular foundation skills. 
-* Skip ahead to the [Deployment](getting-started/deployment) add-on lesson to deploy your app to Firebase or move to local development. 
-* Read more about the Angular app [architecture](guide/architecture).
+To continue exploring Angular, choose either of the following options:
+* [Continue to the "Forms" section](getting-started/forms). 
+* [Skip ahead to the "Deployment" section](getting-started/deployment) to deploy your app to Firebase or move to local development. 
 
-
-[Continue to the next Getting Started lesson: Services and Data.](getting-started/data)
 
