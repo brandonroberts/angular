@@ -9,15 +9,15 @@ import { HttpClient } from '@angular/common/http';
 })
 // #docregion props, methods, import-inject, shipping
 export class CartService {
-// #enddocregion methods, import-inject, shipping
+// #enddocregion import-inject, shipping
   items = [];
+// #enddocregion props, methods
 
-// #enddocregion props
 // #docregion import-inject
   constructor(private http: HttpClient) {}
-
 // #enddocregion import-inject
 // #docregion methods
+
   addToCart(product) {
     this.items.push(product);
   }

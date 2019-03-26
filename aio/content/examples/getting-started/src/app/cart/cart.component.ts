@@ -13,19 +13,19 @@ import { CartService } from '../cart.service';
 })
 // #docregion props-services, submit
 export class CartComponent {
-  checkoutForm;
   items;
+  checkoutForm;
 
   constructor(
+    private cartService: CartService,
     private formBuilder: FormBuilder,
-    private cartService: CartService
-  ) {
-    this.checkoutForm = this.formBuilder.group({
-      name: '',
-      address: ''
-    });
+    ) {
+      this.items = this.cartService.getItems();
 
-    this.items = this.cartService.getItems();
+      this.checkoutForm = this.formBuilder.group({
+        name: '',
+        address: ''
+      });
   }
 
   // #enddocregion props-services
