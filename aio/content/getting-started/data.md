@@ -6,11 +6,9 @@ At the end of [Lesson 2: Routing](getting-started/routing), the online store app
 Users can click on a product name from the list to see details in a new view, with a distinct URL (route).
 
 In this lesson, you'll create the shopping cart. You'll:
-* Define a service and use it in product details
-* Change how product data is managed, to use a data service and Angular's HttpClient to retrieve data from an external source (`json` file)
-* You'll build out your store with retreiving data from and external source, displaying product details,
- and adding a checkout page.
- * You will define a data service for cart data. 
+* Update the product details page to include a "Buy" button, which adds the current product to a list of products managed by a cart service
+* Add a shipping component, which retrieves shipping prices for the items in the cart by using Angular's HttpClient to retrieve shipping data from a .json file
+
 
 ## Create the shopping cart 
 
