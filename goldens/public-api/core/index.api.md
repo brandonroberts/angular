@@ -219,6 +219,12 @@ export interface BootstrapOptions {
 }
 
 // @public
+export function Case(props: {
+    value: unknown;
+    children?: unknown;
+}): never;
+
+// @public
 export enum ChangeDetectionStrategy {
     // @deprecated
     Default = 1,
@@ -294,6 +300,12 @@ export interface Component extends Directive {
 
 // @public
 export const Component: ComponentDecorator;
+
+// @public
+export function component(fn: () => unknown): Type<unknown>;
+
+// @public (undocumented)
+export function component(meta: TsxComponentMetadata, fn: () => unknown): Type<unknown>;
 
 // @public
 export interface ComponentDecorator {
@@ -550,6 +562,11 @@ export class DebugNode {
 export function declareExperimentalWebMcpTool<const InputSchema extends object>(tool: WebMcpToolDescriptor<InputSchema>, injector?: Injector): Promise<void>;
 
 // @public
+export function Default(props: {
+    children?: unknown;
+}): never;
+
+// @public
 export const DEFAULT_CURRENCY_CODE: InjectionToken<string>;
 
 // @public
@@ -587,6 +604,16 @@ export class DefaultIterableDiffer<V> implements IterableDiffer<V>, IterableChan
     // (undocumented)
     onDestroy(): void;
 }
+
+// @public
+export function Defer(props: {
+    on?: string | string[];
+    when?: unknown;
+    placeholder?: unknown;
+    loading?: unknown;
+    error?: unknown;
+    children?: unknown;
+}): never;
 
 // @public
 export interface DestroyableInjector extends Injector {
@@ -772,6 +799,14 @@ export interface FactorySansProvider {
 }
 
 // @public
+export function For<T>(props: {
+    each: Iterable<T> | null | undefined;
+    track: (item: T) => unknown;
+    empty?: unknown;
+    children: (item: T, context: TsxForContext) => unknown;
+}): never;
+
+// @public
 export function forwardRef(forwardRefFn: ForwardRefFn): Type<any>;
 
 // @public
@@ -860,6 +895,13 @@ export interface IdleService {
     cancelOnIdle(id: number): void;
     requestOnIdle(callback: (deadline?: IdleDeadline) => void, options?: IdleRequestOptions): number;
 }
+
+// @public
+export function If<T>(props: {
+    when: T;
+    fallback?: unknown;
+    children?: unknown | ((value: NonNullable<T>) => unknown);
+}): never;
 
 // @public
 export function importProvidersFrom(...sources: ImportProvidersSource[]): EnvironmentProviders;
@@ -1918,6 +1960,12 @@ export interface StreamingResourceOptions<T, R> extends BaseResourceOptions<T, R
 }
 
 // @public
+export function Switch<T>(props: {
+    value: T;
+    children?: unknown;
+}): never;
+
+// @public
 export class TemplateRef<C> {
     createEmbeddedView(context: C, injector?: Injector): EmbeddedViewRef<C>;
     readonly elementRef: ElementRef;
@@ -1974,6 +2022,25 @@ export const TRANSLATIONS: InjectionToken<string>;
 
 // @public
 export const TRANSLATIONS_FORMAT: InjectionToken<string>;
+
+// @public
+export type TsxComponentMetadata = Omit<Component, 'template' | 'templateUrl' | 'imports' | 'deferredImports' | 'changeDetection' | 'standalone'>;
+
+// @public
+export interface TsxForContext {
+    // (undocumented)
+    $count: number;
+    // (undocumented)
+    $even: boolean;
+    // (undocumented)
+    $first: boolean;
+    // (undocumented)
+    $index: number;
+    // (undocumented)
+    $last: boolean;
+    // (undocumented)
+    $odd: boolean;
+}
 
 // @public
 export function twoWayBinding(publicName: string, value: WritableSignal<unknown>): Binding;

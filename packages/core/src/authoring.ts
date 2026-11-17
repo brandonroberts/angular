@@ -28,3 +28,14 @@ export {
 } from './authoring/output/output_emitter_ref';
 export {OutputRef, OutputRefSubscription} from './authoring/output/output_ref';
 export {ContentChildFunction, ViewChildFunction} from './authoring/queries';
+export {
+  Case,
+  component,
+  Default,
+  Defer,
+  For,
+  If,
+  Switch,
+  TsxComponentMetadata,
+  TsxForContext,
+} from './authoring/tsx';

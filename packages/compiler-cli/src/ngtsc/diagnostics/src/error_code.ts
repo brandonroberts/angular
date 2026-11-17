@@ -773,4 +773,10 @@ export enum ErrorCode {
    * Raised when a `@defer` block specifies a `name` parameter but `deferredImports` is not an object.
    */
   DEFER_BLOCK_INVALID_NAME_PARAMETER = 11102,
+
+  /**
+   * Raised when an experimental TSX component (`component(meta, fn)` in a `.tsx` file) uses
+   * syntax that cannot be lowered to an Angular template.
+   */
+  TSX_COMPONENT_INVALID = 12000,
 }

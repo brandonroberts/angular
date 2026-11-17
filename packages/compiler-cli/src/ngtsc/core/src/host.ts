@@ -13,6 +13,7 @@ import {findFlatIndexEntryPoint, FlatIndexGenerator} from '../../entry_point';
 import {AbsoluteFsPath, resolve} from '../../file_system';
 import {isShim, ShimAdapter, ShimReferenceTagger} from '../../shims';
 import {PerFileShimGenerator, TopLevelShimGenerator} from '../../shims/api';
+import {findComponentSelector, lowerTsxComponents} from '../../tsx';
 import {TypeCheckShimGenerator} from '../../typecheck';
 import {normalizeSeparators} from '../../util/src/path';
 import {getRootDirs, isNonDeclarationTsPath, RequiredDelegations} from '../../util/src/typescript';
@@ -152,6 +153,7 @@ export class NgCompilerHost
     private shimTagger: ShimReferenceTagger,
     entryPoint: AbsoluteFsPath | null,
     diagnostics: ts.Diagnostic[],
+    private readonly tsxOptions: ts.CompilerOptions | null = null,
   ) {
     super(delegate);
 
@@ -270,6 +272,7 @@ export class NgCompilerHost
       shimTagger,
       entryPoint,
       diagnostics,
+      options._experimentalTsxComponents ? (options as ts.CompilerOptions) : null,
     );
   }
 
@@ -316,8 +319,119 @@ export class NgCompilerHost
       return undefined;
     }
 
-    this.shimTagger.tag(sf);
-    return sf;
+    const lowered = this.maybeLowerTsx(sf, languageVersionOrOptions);
+    this.shimTagger.tag(lowered);
+    return lowered;
+  }
+
+  /**
+   * Experimental: lowers TSX function components in `.tsx` files into decorated component classes,
+   * so that the rest of the compiler sees ordinary Angular source.
+   */
+  private maybeLowerTsx(
+    sf: ts.SourceFile,
+    languageVersionOrOptions: ts.ScriptTarget | ts.CreateSourceFileOptions,
+  ): ts.SourceFile {
+    if (
+      this.tsxOptions === null ||
+      sf.isDeclarationFile ||
+      !sf.fileName.endsWith('.tsx') ||
+      !sf.text.includes('@angular/core')
+    ) {
+      return sf;
+    }
+    // Re-parse with parent pointers, which the lowering relies on.
+    const parsed = ts.createSourceFile(
+      sf.fileName,
+      sf.text,
+      languageVersionOrOptions,
+      true,
+      ts.ScriptKind.TSX,
+    );
+    const result = lowerTsxComponents(parsed, {
+      resolveSelector: (name, moduleSpecifier, containingFile) =>
+        this.resolveTsxSelector(name, moduleSpecifier, containingFile, 0),
+    });
+    if (result === null) {
+      return sf;
+    }
+    this.constructionDiagnostics.push(...result.diagnostics);
+    const lowered = ts.createSourceFile(
+      sf.fileName,
+      result.text,
+      languageVersionOrOptions,
+      undefined,
+      ts.ScriptKind.TSX,
+    );
+    const version = (sf as {version?: string}).version;
+    if (version !== undefined) {
+      (lowered as {version?: string}).version = version;
+    }
+    return lowered;
+  }
+
+  /** Finds the selector of a component referenced as a TSX tag, following re-exports. */
+  private resolveTsxSelector(
+    name: string,
+    moduleSpecifier: string | null,
+    containingFile: string,
+    depth: number,
+  ): string | null {
+    let fileName = containingFile;
+    if (moduleSpecifier !== null) {
+      const resolved = ts.resolveModuleName(
+        moduleSpecifier,
+        containingFile,
+        this.tsxOptions!,
+        this,
+      ).resolvedModule;
+      if (resolved === undefined) {
+        return null;
+      }
+      fileName = resolved.resolvedFileName;
+    }
+    const text = this.delegate.readFile(fileName);
+    if (text === undefined) {
+      return null;
+    }
+    const sf = ts.createSourceFile(
+      fileName,
+      text,
+      ts.ScriptTarget.Latest,
+      true,
+      fileName.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+    );
+    const selector = findComponentSelector(sf, name);
+    if (selector !== undefined) {
+      return selector;
+    }
+    if (depth >= 5) {
+      return null;
+    }
+    for (const stmt of sf.statements) {
+      if (
+        !ts.isExportDeclaration(stmt) ||
+        stmt.moduleSpecifier === undefined ||
+        !ts.isStringLiteral(stmt.moduleSpecifier)
+      ) {
+        continue;
+      }
+      const spec = stmt.moduleSpecifier.text;
+      if (stmt.exportClause === undefined) {
+        const found = this.resolveTsxSelector(name, spec, fileName, depth + 1);
+        if (found !== null) {
+          return found;
+        }
+      } else if (ts.isNamedExports(stmt.exportClause)) {
+        for (const el of stmt.exportClause.elements) {
+          if (el.name.text === name) {
+            const original = el.propertyName !== undefined ? el.propertyName.text : name;
+            return this.resolveTsxSelector(original, spec, fileName, depth + 1);
+          }
+        }
+      }
+    }
+    return null;
   }
 
   fileExists(fileName: string): boolean {

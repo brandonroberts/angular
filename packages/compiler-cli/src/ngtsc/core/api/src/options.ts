@@ -113,6 +113,14 @@ export interface InternalOptions {
    * import e.g. `Component` relatively and should be detected by the compiler.
    */
   _isAngularCoreCompilation?: boolean;
+
+  /**
+   * Experimental: lower Solid-style TSX function components (`component(meta, fn)` declared in
+   * `.tsx` files) into decorated component classes before analysis.
+   *
+   * @internal
+   */
+  _experimentalTsxComponents?: boolean;
 }
 
 /**
