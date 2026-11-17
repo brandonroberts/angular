@@ -64,6 +64,12 @@ export interface NgCompilerAdapter
   readonly constructionDiagnostics: ts.Diagnostic[];
 
   /**
+   * Optionally rewrites diagnostics before they are reported, e.g. to map positions in sources the
+   * adapter generated back to the files the user wrote.
+   */
+  remapDiagnostics?(diagnostics: ts.Diagnostic[]): ts.Diagnostic[];
+
+  /**
    * A `Set` of `ts.SourceFile`s which are internal to the program and should not be emitted as JS
    * files.
    *

@@ -13,7 +13,7 @@ import {findFlatIndexEntryPoint, FlatIndexGenerator} from '../../entry_point';
 import {AbsoluteFsPath, resolve} from '../../file_system';
 import {isShim, ShimAdapter, ShimReferenceTagger} from '../../shims';
 import {PerFileShimGenerator, TopLevelShimGenerator} from '../../shims/api';
-import {findComponentSelector, lowerTsxComponents} from '../../tsx';
+import {findComponentSelector, lowerTsxComponents, TsxSourceMap} from '../../tsx';
 import {TypeCheckShimGenerator} from '../../typecheck';
 import {normalizeSeparators} from '../../util/src/path';
 import {getRootDirs, isNonDeclarationTsPath, RequiredDelegations} from '../../util/src/typescript';
@@ -144,6 +144,11 @@ export class NgCompilerHost
 
   readonly inputFiles: ReadonlyArray<string>;
   readonly rootDirs: ReadonlyArray<AbsoluteFsPath>;
+
+  /** Lowering maps of `.tsx` files containing TSX components, keyed by file name. */
+  private readonly tsxSourceMaps = new Map<string, TsxSourceMap>();
+  /** Original (pre-lowering) source files, used to report diagnostics against the TSX. */
+  private readonly tsxOriginalFiles = new Map<string, ts.SourceFile>();
 
   constructor(
     delegate: ExtendedTsCompilerHost,
@@ -356,6 +361,8 @@ export class NgCompilerHost
       return sf;
     }
     this.constructionDiagnostics.push(...result.diagnostics);
+    this.tsxSourceMaps.set(sf.fileName, result.sourceMap);
+    this.tsxOriginalFiles.set(sf.fileName, parsed);
     const lowered = ts.createSourceFile(
       sf.fileName,
       result.text,
@@ -368,6 +375,51 @@ export class NgCompilerHost
       (lowered as {version?: string}).version = version;
     }
     return lowered;
+  }
+
+  /**
+   * Returns the map from the lowered source of `fileName` back to its original TSX, or `null` if
+   * the file contains no TSX components. Hosts that emit code themselves can pass it to
+   * `remapSourceMap`/`remapInlineSourceMap` to point source maps at the TSX.
+   */
+  getTsxSourceMap(fileName: string): TsxSourceMap | null {
+    return this.tsxSourceMaps.get(fileName) ?? null;
+  }
+
+  /** Re-positions diagnostics reported against lowered `.tsx` files onto the original TSX. */
+  remapDiagnostics(diagnostics: ts.Diagnostic[]): ts.Diagnostic[] {
+    if (this.tsxSourceMaps.size === 0) {
+      return diagnostics;
+    }
+    return diagnostics.map((diag) => {
+      const remapped = this.remapTsxLocation(diag);
+      if (remapped === diag && diag.relatedInformation === undefined) {
+        return diag;
+      }
+      return {
+        ...remapped,
+        relatedInformation: diag.relatedInformation?.map((info) => this.remapTsxLocation(info)),
+      };
+    });
+  }
+
+  private remapTsxLocation<T extends ts.DiagnosticRelatedInformation>(diag: T): T {
+    if (diag.file === undefined || diag.start === undefined) {
+      return diag;
+    }
+    const map = this.tsxSourceMaps.get(diag.file.fileName);
+    // Only diagnostics against the lowered text need remapping; lowering errors are already
+    // reported against the original.
+    if (map === undefined || diag.file.text !== map.generatedText) {
+      return diag;
+    }
+    const span = map.toOriginalSpan(diag.start, diag.length ?? 0) ?? {start: 0, length: 0};
+    return {
+      ...diag,
+      file: this.tsxOriginalFiles.get(diag.file.fileName)!,
+      start: span.start,
+      length: span.length,
+    };
   }
 
   /** Finds the selector of a component referenced as a TSX tag, following re-exports. */

@@ -105,10 +105,118 @@ Component tags are resolved by reference. The host follows the import, including
 reads the selector statically from `component({selector})`, from `@Component({selector})`, or from
 a compiled `.d.ts` `ɵcmp` declaration.
 
+## Source maps
+
+The lowering records where every character of the generated file came from:
+
+- **Copied code** (statements, `input()` initializers, binding expressions, metadata) maps
+  one-to-one, so TypeScript errors such as a misspelled property land on the exact TSX token.
+- **Synthesized code** (the class shell, hoisted closures, template markup) maps to the TSX node
+  it was generated for. Template positions go through the JSON escaping of the inline template,
+  so `strictTemplates` errors point at the JSX attribute or element that produced them.
+- **Boilerplate** appended to the file (helper imports and types) has no mapping.
+
+`NgCompilerHost` uses the map in three places:
+
+1. `remapDiagnostics()` re-positions TypeScript and Angular diagnostics onto the original TSX,
+   which is also used for the code frame.
+2. `ngc`'s emit rewrites `.js.map` files and inline source maps so that they point at the `.tsx`.
+   With `inlineSources`, `sourcesContent` holds the original TSX.
+3. `getTsxSourceMap(fileName)` exposes it to hosts that run their own emit.
+
+```
+app.tsx:13:16 - error TS2322: Type 'string' is not assignable to type 'number'.
+
+13       <Counter initial={"ten"} bind:step={step} on:changed={(v: number) => last.set(v)} />
+                  ~~~~~~~~~~~~~~~
+```
+
+## Interop examples
+
+A TSX component used from a class component's HTML template:
+
+```ts
+import {Component, signal} from '@angular/core';
+import {Counter} from './counter'; // component({selector: 'app-counter'}, …)
+
+@Component({
+  selector: 'app-dashboard',
+  imports: [Counter],
+  template: `
+    <app-counter [initial]="10" [(step)]="step" (changed)="onChanged($event)" />
+    <p>step is {{ step() }}</p>
+  `,
+})
+export class Dashboard {
+  readonly step = signal(2);
+  onChanged(total: number) {
+    console.log(total);
+  }
+}
+```
+
+A class component, an attribute directive and a library component used from TSX:
+
+```tsx
+import {component, signal, For} from '@angular/core';
+import {MatButton} from '@angular/material/button';
+import {MatTooltip} from '@angular/material/tooltip';
+import {Badge} from './badge'; // @Component({selector: 'app-badge'}) class Badge { label = input.required<string>() }
+
+export const Toolbar = component(() => {
+  const tags = signal(['new', 'sale']);
+  const save = () => console.log('saved');
+  return (
+    <nav>
+      <For each={tags()} track={(t) => t}>
+        {(tag) => <Badge label={tag} />}
+      </For>
+      <button matButton use={[MatTooltip]} matTooltip="Save changes" on:click={save}>
+        Save
+      </button>
+    </nav>
+  );
+});
+```
+
+`<MatButton>` also works as a tag: its selector, `button[matButton]`, is read from the library's
+`.d.ts` and becomes `<button matButton>`.
+
+Routing, dynamic creation and testing all take TSX components as ordinary component types:
+
+```ts
+export const routes: Routes = [{path: 'toolbar', component: Toolbar}];
+
+const ref = createComponent(Counter, {
+  environmentInjector,
+  bindings: [inputBinding('initial', () => 5), outputBinding('changed', (v) => log(v))],
+});
+
+const fixture = TestBed.createComponent(Counter);
+fixture.componentRef.setInput('initial', 3);
+await fixture.whenStable();
+```
+
+Dependency injection is shared both ways. A service provided by a class component is visible to
+TSX children through `inject()`, and `component({providers: […]})` provides to class-component
+children:
+
+```tsx
+export const CartScope = component({providers: [CartStore]}, () => <ng-content />);
+
+@Component({selector: 'cart-total', template: '{{ store.total() }}'})
+export class CartTotal {
+  protected readonly store = inject(CartStore); // provided by the TSX parent
+}
+```
+
 ## Known limitations of the spike
 
-- **Diagnostics point at the lowered source**, not the original TSX. A source map from the
-  lowered file back to the TSX is the next thing needed for usable errors.
+- **Hosts that emit on their own** (the Angular CLI's esbuild builder, Vite plugins, the
+  source-to-source preprocessor) must compose source maps themselves with
+  `getTsxSourceMap()` + `remapSourceMap`/`remapInlineSourceMap`. Only `ngc`'s emit does it today.
+- **Template diagnostics are attribute-granular.** An error in a template binding points at the
+  whole JSX attribute (`count={…}`), not just the expression.
 - **No TSX type-checking in editors.** `@angular/core` doesn't ship a `JSX` namespace yet, so
   TypeScript itself doesn't check raw `.tsx` files in an IDE. The plan is
   `jsxImportSource: "@angular/core"` with `LibraryManagedAttributes` derived from

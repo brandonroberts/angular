@@ -679,6 +679,9 @@ export class NgCompiler {
    * Add https://angular.dev/errors error guide links to diagnostics for this compilation.
    */
   private addMessageTextDetails(diagnostics: ts.Diagnostic[]): ts.Diagnostic[] {
+    if (this.adapter.remapDiagnostics !== undefined) {
+      diagnostics = this.adapter.remapDiagnostics(diagnostics);
+    }
     return diagnostics.map((diag) => {
       const errorCode = errorCodeWithGuideFromDiagnosticCode(diag.code);
       if (errorCode !== null) {

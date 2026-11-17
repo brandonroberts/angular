@@ -28,6 +28,7 @@ import {ActivePerfRecorder, PerfCheckpoint as PerfCheckpoint, PerfEvent, PerfPha
 import {TsCreateProgramDriver} from './program_driver';
 import {DeclarationNode} from './reflection';
 import {retagAllTsFiles} from './shims';
+import {remapInlineSourceMap, remapSourceMap} from './tsx';
 import {OptimizeFor} from './typecheck/api';
 
 /**
@@ -172,7 +173,7 @@ export class NgtscProgram implements api.Program {
         }
         res = diagnostics;
       }
-      return res;
+      return this.host.remapDiagnostics([...res]);
     });
   }
 
@@ -204,7 +205,7 @@ export class NgtscProgram implements api.Program {
         }
         res = diagnostics;
       }
-      return res;
+      return this.host.remapDiagnostics([...res]);
     });
   }
 
@@ -324,6 +325,16 @@ export class NgtscProgram implements api.Program {
             }
 
             this.compiler.incrementalCompilation.recordSuccessfulEmit(writtenSf);
+          }
+        }
+        // Point source maps of lowered TSX components at the original TSX.
+        const tsxMap =
+          sourceFiles?.length === 1 ? this.host.getTsxSourceMap(sourceFiles[0].fileName) : null;
+        if (tsxMap !== null) {
+          if (fileName.endsWith('.map')) {
+            data = remapSourceMap(data, tsxMap);
+          } else if (/\.[cm]?jsx?$/.test(fileName)) {
+            data = remapInlineSourceMap(data, tsxMap);
           }
         }
         this.host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles);

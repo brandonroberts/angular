@@ -14,3 +14,4 @@ export {
   TsxLoweringResult,
   TsxSelectorResolver,
 } from './src/lower';
+export {remapInlineSourceMap, remapSourceMap, TsxSourceMap} from './src/source_map';

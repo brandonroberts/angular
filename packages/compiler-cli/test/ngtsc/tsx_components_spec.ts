@@ -16,6 +16,11 @@ import {NgtscTestEnvironment} from './env';
 
 const testFiles = loadStandardTestFiles();
 
+/** The source text a diagnostic points at. */
+function spanText(diag: ts.Diagnostic): string {
+  return diag.file!.text.slice(diag.start!, diag.start! + diag.length!);
+}
+
 runInEachFileSystem(() => {
   describe('experimental TSX components', () => {
     let env!: NgtscTestEnvironment;
@@ -135,6 +140,8 @@ runInEachFileSystem(() => {
       expect(ts.flattenDiagnosticMessageText(diags[0].messageText, '\n')).toContain(
         `Type 'string' is not assignable to type 'number'`,
       );
+      // Reported against the original TSX, on the attribute that produced the binding.
+      expect(spanText(diags[0])).toBe(`count={'not a number'}`);
     });
 
     it('should type-check expressions that use loop variables', () => {
@@ -159,6 +166,28 @@ runInEachFileSystem(() => {
       expect(ts.flattenDiagnosticMessageText(diags[0].messageText, '\n')).toContain(
         `Property 'titel' does not exist`,
       );
+      expect(spanText(diags[0])).toBe('titel');
+      expect(diags[0].file!.text).toContain('<For each={todos()}');
+    });
+
+    it('should emit source maps that point at the original TSX', () => {
+      env.tsconfig(
+        {_experimentalTsxComponents: true, strictTemplates: true},
+        {jsx: 'react-jsx', sourceMap: true, inlineSources: true},
+      );
+      const source = `
+        import {component, signal} from '@angular/core';
+
+        export const App = component(() => {
+          const count = signal(0);
+          return <button on:click={() => count.update((c) => c + 1)}>{count()}</button>;
+        });
+      `;
+      env.write('app.tsx', source);
+
+      env.driveMain();
+      const map = JSON.parse(env.getContents('app.js.map'));
+      expect(map.sourcesContent).toEqual([source]);
     });
 
     it('should report TSX that cannot be lowered', () => {

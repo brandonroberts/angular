@@ -8,7 +8,9 @@ ts_project(
         "src/**/*.ts",
     ]),
     deps = [
+        "//:node_modules/@types/node",
         "//:node_modules/typescript",
+        "//packages/compiler-cli:node_modules/@jridgewell/sourcemap-codec",
         "//packages/compiler-cli/src/ngtsc/diagnostics",
     ],
 )

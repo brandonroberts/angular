@@ -10,6 +10,8 @@ import ts from 'typescript';
 
 import {ErrorCode, ngErrorCode} from '../../diagnostics';
 
+import {jsonLiteral, joinMapped, MappedText, mt, TsxSourceMap} from './source_map';
+
 /**
  * Experimental: lowers Solid-style TSX function components into ordinary decorated Angular
  * component classes, so that the rest of ngtsc (analysis, template type-checking, Ivy codegen)
@@ -116,6 +118,8 @@ export interface TsxLoweringResult {
   text: string;
   /** Errors encountered while lowering, positioned against the original source file. */
   diagnostics: ts.Diagnostic[];
+  /** Maps positions in `text` back to the original TSX. */
+  sourceMap: TsxSourceMap;
 }
 
 interface ImportedName {
@@ -159,7 +163,7 @@ export function lowerTsxComponents(
   const decoratorName =
     existingDecorator ?? (isNameTaken(sf, imports, 'Component') ? 'ɵngComponent' : 'Component');
 
-  const replacements: {start: number; end: number; text: string}[] = [];
+  const replacements: {start: number; end: number; text: MappedText}[] = [];
   const diagnostics: ts.Diagnostic[] = [];
   const helpers = new Set<string>();
 
@@ -187,12 +191,15 @@ export function lowerTsxComponents(
     return null;
   }
 
-  // Splice back to front so earlier offsets stay valid. Everything outside the component
-  // declarations keeps its original text.
-  let text = sf.text;
-  for (const r of replacements.reverse()) {
-    text = text.slice(0, r.start) + r.text + text.slice(r.end);
+  // Everything outside the component declarations is copied verbatim.
+  const out = new MappedText();
+  let cursor = 0;
+  for (const r of replacements) {
+    out.copyRange(sf.text, cursor, r.start);
+    out.append(r.text);
+    cursor = r.end;
   }
+  out.copyRange(sf.text, cursor, sf.text.length);
 
   // Appended rather than prepended so that line numbers before the first component are preserved.
   // Imports and type aliases are hoisted, so their position does not matter.
@@ -221,9 +228,13 @@ export function lowerTsxComponents(
   if (erased.length > 0) {
     trailer.push(`void [${erased.join(', ')}];`);
   }
-  text += trailer.join('\n') + '\n';
+  out.append(trailer.join('\n') + '\n');
 
-  return {text, diagnostics};
+  return {
+    text: out.text,
+    diagnostics,
+    sourceMap: TsxSourceMap.fromMappedText(sf.fileName, sf.text, out),
+  };
 }
 
 /**
@@ -296,7 +307,7 @@ export function defaultSelector(name: string): string {
 }
 
 class ComponentLowerer {
-  private readonly bindings: string[] = [];
+  private readonly bindings: MappedText[] = [];
   private readonly keys: string[] = [];
   private readonly deps = new Set<string>();
   private counter = 0;
@@ -309,7 +320,7 @@ class ComponentLowerer {
     private readonly decoratorName: string,
   ) {}
 
-  lower(stmt: ts.VariableStatement, name: string, call: ts.CallExpression): string {
+  lower(stmt: ts.VariableStatement, name: string, call: ts.CallExpression): MappedText {
     let meta: ts.ObjectLiteralExpression | null = null;
     let fn: ts.Expression;
     if (call.arguments.length === 1) {
@@ -337,9 +348,9 @@ class ComponentLowerer {
 
     // Split the body into member declarations (lifted to class fields), plain statements, and the
     // returned TSX.
-    const fields: string[] = [];
-    const aliases: string[] = [];
-    const statements: string[] = [];
+    const fields: MappedText[] = [];
+    const aliases: MappedText[] = [];
+    const statements: MappedText[] = [];
     let returned: ts.Expression;
 
     if (ts.isBlock(fn.body)) {
@@ -352,10 +363,14 @@ class ComponentLowerer {
         rejectNestedReturns(s);
         const member = this.getMemberDeclaration(s);
         if (member !== null) {
-          fields.push(`  readonly ${member.name} = ${member.init.getText(this.sf)};`);
-          aliases.push(`    const ${member.name} = this.${member.name};`);
+          fields.push(
+            mt`  readonly ${this.copy(member.name)} = ${this.copy(member.init)};`.from(s, this.sf),
+          );
+          aliases.push(
+            mt`    const ${member.name.text} = this.${member.name.text};`.from(s, this.sf),
+          );
         } else {
-          statements.push(indent(s.getText(this.sf), '    '));
+          statements.push(mt`    ${this.copy(s)}`);
         }
       }
       returned = last.expression;
@@ -365,7 +380,7 @@ class ComponentLowerer {
 
     const template = this.lowerChild(returned, []);
 
-    const metaProps: string[] = [];
+    const metaProps: (string | MappedText)[] = [];
     let hasSelector = false;
     if (meta !== null) {
       for (const prop of meta.properties) {
@@ -379,34 +394,38 @@ class ComponentLowerer {
         if (propName === 'selector') {
           hasSelector = true;
         }
-        metaProps.push(prop.getText(this.sf));
+        metaProps.push(this.copy(prop));
       }
     }
     if (!hasSelector) {
       metaProps.push(`selector: ${JSON.stringify(defaultSelector(name))}`);
     }
-    metaProps.push(`template: ${JSON.stringify(template)}`);
+    metaProps.push(mt`template: ${jsonLiteral(template)}`.from(returned, this.sf));
     if (this.deps.size > 0) {
       metaProps.push(`imports: [${[...this.deps].join(', ')}]`);
     }
     metaProps.push('changeDetection: ɵngChangeDetectionStrategy.OnPush');
 
     const isExported = stmt.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword) ?? false;
+    const nameNode = stmt.declarationList.declarations[0].name;
     const setup = [
       ...aliases,
       ...statements,
-      ...this.bindings.map((b) => '    ' + b),
+      ...this.bindings.map((b) => mt`    ${b}`),
       `    return {${this.keys.map((k) => `${k}: ɵ${k}`).join(', ')}};`,
     ];
-    return [
-      `@${this.decoratorName}({\n  ${metaProps.join(',\n  ')},\n})`,
-      `${isExported ? 'export ' : ''}class ${name} {`,
-      ...fields,
-      `  protected readonly ${TSX_BINDINGS_FIELD} = (() => {`,
-      ...setup,
-      '  })();',
-      '}',
-    ].join('\n');
+    return joinMapped(
+      [
+        mt`@${this.decoratorName}({\n  ${joinMapped(metaProps, ',\n  ')},\n})`.from(call, this.sf),
+        mt`${isExported ? 'export ' : ''}class ${this.copy(nameNode)} {`,
+        ...fields,
+        mt`  protected readonly ${TSX_BINDINGS_FIELD} = (() => {`.from(fn, this.sf),
+        ...setup,
+        '  })();',
+        '}',
+      ],
+      '\n',
+    ).from(stmt, this.sf);
   }
 
   /**
@@ -414,7 +433,9 @@ class ComponentLowerer {
    * component body. These become class fields so that the compiler recognizes them exactly as it
    * would in a class.
    */
-  private getMemberDeclaration(stmt: ts.Statement): {name: string; init: ts.Expression} | null {
+  private getMemberDeclaration(
+    stmt: ts.Statement,
+  ): {name: ts.Identifier; init: ts.Expression} | null {
     if (
       !ts.isVariableStatement(stmt) ||
       stmt.declarationList.declarations.length !== 1 ||
@@ -441,35 +462,61 @@ class ComponentLowerer {
     if (imported?.module !== CORE_MODULE || !MEMBER_APIS.has(imported.importedName)) {
       return null;
     }
-    return {name: decl.name.text, init: decl.initializer};
+    return {name: decl.name, init: decl.initializer};
   }
 
   // ---------------------------------------------------------------------------------------------
   // Bindings
 
   /** Hoists `expr` into a closure and returns the template expression that calls it. */
-  private bindValue(expr: ts.Expression, scope: Local[]): {call: string; id: string} {
+  private bindValue(expr: ts.Expression, scope: Local[]): {call: MappedText; id: string} {
     this.rejectJsx(expr);
     const locals = this.freeLocals(expr, scope);
     const id = this.nextId();
-    this.bindings.push(`const ɵ${id} = (${params(locals)}) => (${expr.getText(this.sf)});`);
-    return {call: `${TSX_BINDINGS_FIELD}.${id}(${locals.map((l) => l.name).join(', ')})`, id};
+    this.bindings.push(
+      mt`const ɵ${id} = (${params(locals)}) => (${this.copy(expr)});`.from(expr, this.sf),
+    );
+    return {
+      call: this.call(
+        expr,
+        id,
+        locals.map((l) => l.name),
+      ),
+      id,
+    };
+  }
+
+  /** The template expression that calls hoisted binding `id`, attributed to `node`. */
+  private call(node: ts.Node, id: string, args: string[]): MappedText {
+    return mt`${TSX_BINDINGS_FIELD}.${id}(${args.join(', ')})`.from(node, this.sf);
+  }
+
+  /** A verbatim copy of `node`. */
+  private copy(node: ts.Node): MappedText {
+    return new MappedText().copy(node, this.sf);
   }
 
   /** Hoists an event handler. The handler expression is re-evaluated on every event. */
-  private bindEvent(expr: ts.Expression, scope: Local[]): string {
+  private bindEvent(expr: ts.Expression, scope: Local[]): MappedText {
     this.rejectJsx(expr);
     const locals = this.freeLocals(expr, scope);
     const id = this.nextId();
     const all = [{name: '$event', type: 'any'}, ...locals];
     this.bindings.push(
-      `const ɵ${id} = (${params(all)}) => ((${expr.getText(this.sf)}) as (e: any) => unknown)($event);`,
+      mt`const ɵ${id} = (${params(all)}) => ((${this.copy(expr)}) as (e: any) => unknown)($event);`.from(
+        expr,
+        this.sf,
+      ),
     );
-    return `${TSX_BINDINGS_FIELD}.${id}(${all.map((l) => l.name).join(', ')})`;
+    return this.call(
+      expr,
+      id,
+      all.map((l) => l.name),
+    );
   }
 
   /** Exposes a writable signal for a two-way binding. */
-  private bindTwoWay(expr: ts.Expression, scope: Local[]): string {
+  private bindTwoWay(expr: ts.Expression, scope: Local[]): MappedText {
     this.rejectJsx(expr);
     const locals = this.freeLocals(expr, scope);
     if (locals.length > 0) {
@@ -479,18 +526,20 @@ class ComponentLowerer {
       );
     }
     const id = this.nextId();
-    this.bindings.push(`const ɵ${id} = ${expr.getText(this.sf)};`);
-    return `${TSX_BINDINGS_FIELD}.${id}`;
+    this.bindings.push(mt`const ɵ${id} = ${this.copy(expr)};`.from(expr, this.sf));
+    return mt`${TSX_BINDINGS_FIELD}.${id}`.from(expr, this.sf);
   }
 
   /** Hoists a `track` function for `<For>`, called with the loop item. */
-  private bindTrack(fn: ts.Expression, item: Local, scope: Local[]): string {
+  private bindTrack(fn: ts.Expression, item: Local, scope: Local[]): MappedText {
     this.rejectJsx(fn);
     const locals = this.freeLocals(fn, scope).filter((l) => l.name !== item.name);
     const id = this.nextId();
     const all = [{name: 'ɵitem', type: item.type}, ...locals];
-    this.bindings.push(`const ɵ${id} = (${params(all)}) => (${fn.getText(this.sf)})(ɵitem);`);
-    return `${TSX_BINDINGS_FIELD}.${id}(${[item.name, ...locals.map((l) => l.name)].join(', ')})`;
+    this.bindings.push(
+      mt`const ɵ${id} = (${params(all)}) => (${this.copy(fn)})(ɵitem);`.from(fn, this.sf),
+    );
+    return this.call(fn, id, [item.name, ...locals.map((l) => l.name)]);
   }
 
   private nextId(): string {
@@ -546,18 +595,20 @@ class ComponentLowerer {
   // ---------------------------------------------------------------------------------------------
   // Template generation
 
-  private lowerChild(node: ts.Node, scope: Local[]): string {
+  private lowerChild(node: ts.Node, scope: Local[]): MappedText {
     if (ts.isJsxText(node)) {
-      return escapeText(cleanJsxText(node.text));
+      return mt`${escapeText(cleanJsxText(node.text))}`.from(node, this.sf);
     }
     if (ts.isJsxExpression(node)) {
-      return node.expression === undefined ? '' : this.lowerChild(node.expression, scope);
+      return node.expression === undefined
+        ? new MappedText()
+        : this.lowerChild(node.expression, scope);
     }
     if (ts.isParenthesizedExpression(node)) {
       return this.lowerChild(node.expression, scope);
     }
     if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
-      return escapeText(node.text);
+      return mt`${escapeText(node.text)}`.from(node, this.sf);
     }
     if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node)) {
       return this.lowerElement(node, scope);
@@ -576,7 +627,10 @@ class ComponentLowerer {
       node.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken &&
       containsJsx(node.right)
     ) {
-      return `@if (${this.bindValue(node.left, scope).call}) {${this.lowerBranch(node.right, scope)}}`;
+      return mt`@if (${this.bindValue(node.left, scope).call}) {${this.lowerBranch(node.right, scope)}}`.from(
+        node,
+        this.sf,
+      );
     }
     if (ts.isArrowFunction(node) || ts.isFunctionExpression(node)) {
       throw new TsxLoweringError(
@@ -596,37 +650,42 @@ class ComponentLowerer {
       );
     }
     if (ts.isExpression(node)) {
-      return `{{ ${this.bindValue(node, scope).call} }}`;
+      return mt`{{ ${this.bindValue(node, scope).call} }}`.from(node, this.sf);
     }
     throw new TsxLoweringError(node, 'Unsupported TSX child.');
   }
 
-  private lowerChildren(children: ts.NodeArray<ts.JsxChild>, scope: Local[]): string {
-    return children.map((c) => this.lowerChild(c, scope)).join('');
+  private lowerChildren(children: ts.NodeArray<ts.JsxChild>, scope: Local[]): MappedText {
+    return joinMapped(
+      children.map((c) => this.lowerChild(c, scope)),
+      '',
+    );
   }
 
-  private lowerBranch(expr: ts.Expression, scope: Local[]): string {
+  private lowerBranch(expr: ts.Expression, scope: Local[]): MappedText {
     const e = skipParens(expr);
     if (isNullish(e)) {
-      return '';
+      return new MappedText();
     }
     return this.lowerChild(e, scope);
   }
 
-  private lowerConditional(node: ts.ConditionalExpression, scope: Local[]): string {
-    let out = `@if (${this.bindValue(node.condition, scope).call}) {${this.lowerBranch(node.whenTrue, scope)}}`;
+  private lowerConditional(node: ts.ConditionalExpression, scope: Local[]): MappedText {
+    const out = mt`@if (${this.bindValue(node.condition, scope).call}) {${this.lowerBranch(node.whenTrue, scope)}}`;
     let rest = skipParens(node.whenFalse);
     while (ts.isConditionalExpression(rest)) {
-      out += ` @else if (${this.bindValue(rest.condition, scope).call}) {${this.lowerBranch(rest.whenTrue, scope)}}`;
+      out.append(
+        mt` @else if (${this.bindValue(rest.condition, scope).call}) {${this.lowerBranch(rest.whenTrue, scope)}}`,
+      );
       rest = skipParens(rest.whenFalse);
     }
     if (!isNullish(rest)) {
-      out += ` @else {${this.lowerBranch(rest, scope)}}`;
+      out.append(mt` @else {${this.lowerBranch(rest, scope)}}`);
     }
-    return out;
+    return out.from(node, this.sf);
   }
 
-  private lowerElement(node: ts.JsxElement | ts.JsxSelfClosingElement, scope: Local[]): string {
+  private lowerElement(node: ts.JsxElement | ts.JsxSelfClosingElement, scope: Local[]): MappedText {
     const opening = ts.isJsxElement(node) ? node.openingElement : node;
     const children = ts.isJsxElement(node) ? node.children : undefined;
     const tag = opening.tagName;
@@ -646,7 +705,7 @@ class ComponentLowerer {
       throw new TsxLoweringError(tag, 'Only plain identifiers are supported as component tags.');
     }
 
-    const attrs = [...extraAttrs];
+    const attrs: (string | MappedText)[] = [...extraAttrs];
     for (const attr of opening.attributes.properties) {
       const lowered = this.lowerAttribute(attr, scope);
       if (lowered !== null) {
@@ -654,15 +713,18 @@ class ComponentLowerer {
       }
     }
 
-    const open = `<${tagName}${attrs.length > 0 ? ' ' + attrs.join(' ') : ''}>`;
+    const open = mt`<${tagName}${attrs.length > 0 ? ' ' : ''}${joinMapped(attrs, ' ')}>`.from(
+      opening,
+      this.sf,
+    );
     if (VOID_ELEMENTS.has(tagName)) {
       if (children !== undefined && children.some((c) => !isWhitespaceText(c))) {
         throw new TsxLoweringError(node, `<${tagName}> cannot have children.`);
       }
-      return open;
+      return open.from(node, this.sf);
     }
-    const inner = children !== undefined ? this.lowerChildren(children, scope) : '';
-    return `${open}${inner}</${tagName}>`;
+    const inner = children !== undefined ? this.lowerChildren(children, scope) : new MappedText();
+    return mt`${open}${inner}</${tagName}>`.from(node, this.sf);
   }
 
   private resolveComponentTag(
@@ -687,7 +749,15 @@ class ComponentLowerer {
     return parsed;
   }
 
-  private lowerAttribute(attr: ts.JsxAttributeLike, scope: Local[]): string | null {
+  private lowerAttribute(attr: ts.JsxAttributeLike, scope: Local[]): MappedText | null {
+    const lowered = this.lowerAttributeText(attr, scope);
+    return lowered === null ? null : mt`${lowered}`.from(attr, this.sf);
+  }
+
+  private lowerAttributeText(
+    attr: ts.JsxAttributeLike,
+    scope: Local[],
+  ): string | MappedText | null {
     if (ts.isJsxSpreadAttribute(attr)) {
       throw new TsxLoweringError(attr, 'Spread attributes are not supported.');
     }
@@ -750,16 +820,17 @@ class ComponentLowerer {
     const expr = init.expression;
 
     switch (namespace) {
+      // Binding calls (`$fc.bN(a, b)`) never contain characters that need attribute escaping.
       case null:
-        return `[${name}]="${escapeAttr(this.bindValue(expr, scope).call)}"`;
+        return mt`[${name}]="${this.bindValue(expr, scope).call}"`;
       case 'on':
-        return `(${name})="${escapeAttr(this.bindEvent(expr, scope))}"`;
+        return mt`(${name})="${this.bindEvent(expr, scope)}"`;
       case 'bind':
-        return `[(${name})]="${escapeAttr(this.bindTwoWay(expr, scope))}"`;
+        return mt`[(${name})]="${this.bindTwoWay(expr, scope)}"`;
       case 'attr':
       case 'class':
       case 'style':
-        return `[${namespace}.${name}]="${escapeAttr(this.bindValue(expr, scope).call)}"`;
+        return mt`[${namespace}.${name}]="${this.bindValue(expr, scope).call}"`;
       default:
         throw new TsxLoweringError(
           attr.name,
@@ -776,17 +847,18 @@ class ComponentLowerer {
     opening: ts.JsxOpeningLikeElement,
     children: ts.NodeArray<ts.JsxChild> | undefined,
     scope: Local[],
-  ): string {
+  ): MappedText {
     const attrs = this.controlFlowAttributes(opening);
+    const element = opening.parent && ts.isJsxElement(opening.parent) ? opening.parent : opening;
     switch (kind) {
       case 'If':
-        return this.lowerIf(opening, attrs, children, scope);
+        return this.lowerIf(opening, attrs, children, scope).from(element, this.sf);
       case 'For':
-        return this.lowerFor(opening, attrs, children, scope);
+        return this.lowerFor(opening, attrs, children, scope).from(element, this.sf);
       case 'Switch':
-        return this.lowerSwitch(opening, attrs, children, scope);
+        return this.lowerSwitch(opening, attrs, children, scope).from(element, this.sf);
       case 'Defer':
-        return this.lowerDefer(opening, attrs, children, scope);
+        return this.lowerDefer(opening, attrs, children, scope).from(element, this.sf);
       default:
         throw new TsxLoweringError(opening, `<${kind}> may only be used directly inside <Switch>.`);
     }
@@ -797,11 +869,11 @@ class ComponentLowerer {
     attrs: Map<string, ts.JsxAttributeValue>,
     children: ts.NodeArray<ts.JsxChild> | undefined,
     scope: Local[],
-  ): string {
+  ): MappedText {
     expectAttributes(opening, attrs, ['when'], ['fallback']);
     const when = this.bindValue(attrExpression(attrs.get('when')!), scope);
 
-    let body: string;
+    let body: MappedText;
     let alias = '';
     const callback = getRenderCallback(children);
     if (callback !== null) {
@@ -818,13 +890,13 @@ class ComponentLowerer {
       }
       body = this.lowerCallbackBody(callback, inner);
     } else {
-      body = children !== undefined ? this.lowerChildren(children, scope) : '';
+      body = children !== undefined ? this.lowerChildren(children, scope) : new MappedText();
     }
 
-    let out = `@if (${when.call}${alias}) {${body}}`;
+    const out = mt`@if (${when.call}${alias}) {${body}}`;
     const fallback = attrs.get('fallback');
     if (fallback !== undefined) {
-      out += ` @else {${this.lowerSlot(fallback, scope)}}`;
+      out.append(mt` @else {${this.lowerSlot(fallback, scope)}}`);
     }
     return out;
   }
@@ -834,7 +906,7 @@ class ComponentLowerer {
     attrs: Map<string, ts.JsxAttributeValue>,
     children: ts.NodeArray<ts.JsxChild> | undefined,
     scope: Local[],
-  ): string {
+  ): MappedText {
     expectAttributes(opening, attrs, ['each', 'track'], ['empty']);
     const callback = getRenderCallback(children);
     if (callback === null) {
@@ -890,10 +962,10 @@ class ComponentLowerer {
     }
 
     const body = this.lowerCallbackBody(callback, inner);
-    let out = `@for (${item.name} of ${each.call}; track ${track}${lets.length > 0 ? '; ' + lets.join(', ') : ''}) {${body}}`;
+    const out = mt`@for (${item.name} of ${each.call}; track ${track}${lets.length > 0 ? '; ' + lets.join(', ') : ''}) {${body}}`;
     const empty = attrs.get('empty');
     if (empty !== undefined) {
-      out += ` @empty {${this.lowerSlot(empty, scope)}}`;
+      out.append(mt` @empty {${this.lowerSlot(empty, scope)}}`);
     }
     return out;
   }
@@ -903,10 +975,10 @@ class ComponentLowerer {
     attrs: Map<string, ts.JsxAttributeValue>,
     children: ts.NodeArray<ts.JsxChild> | undefined,
     scope: Local[],
-  ): string {
+  ): MappedText {
     expectAttributes(opening, attrs, ['value'], []);
     const value = this.bindValue(attrExpression(attrs.get('value')!), scope);
-    const cases: string[] = [];
+    const cases: MappedText[] = [];
     for (const child of children ?? []) {
       if (
         isWhitespaceText(child) ||
@@ -928,7 +1000,8 @@ class ComponentLowerer {
         throw new TsxLoweringError(child, '<Switch> may only contain <Case> and <Default>.');
       }
       const caseChildren = ts.isJsxElement(el!) ? el.children : undefined;
-      const body = caseChildren !== undefined ? this.lowerChildren(caseChildren, scope) : '';
+      const body =
+        caseChildren !== undefined ? this.lowerChildren(caseChildren, scope) : new MappedText();
       const caseAttrs = this.controlFlowAttributes(caseOpening);
       if (kind.importedName === 'Case') {
         expectAttributes(caseOpening, caseAttrs, ['value'], []);
@@ -936,13 +1009,13 @@ class ComponentLowerer {
         const test = ts.isStringLiteral(v)
           ? singleQuoted(v.text)
           : this.bindValue(attrExpression(v), scope).call;
-        cases.push(`@case (${test}) {${body}}`);
+        cases.push(mt`@case (${test}) {${body}}`.from(child, this.sf));
       } else {
         expectAttributes(caseOpening, caseAttrs, [], []);
-        cases.push(`@default {${body}}`);
+        cases.push(mt`@default {${body}}`.from(child, this.sf));
       }
     }
-    return `@switch (${value.call}) {${cases.join(' ')}}`;
+    return mt`@switch (${value.call}) {${joinMapped(cases, ' ')}}`;
   }
 
   private lowerDefer(
@@ -950,9 +1023,9 @@ class ComponentLowerer {
     attrs: Map<string, ts.JsxAttributeValue>,
     children: ts.NodeArray<ts.JsxChild> | undefined,
     scope: Local[],
-  ): string {
+  ): MappedText {
     expectAttributes(opening, attrs, [], ['on', 'when', 'placeholder', 'loading', 'error']);
-    const triggers: string[] = [];
+    const triggers: (string | MappedText)[] = [];
     const on = attrs.get('on');
     if (on !== undefined) {
       const values = staticStrings(on);
@@ -966,15 +1039,18 @@ class ComponentLowerer {
     }
     const when = attrs.get('when');
     if (when !== undefined) {
-      triggers.push(`when ${this.bindValue(attrExpression(when), scope).call}`);
+      triggers.push(mt`when ${this.bindValue(attrExpression(when), scope).call}`);
     }
 
-    const body = children !== undefined ? this.lowerChildren(children, scope) : '';
-    let out = `@defer${triggers.length > 0 ? ` (${triggers.join('; ')})` : ''} {${body}}`;
+    const body = children !== undefined ? this.lowerChildren(children, scope) : new MappedText();
+    const out =
+      triggers.length > 0
+        ? mt`@defer (${joinMapped(triggers, '; ')}) {${body}}`
+        : mt`@defer {${body}}`;
     for (const block of ['placeholder', 'loading', 'error']) {
       const slot = attrs.get(block);
       if (slot !== undefined) {
-        out += ` @${block} {${this.lowerSlot(slot, scope)}}`;
+        out.append(mt` @${block} {${this.lowerSlot(slot, scope)}}`);
       }
     }
     return out;
@@ -983,7 +1059,7 @@ class ComponentLowerer {
   private lowerCallbackBody(
     callback: ts.ArrowFunction | ts.FunctionExpression,
     scope: Local[],
-  ): string {
+  ): MappedText {
     if (ts.isBlock(callback.body)) {
       const stmts = callback.body.statements;
       if (
@@ -1002,9 +1078,9 @@ class ComponentLowerer {
   }
 
   /** Lowers a TSX-valued attribute such as `fallback={<p>…</p>}` or `fallback="text"`. */
-  private lowerSlot(value: ts.JsxAttributeValue, scope: Local[]): string {
+  private lowerSlot(value: ts.JsxAttributeValue, scope: Local[]): MappedText {
     if (ts.isStringLiteral(value)) {
-      return escapeText(value.text);
+      return mt`${escapeText(value.text)}`.from(value, this.sf);
     }
     if (ts.isJsxExpression(value) && value.expression !== undefined) {
       return this.lowerBranch(value.expression, scope);
@@ -1306,13 +1382,6 @@ function escapeAttr(value: string): string {
 
 function params(locals: Local[]): string {
   return locals.map((l) => `${l.name}: ${l.type}`).join(', ');
-}
-
-function indent(text: string, prefix: string): string {
-  return text
-    .split('\n')
-    .map((l, i) => (i === 0 ? prefix + l.trimStart() : l))
-    .join('\n');
 }
 
 function makeDiagnostic(sf: ts.SourceFile, node: ts.Node, message: string): ts.Diagnostic {
