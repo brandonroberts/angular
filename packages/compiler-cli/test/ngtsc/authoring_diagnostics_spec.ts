@@ -200,6 +200,23 @@ runInEachFileSystem(() => {
       expect(diags.length).toBe(0);
     });
 
+    it('should not report usage in a class whose decorator is imported under an alias', () => {
+      env.write(
+        'test.ts',
+        `
+        import {Component as NgComponent, input} from '@angular/core';
+
+        @NgComponent({template: ''})
+        export class TestDir {
+          inp = input();
+        }
+      `,
+      );
+
+      const diags = env.driveDiagnostics();
+      expect(diags.length).toBe(0);
+    });
+
     it('should not report if an initializer function is wrapped in a parenthesized expression', () => {
       env.write(
         'test.ts',

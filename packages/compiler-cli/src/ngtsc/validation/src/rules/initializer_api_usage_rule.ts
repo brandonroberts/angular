@@ -95,7 +95,7 @@ export class InitializerApiUsageRule implements SourceFileValidatorRule {
           decorators.some((decorator) => {
             return (
               decorator.import?.from === '@angular/core' &&
-              (decorator.name === 'Component' || decorator.name === 'Directive')
+              (decorator.import.name === 'Component' || decorator.import.name === 'Directive')
             );
           });
 
